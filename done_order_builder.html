@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Done Order Builder</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0d0f14;color:#f5f7fb;font-family:Arial,sans-serif;padding:18px}
+.wrap{max-width:980px;margin:auto}
+.card{background:#171a22;border:1px solid #2b3040;border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 12px 35px #0006}
+h1{margin:0 0 5px;font-size:24px}
+.sub{color:#9299aa;font-size:13px}
+label{display:block;color:#b9bfce;font-size:12px;margin:12px 0 6px}
+input,textarea,select{width:100%;border:1px solid #303647;border-radius:10px;background:#0f1218;color:#fff;padding:11px;outline:none}
+input{height:43px}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:#746bff}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btns{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+button{border:0;border-radius:10px;padding:11px 12px;background:#292e3c;color:#fff;font-weight:700;cursor:pointer}
+button:hover{filter:brightness(1.12)}
+.primary{background:#635bff}.green{background:#27834b}.danger{background:#a83d48}
+.status{text-align:center;color:#aeb5c5;font-size:12px;min-height:20px;margin-top:12px}
+.list{display:grid;gap:9px;margin-top:12px}
+.item{display:flex;align-items:center;gap:10px;background:#10131a;border:1px solid #2c3140;border-radius:12px;padding:10px}
+.item-main{flex:1;min-width:0}
+.item-title{font-weight:700}.item-msg{font-size:12px;color:#969dac;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.small{padding:8px 10px;font-size:12px}
+.empty{color:#777f91;text-align:center;padding:18px;font-size:13px}
+.note{color:#747c8f;font-size:11px;line-height:1.45;margin-top:10px}
+@media(max-width:650px){.row{grid-template-columns:1fr}.btns{grid-template-columns:1fr}.item{align-items:flex-start;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="card">
+  <h1>⚡ DONE ORDER BUILDER</h1>
+  <div class="sub">Tự tạo, sửa, xóa nút DONE — không cần sửa code.</div>
+
+  <label>Discord Webhook</label>
+  <input id="webhook" type="password" placeholder="Dán webhook mới vào đây">
+
+  <div class="row">
+    <div>
+      <label>Discord User ID để ping (tùy chọn)</label>
+      <input id="userid" inputmode="numeric" placeholder="123456789012345678">
+    </div>
+    <div>
+      <label>Ảnh Embed URL (tùy chọn)</label>
+      <input id="image" placeholder="https://.../image.jpg">
+    </div>
+  </div>
+
+  <div class="btns">
+    <button class="primary" onclick="testWebhook()">🔔 TEST WEBHOOK</button>
+    <button class="green" onclick="openEditor()">➕ THÊM DONE</button>
+  </div>
+  <div id="status" class="status"></div>
+  <div class="note">Webhook chỉ lưu trong trình duyệt của m. Không dùng webhook đã từng bị lộ.</div>
+</div>
+
+<div class="card" id="editor" style="display:none">
+  <h2 id="editorTitle" style="margin:0 0 8px">➕ Thêm Done</h2>
+
+  <div class="row">
+    <div>
+      <label>Tên nút</label>
+      <input id="name" placeholder="VD: 🐉 DONE KITSUNE">
+    </div>
+    <div>
+      <label>Tiêu đề Discord</label>
+      <input id="title" placeholder="VD: 🐉 ĐƠN HÀNG">
+    </div>
+  </div>
+
+  <label>Nội dung thông báo</label>
+  <textarea id="message" placeholder="VD: đã done Kitsune / mong quý khách ủng hộ típ nhé"></textarea>
+
+  <div class="row">
+    <div>
+      <label>Màu Embed</label>
+      <input id="color" type="color" value="#635bff" style="padding:4px">
+    </div>
+    <div>
+      <label>Chế độ ping</label>
+      <select id="pingMode">
+        <option value="global">Dùng User ID ở trên</option>
+        <option value="none">Không ping</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="btns">
+    <button class="primary" onclick="saveDone()">💾 LƯU DONE</button>
+    <button onclick="closeEditor()">✖ HỦY</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2 style="margin:0">📋 Danh sách DONE</h2>
+  <div class="sub" style="margin-top:4px">Các nút này được lưu tự động trên trình duyệt.</div>
+  <div id="list" class="list"></div>
+</div>
+
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let dones=JSON.parse(localStorage.getItem("done_buttons")||"[]");
+let editing=-1;
+
+$("webhook").value=localStorage.getItem("done_webhook")||"";
+$("userid").value=localStorage.getItem("done_userid")||"";
+$("image").value=localStorage.getItem("done_image")||"";
+
+function setStatus(x){$("status").textContent=x}
+
+function saveSettings(){
+  localStorage.setItem("done_webhook",$("webhook").value.trim());
+  localStorage.setItem("done_userid",$("userid").value.trim());
+  localStorage.setItem("done_image",$("image").value.trim());
+}
+$("webhook").addEventListener("change",saveSettings);
+$("userid").addEventListener("change",saveSettings);
+$("image").addEventListener("change",saveSettings);
+
+function openEditor(index=-1){
+  editing=index;
+  $("editor").style.display="block";
+  if(index<0){
+    $("editorTitle").textContent="➕ Thêm Done";
+    $("name").value="";
+    $("title").value="📦 ĐƠN HÀNG";
+    $("message").value="";
+    $("color").value="#635bff";
+    $("pingMode").value="global";
+  }else{
+    const d=dones[index];
+    $("editorTitle").textContent="✏️ Sửa Done";
+    $("name").value=d.name;
+    $("title").value=d.title;
+    $("message").value=d.message;
+    $("color").value=d.color||"#635bff";
+    $("pingMode").value=d.pingMode||"global";
+  }
+  $("name").focus();
+  window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+}
+
+function closeEditor(){editing=-1;$("editor").style.display="none"}
+
+function saveDone(){
+  const d={
+    name:$("name").value.trim(),
+    title:$("title").value.trim()||"📦 ĐƠN HÀNG",
+    message:$("message").value.trim(),
+    color:$("color").value,
+    pingMode:$("pingMode").value
+  };
+  if(!d.name||!d.message){alert("Nhập tên nút và nội dung DONE trước.");return}
+  if(editing<0)dones.push(d);else dones[editing]=d;
+  localStorage.setItem("done_buttons",JSON.stringify(dones));
+  render();
+  closeEditor();
+  setStatus("✅ Đã lưu nút DONE");
+}
+
+function deleteDone(i){
+  if(confirm("Xóa nút này?")){
+    dones.splice(i,1);
+    localStorage.setItem("done_buttons",JSON.stringify(dones));
+    render();
+  }
+}
+
+function move(i,dir){
+  const j=i+dir;
+  if(j<0||j>=dones.length)return;
+  [dones[i],dones[j]]=[dones[j],dones[i]];
+  localStorage.setItem("done_buttons",JSON.stringify(dones));
+  render();
+}
+
+function render(){
+  const box=$("list");
+  if(!dones.length){
+    box.innerHTML='<div class="empty">Chưa có nút DONE. Bấm “THÊM DONE” để tạo.</div>';
+    return;
+  }
+  box.innerHTML=dones.map((d,i)=>`
+    <div class="item">
+      <div class="item-main">
+        <div class="item-title">${esc(d.name)}</div>
+        <div class="item-msg">${esc(d.message)}</div>
+      </div>
+      <button class="small primary" onclick="sendDone(${i})">GỬI</button>
+      <button class="small" onclick="openEditor(${i})">SỬA</button>
+      <button class="small" onclick="move(${i},-1)">↑</button>
+      <button class="small" onclick="move(${i},1)">↓</button>
+      <button class="small danger" onclick="deleteDone(${i})">XÓA</button>
+    </div>`).join("");
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+function hexToInt(hex){
+  return parseInt(hex.replace("#",""),16);
+}
+
+async function post(payload){
+  saveSettings();
+  const url=$("webhook").value.trim();
+  if(!url){setStatus("❌ Chưa nhập webhook");return}
+  if(!/^https:\/\/(discord\.com|discordapp\.com)\/api\/webhooks\//.test(url)){
+    setStatus("❌ Webhook không đúng định dạng");return
+  }
+  setStatus("⏳ Đang gửi...");
+  try{
+    const r=await fetch(url,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+    if(r.ok||r.status===204)setStatus("✅ Đã gửi Discord");
+    else setStatus("❌ Discord HTTP "+r.status);
+  }catch(e){
+    setStatus("❌ Trình duyệt chặn request (CORS).");
+  }
+}
+
+function makePayload(title,message,color,ping){
+  const p={
+    embeds:[{
+      title:title,
+      description:message,
+      color:hexToInt(color||"#635bff"),
+      image:$("image").value.trim()?{url:$("image").value.trim()}:undefined,
+      footer:{text:"Done Order Builder"},
+      timestamp:new Date().toISOString()
+    }]
+  };
+  if(p.embeds[0].image===undefined)delete p.embeds[0].image;
+  const id=$("userid").value.trim();
+  if(ping==="global"&&id){
+    if(!/^\d{15,25}$/.test(id)){setStatus("❌ User ID không hợp lệ");return null}
+    p.content="<@"+id+">";
+    p.allowed_mentions={users:[id]};
+  }
+  return p;
+}
+
+function sendDone(i){
+  const d=dones[i];
+  const p=makePayload(d.title,d.message,d.color,d.pingMode);
+  if(p)post(p);
+}
+
+function testWebhook(){
+  const p=makePayload("🔔 TEST DISCORD","Webhook đang hoạt động!", "#635bff","global");
+  if(p)post(p);
+}
+
+render();
+</script>
+</body>
+</html>
