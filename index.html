@@ -3,268 +3,1287 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Done Order Builder</title>
+<title>Done Order Builder — Neon Purple</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0d0f14;color:#f5f7fb;font-family:Arial,sans-serif;padding:18px}
-.wrap{max-width:980px;margin:auto}
-.card{background:#171a22;border:1px solid #2b3040;border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 12px 35px #0006}
-h1{margin:0 0 5px;font-size:24px}
-.sub{color:#9299aa;font-size:13px}
-label{display:block;color:#b9bfce;font-size:12px;margin:12px 0 6px}
-input,textarea,select{width:100%;border:1px solid #303647;border-radius:10px;background:#0f1218;color:#fff;padding:11px;outline:none}
-input{height:43px}
-textarea{min-height:90px;resize:vertical}
-input:focus,textarea:focus,select:focus{border-color:#746bff}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btns{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
-button{border:0;border-radius:10px;padding:11px 12px;background:#292e3c;color:#fff;font-weight:700;cursor:pointer}
-button:hover{filter:brightness(1.12)}
-.primary{background:#635bff}.green{background:#27834b}.danger{background:#a83d48}
-.status{text-align:center;color:#aeb5c5;font-size:12px;min-height:20px;margin-top:12px}
-.list{display:grid;gap:9px;margin-top:12px}
-.item{display:flex;align-items:center;gap:10px;background:#10131a;border:1px solid #2c3140;border-radius:12px;padding:10px}
-.item-main{flex:1;min-width:0}
-.item-title{font-weight:700}.item-msg{font-size:12px;color:#969dac;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
-.small{padding:8px 10px;font-size:12px}
-.empty{color:#777f91;text-align:center;padding:18px;font-size:13px}
-.note{color:#747c8f;font-size:11px;line-height:1.45;margin-top:10px}
-@media(max-width:650px){.row{grid-template-columns:1fr}.btns{grid-template-columns:1fr}.item{align-items:flex-start;flex-wrap:wrap}}
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#07030f;
+  --card:rgba(19,10,35,.78);
+  --card2:rgba(28,13,50,.72);
+  --border:rgba(190,92,255,.28);
+  --purple:#9b4dff;
+  --purple2:#c45cff;
+  --pink:#ff4fd8;
+  --text:#faf7ff;
+  --muted:#aaa0bc;
+  --danger:#ff477e;
+  --green:#38e59b;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  padding:20px;
+
+  background:
+    linear-gradient(
+      rgba(7,3,15,.76),
+      rgba(7,3,15,.90)
+    ),
+    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s");
+
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+}
+
+/* Ánh sáng nền */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+
+  background:
+    radial-gradient(circle at 15% 15%,rgba(160,50,255,.24),transparent 30%),
+    radial-gradient(circle at 85% 20%,rgba(255,50,220,.16),transparent 28%),
+    radial-gradient(circle at 50% 90%,rgba(100,40,255,.18),transparent 32%);
+}
+
+.wrap{
+  max-width:980px;
+  margin:auto;
+}
+
+/* CARD */
+.card{
+  position:relative;
+  background:linear-gradient(
+    145deg,
+    rgba(31,13,52,.84),
+    rgba(12,7,24,.82)
+  );
+
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:20px;
+  margin-bottom:16px;
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.025) inset,
+    0 15px 50px rgba(0,0,0,.55),
+    0 0 35px rgba(150,50,255,.10);
+
+  overflow:hidden;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:1px;
+
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #b44cff,
+    #ff5de2,
+    #8d4dff,
+    transparent
+  );
+
+  box-shadow:0 0 14px #b44cff;
+}
+
+/* HEADER */
+h1{
+  margin:0 0 6px;
+  font-size:26px;
+  letter-spacing:.5px;
+
+  background:linear-gradient(
+    90deg,
+    #ffffff,
+    #d99cff,
+    #ff75e6
+  );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+
+  text-shadow:0 0 25px rgba(190,80,255,.35);
+}
+
+h2{
+  color:#f7edff;
+}
+
+.sub{
+  color:#a99bb9;
+  font-size:13px;
+}
+
+/* LABEL */
+label{
+  display:block;
+  color:#c9b9d8;
+  font-size:12px;
+  margin:13px 0 7px;
+}
+
+/* INPUT */
+input,
+textarea,
+select{
+  width:100%;
+  border:1px solid rgba(180,90,255,.25);
+  border-radius:12px;
+
+  background:rgba(7,3,15,.72);
+  color:#fff;
+
+  padding:12px;
+  outline:none;
+
+  transition:
+    border .2s,
+    box-shadow .2s,
+    background .2s,
+    transform .2s;
+}
+
+input{
+  height:44px;
+}
+
+textarea{
+  min-height:95px;
+  resize:vertical;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#756b83;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#b75cff;
+
+  background:rgba(15,7,27,.88);
+
+  box-shadow:
+    0 0 0 2px rgba(180,80,255,.08),
+    0 0 20px rgba(160,70,255,.22);
+
+  transform:translateY(-1px);
+}
+
+/* GRID */
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+/* BUTTON GRID */
+.btns{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+
+/* BUTTON */
+button{
+  position:relative;
+  border:1px solid rgba(210,130,255,.16);
+  border-radius:12px;
+
+  padding:12px 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(57,29,81,.95),
+      rgba(28,13,47,.95)
+    );
+
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+
+  transition:
+    transform .18s,
+    box-shadow .18s,
+    filter .18s,
+    border .18s;
+
+  box-shadow:
+    0 5px 18px rgba(0,0,0,.28);
+}
+
+button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.15);
+
+  border-color:rgba(210,110,255,.55);
+
+  box-shadow:
+    0 7px 25px rgba(0,0,0,.4),
+    0 0 20px rgba(170,70,255,.18);
+}
+
+button:active{
+  transform:translateY(0);
+}
+
+/* PRIMARY */
+.primary{
+  background:
+    linear-gradient(
+      135deg,
+      #7134d9,
+      #a63eff,
+      #d14bff
+    );
+
+  border-color:#b96aff;
+
+  box-shadow:
+    0 0 18px rgba(166,62,255,.35),
+    0 7px 22px rgba(75,20,120,.45);
+}
+
+.primary:hover{
+  box-shadow:
+    0 0 28px rgba(194,76,255,.55),
+    0 8px 28px rgba(75,20,120,.55);
+}
+
+/* GREEN */
+.green{
+  background:
+    linear-gradient(
+      135deg,
+      #147b59,
+      #18aa76,
+      #28d994
+    );
+
+  border-color:rgba(70,255,181,.5);
+
+  box-shadow:
+    0 0 18px rgba(40,220,150,.2);
+}
+
+.green:hover{
+  box-shadow:
+    0 0 27px rgba(40,220,150,.38);
+}
+
+/* DANGER */
+.danger{
+  background:
+    linear-gradient(
+      135deg,
+      #8e2548,
+      #c52d61,
+      #ed3f75
+    );
+
+  border-color:rgba(255,80,130,.4);
+}
+
+.danger:hover{
+  box-shadow:
+    0 0 25px rgba(255,60,120,.35);
+}
+
+/* STATUS */
+.status{
+  text-align:center;
+  color:#c9b9d8;
+  font-size:12px;
+  min-height:20px;
+  margin-top:13px;
+}
+
+/* LIST */
+.list{
+  display:grid;
+  gap:10px;
+  margin-top:14px;
+}
+
+.item{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(25,12,42,.82),
+      rgba(10,6,19,.82)
+    );
+
+  border:1px solid rgba(180,90,255,.18);
+  border-radius:14px;
+
+  padding:11px;
+
+  transition:
+    border .2s,
+    box-shadow .2s,
+    transform .2s;
+}
+
+.item:hover{
+  transform:translateY(-1px);
+
+  border-color:rgba(190,90,255,.45);
+
+  box-shadow:
+    0 0 22px rgba(150,60,255,.12);
+}
+
+.item-main{
+  flex:1;
+  min-width:0;
+}
+
+.item-title{
+  font-weight:700;
+  color:#fff;
+
+  text-shadow:
+    0 0 12px rgba(190,90,255,.22);
+}
+
+.item-msg{
+  font-size:12px;
+  color:#9c91aa;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  margin-top:4px;
+}
+
+.small{
+  padding:8px 10px;
+  font-size:12px;
+}
+
+/* EMPTY */
+.empty{
+  color:#756b83;
+  text-align:center;
+  padding:22px;
+  font-size:13px;
+
+  border:1px dashed rgba(170,90,255,.2);
+  border-radius:12px;
+}
+
+/* NOTE */
+.note{
+  color:#776d86;
+  font-size:11px;
+  line-height:1.5;
+  margin-top:11px;
+}
+
+/* EDITOR */
+#editor{
+  animation:editorIn .3s ease;
+}
+
+@keyframes editorIn{
+  from{
+    opacity:0;
+    transform:translateY(12px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* COLOR INPUT */
+input[type="color"]{
+  height:44px;
+  cursor:pointer;
+  padding:4px;
+}
+
+/* SELECT */
+select{
+  height:44px;
+  cursor:pointer;
+}
+
+select option{
+  background:#160b25;
+  color:white;
+}
+
+/* RESPONSIVE */
+@media(max-width:650px){
+
+  body{
+    padding:12px;
+    background-attachment:scroll;
+  }
+
+  .card{
+    padding:16px;
+    border-radius:18px;
+  }
+
+  h1{
+    font-size:22px;
+  }
+
+  .row{
+    grid-template-columns:1fr;
+  }
+
+  .btns{
+    grid-template-columns:1fr;
+  }
+
+  .item{
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .item-main{
+    width:100%;
+    flex-basis:100%;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
 
 <div class="card">
+
   <h1>⚡ DONE ORDER BUILDER</h1>
-  <div class="sub">Tự tạo, sửa, xóa nút DONE — không cần sửa code.</div>
+
+  <div class="sub">
+    Tự tạo, sửa, xóa nút DONE — giao diện Neon Purple ✨
+  </div>
 
   <label>Discord Webhook</label>
-  <input id="webhook" type="password" placeholder="Dán webhook mới vào đây">
+
+  <input
+    id="webhook"
+    type="password"
+    placeholder="Dán webhook mới vào đây"
+  >
 
   <div class="row">
+
     <div>
       <label>Discord User ID để ping (tùy chọn)</label>
-      <input id="userid" inputmode="numeric" placeholder="123456789012345678">
+
+      <input
+        id="userid"
+        inputmode="numeric"
+        placeholder="123456789012345678"
+      >
     </div>
+
     <div>
       <label>Ảnh Embed URL (tùy chọn)</label>
-      <input id="image" placeholder="https://.../image.jpg">
+
+      <input
+        id="image"
+        placeholder="https://.../image.jpg"
+      >
     </div>
+
   </div>
 
   <div class="btns">
-    <button class="primary" onclick="testWebhook()">🔔 TEST WEBHOOK</button>
-    <button class="green" onclick="openEditor()">➕ THÊM DONE</button>
+
+    <button
+      class="primary"
+      onclick="testWebhook()"
+    >
+      🔔 TEST WEBHOOK
+    </button>
+
+    <button
+      class="green"
+      onclick="openEditor()"
+    >
+      ➕ THÊM DONE
+    </button>
+
   </div>
+
   <div id="status" class="status"></div>
-  <div class="note">Webhook chỉ lưu trong trình duyệt của m. Không dùng webhook đã từng bị lộ.</div>
+
+  <div class="note">
+    Webhook chỉ lưu trong trình duyệt của bạn.
+    Không dùng webhook đã từng bị lộ.
+  </div>
+
 </div>
 
-<div class="card" id="editor" style="display:none">
-  <h2 id="editorTitle" style="margin:0 0 8px">➕ Thêm Done</h2>
+
+<div
+  class="card"
+  id="editor"
+  style="display:none"
+>
+
+  <h2
+    id="editorTitle"
+    style="margin:0 0 8px"
+  >
+    ➕ Thêm Done
+  </h2>
 
   <div class="row">
+
     <div>
+
       <label>Tên nút</label>
-      <input id="name" placeholder="VD: 🐉 DONE KITSUNE">
+
+      <input
+        id="name"
+        placeholder="VD: 🐉 DONE KITSUNE"
+      >
+
     </div>
+
     <div>
+
       <label>Tiêu đề Discord</label>
-      <input id="title" placeholder="VD: 🐉 ĐƠN HÀNG">
+
+      <input
+        id="title"
+        placeholder="VD: 🐉 ĐƠN HÀNG"
+      >
+
     </div>
+
   </div>
 
   <label>Nội dung thông báo</label>
-  <textarea id="message" placeholder="VD: đã done Kitsune / mong quý khách ủng hộ típ nhé"></textarea>
+
+  <textarea
+    id="message"
+    placeholder="VD: đã done Kitsune / mong quý khách ủng hộ típ nhé"
+  ></textarea>
 
   <div class="row">
+
     <div>
+
       <label>Màu Embed</label>
-      <input id="color" type="color" value="#635bff" style="padding:4px">
+
+      <input
+        id="color"
+        type="color"
+        value="#9b4dff"
+        style="padding:4px"
+      >
+
     </div>
+
     <div>
+
       <label>Chế độ ping</label>
+
       <select id="pingMode">
-        <option value="global">Dùng User ID ở trên</option>
-        <option value="none">Không ping</option>
+
+        <option value="global">
+          Dùng User ID ở trên
+        </option>
+
+        <option value="none">
+          Không ping
+        </option>
+
       </select>
+
     </div>
+
   </div>
 
   <div class="btns">
-    <button class="primary" onclick="saveDone()">💾 LƯU DONE</button>
-    <button onclick="closeEditor()">✖ HỦY</button>
+
+    <button
+      class="primary"
+      onclick="saveDone()"
+    >
+      💾 LƯU DONE
+    </button>
+
+    <button onclick="closeEditor()">
+      ✖ HỦY
+    </button>
+
   </div>
+
 </div>
+
 
 <div class="card">
-  <h2 style="margin:0">📋 Danh sách DONE</h2>
-  <div class="sub" style="margin-top:4px">Các nút này được lưu tự động trên trình duyệt.</div>
-  <div id="list" class="list"></div>
+
+  <h2 style="margin:0">
+    📋 Danh sách DONE
+  </h2>
+
+  <div
+    class="sub"
+    style="margin-top:4px"
+  >
+    Các nút này được lưu tự động trên trình duyệt.
+  </div>
+
+  <div
+    id="list"
+    class="list"
+  ></div>
+
 </div>
 
 </div>
+
 
 <script>
-const $=id=>document.getElementById(id);
-let dones=JSON.parse(localStorage.getItem("done_buttons")||"[]");
-let editing=-1;
 
-$("webhook").value=localStorage.getItem("done_webhook")||"";
-$("userid").value=localStorage.getItem("done_userid")||"";
-$("image").value=localStorage.getItem("done_image")||"";
+const $ = id => document.getElementById(id);
 
-function setStatus(x){$("status").textContent=x}
+let dones =
+  JSON.parse(
+    localStorage.getItem("done_buttons") || "[]"
+  );
+
+let editing = -1;
+
+
+/* LOAD SETTINGS */
+
+$("webhook").value =
+  localStorage.getItem("done_webhook") || "";
+
+$("userid").value =
+  localStorage.getItem("done_userid") || "";
+
+$("image").value =
+  localStorage.getItem("done_image") || "";
+
+
+/* STATUS */
+
+function setStatus(x){
+
+  $("status").textContent = x;
+
+}
+
+
+/* SAVE SETTINGS */
 
 function saveSettings(){
-  localStorage.setItem("done_webhook",$("webhook").value.trim());
-  localStorage.setItem("done_userid",$("userid").value.trim());
-  localStorage.setItem("done_image",$("image").value.trim());
+
+  localStorage.setItem(
+    "done_webhook",
+    $("webhook").value.trim()
+  );
+
+  localStorage.setItem(
+    "done_userid",
+    $("userid").value.trim()
+  );
+
+  localStorage.setItem(
+    "done_image",
+    $("image").value.trim()
+  );
+
 }
-$("webhook").addEventListener("change",saveSettings);
-$("userid").addEventListener("change",saveSettings);
-$("image").addEventListener("change",saveSettings);
+
+
+$("webhook").addEventListener(
+  "change",
+  saveSettings
+);
+
+$("userid").addEventListener(
+  "change",
+  saveSettings
+);
+
+$("image").addEventListener(
+  "change",
+  saveSettings
+);
+
+
+/* OPEN EDITOR */
 
 function openEditor(index=-1){
-  editing=index;
-  $("editor").style.display="block";
-  if(index<0){
-    $("editorTitle").textContent="➕ Thêm Done";
-    $("name").value="";
-    $("title").value="📦 ĐƠN HÀNG";
-    $("message").value="";
-    $("color").value="#635bff";
-    $("pingMode").value="global";
+
+  editing = index;
+
+  $("editor").style.display = "block";
+
+  if(index < 0){
+
+    $("editorTitle").textContent =
+      "➕ Thêm Done";
+
+    $("name").value = "";
+
+    $("title").value =
+      "📦 ĐƠN HÀNG";
+
+    $("message").value = "";
+
+    $("color").value =
+      "#9b4dff";
+
+    $("pingMode").value =
+      "global";
+
   }else{
-    const d=dones[index];
-    $("editorTitle").textContent="✏️ Sửa Done";
-    $("name").value=d.name;
-    $("title").value=d.title;
-    $("message").value=d.message;
-    $("color").value=d.color||"#635bff";
-    $("pingMode").value=d.pingMode||"global";
+
+    const d = dones[index];
+
+    $("editorTitle").textContent =
+      "✏️ Sửa Done";
+
+    $("name").value =
+      d.name;
+
+    $("title").value =
+      d.title;
+
+    $("message").value =
+      d.message;
+
+    $("color").value =
+      d.color || "#9b4dff";
+
+    $("pingMode").value =
+      d.pingMode || "global";
+
   }
+
   $("name").focus();
-  window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+
+  window.scrollTo({
+    top:document.body.scrollHeight,
+    behavior:"smooth"
+  });
+
 }
 
-function closeEditor(){editing=-1;$("editor").style.display="none"}
+
+/* CLOSE EDITOR */
+
+function closeEditor(){
+
+  editing = -1;
+
+  $("editor").style.display =
+    "none";
+
+}
+
+
+/* SAVE DONE */
 
 function saveDone(){
-  const d={
-    name:$("name").value.trim(),
-    title:$("title").value.trim()||"📦 ĐƠN HÀNG",
-    message:$("message").value.trim(),
-    color:$("color").value,
-    pingMode:$("pingMode").value
+
+  const d = {
+
+    name:
+      $("name").value.trim(),
+
+    title:
+      $("title").value.trim()
+      || "📦 ĐƠN HÀNG",
+
+    message:
+      $("message").value.trim(),
+
+    color:
+      $("color").value,
+
+    pingMode:
+      $("pingMode").value
+
   };
-  if(!d.name||!d.message){alert("Nhập tên nút và nội dung DONE trước.");return}
-  if(editing<0)dones.push(d);else dones[editing]=d;
-  localStorage.setItem("done_buttons",JSON.stringify(dones));
-  render();
-  closeEditor();
-  setStatus("✅ Đã lưu nút DONE");
-}
 
-function deleteDone(i){
-  if(confirm("Xóa nút này?")){
-    dones.splice(i,1);
-    localStorage.setItem("done_buttons",JSON.stringify(dones));
-    render();
-  }
-}
 
-function move(i,dir){
-  const j=i+dir;
-  if(j<0||j>=dones.length)return;
-  [dones[i],dones[j]]=[dones[j],dones[i]];
-  localStorage.setItem("done_buttons",JSON.stringify(dones));
-  render();
-}
+  if(!d.name || !d.message){
 
-function render(){
-  const box=$("list");
-  if(!dones.length){
-    box.innerHTML='<div class="empty">Chưa có nút DONE. Bấm “THÊM DONE” để tạo.</div>';
+    alert(
+      "Nhập tên nút và nội dung DONE trước."
+    );
+
     return;
   }
-  box.innerHTML=dones.map((d,i)=>`
-    <div class="item">
-      <div class="item-main">
-        <div class="item-title">${esc(d.name)}</div>
-        <div class="item-msg">${esc(d.message)}</div>
-      </div>
-      <button class="small primary" onclick="sendDone(${i})">GỬI</button>
-      <button class="small" onclick="openEditor(${i})">SỬA</button>
-      <button class="small" onclick="move(${i},-1)">↑</button>
-      <button class="small" onclick="move(${i},1)">↓</button>
-      <button class="small danger" onclick="deleteDone(${i})">XÓA</button>
-    </div>`).join("");
+
+
+  if(editing < 0){
+
+    dones.push(d);
+
+  }else{
+
+    dones[editing] = d;
+
+  }
+
+
+  localStorage.setItem(
+    "done_buttons",
+    JSON.stringify(dones)
+  );
+
+
+  render();
+
+  closeEditor();
+
+  setStatus(
+    "✅ Đã lưu nút DONE"
+  );
+
 }
+
+
+/* DELETE */
+
+function deleteDone(i){
+
+  if(
+    confirm("Xóa nút này?")
+  ){
+
+    dones.splice(i,1);
+
+    localStorage.setItem(
+      "done_buttons",
+      JSON.stringify(dones)
+    );
+
+    render();
+
+  }
+
+}
+
+
+/* MOVE */
+
+function move(i,dir){
+
+  const j = i + dir;
+
+  if(
+    j < 0 ||
+    j >= dones.length
+  ) return;
+
+
+  [
+    dones[i],
+    dones[j]
+  ] =
+  [
+    dones[j],
+    dones[i]
+  ];
+
+
+  localStorage.setItem(
+    "done_buttons",
+    JSON.stringify(dones)
+  );
+
+  render();
+
+}
+
+
+/* ESCAPE HTML */
 
 function esc(s){
-  return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+
+  return String(s).replace(
+    /[&<>"']/g,
+    m =>
+      ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m])
+  );
+
 }
+
+
+/* RENDER */
+
+function render(){
+
+  const box =
+    $("list");
+
+
+  if(!dones.length){
+
+    box.innerHTML =
+      '<div class="empty">' +
+      'Chưa có nút DONE. ' +
+      'Bấm “THÊM DONE” để tạo.' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    dones.map(
+      (d,i) => `
+
+      <div class="item">
+
+        <div class="item-main">
+
+          <div class="item-title">
+            ${esc(d.name)}
+          </div>
+
+          <div class="item-msg">
+            ${esc(d.message)}
+          </div>
+
+        </div>
+
+        <button
+          class="small primary"
+          onclick="sendDone(${i})"
+        >
+          GỬI
+        </button>
+
+        <button
+          class="small"
+          onclick="openEditor(${i})"
+        >
+          SỬA
+        </button>
+
+        <button
+          class="small"
+          onclick="move(${i},-1)"
+        >
+          ↑
+        </button>
+
+        <button
+          class="small"
+          onclick="move(${i},1)"
+        >
+          ↓
+        </button>
+
+        <button
+          class="small danger"
+          onclick="deleteDone(${i})"
+        >
+          XÓA
+        </button>
+
+      </div>
+
+      `
+    ).join("");
+
+}
+
+
+/* HEX -> INTEGER */
 
 function hexToInt(hex){
-  return parseInt(hex.replace("#",""),16);
+
+  return parseInt(
+    hex.replace("#",""),
+    16
+  );
+
 }
+
+
+/* DISCORD POST */
 
 async function post(payload){
+
   saveSettings();
-  const url=$("webhook").value.trim();
-  if(!url){setStatus("❌ Chưa nhập webhook");return}
-  if(!/^https:\/\/(discord\.com|discordapp\.com)\/api\/webhooks\//.test(url)){
-    setStatus("❌ Webhook không đúng định dạng");return
+
+  const url =
+    $("webhook").value.trim();
+
+
+  if(!url){
+
+    setStatus(
+      "❌ Chưa nhập webhook"
+    );
+
+    return;
+
   }
-  setStatus("⏳ Đang gửi...");
+
+
+  if(
+    !/^https:\/\/(discord\.com|discordapp\.com)\/api\/webhooks\//
+      .test(url)
+  ){
+
+    setStatus(
+      "❌ Webhook không đúng định dạng"
+    );
+
+    return;
+
+  }
+
+
+  setStatus(
+    "⏳ Đang gửi..."
+  );
+
+
   try{
-    const r=await fetch(url,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payload)
-    });
-    if(r.ok||r.status===204)setStatus("✅ Đã gửi Discord");
-    else setStatus("❌ Discord HTTP "+r.status);
+
+    const r =
+      await fetch(
+        url,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(payload)
+        }
+      );
+
+
+    if(
+      r.ok ||
+      r.status === 204
+    ){
+
+      setStatus(
+        "✅ Đã gửi Discord"
+      );
+
+    }else{
+
+      setStatus(
+        "❌ Discord HTTP " +
+        r.status
+      );
+
+    }
+
+
   }catch(e){
-    setStatus("❌ Trình duyệt chặn request (CORS).");
+
+    setStatus(
+      "❌ Trình duyệt chặn request (CORS)."
+    );
+
   }
+
 }
 
-function makePayload(title,message,color,ping){
-  const p={
+
+/* CREATE PAYLOAD */
+
+function makePayload(
+  title,
+  message,
+  color,
+  ping
+){
+
+  const p = {
+
     embeds:[{
+
       title:title,
+
       description:message,
-      color:hexToInt(color||"#635bff"),
-      image:$("image").value.trim()?{url:$("image").value.trim()}:undefined,
-      footer:{text:"Done Order Builder"},
-      timestamp:new Date().toISOString()
+
+      color:
+        hexToInt(
+          color || "#9b4dff"
+        ),
+
+      image:
+        $("image").value.trim()
+        ?
+        {
+          url:
+            $("image").value.trim()
+        }
+        :
+        undefined,
+
+      footer:{
+        text:
+          "⚡ Done Order Builder • Neon Purple"
+      },
+
+      timestamp:
+        new Date().toISOString()
+
     }]
+
   };
-  if(p.embeds[0].image===undefined)delete p.embeds[0].image;
-  const id=$("userid").value.trim();
-  if(ping==="global"&&id){
-    if(!/^\d{15,25}$/.test(id)){setStatus("❌ User ID không hợp lệ");return null}
-    p.content="<@"+id+">";
-    p.allowed_mentions={users:[id]};
+
+
+  if(
+    p.embeds[0].image === undefined
+  ){
+
+    delete p.embeds[0].image;
+
   }
+
+
+  const id =
+    $("userid").value.trim();
+
+
+  if(
+    ping === "global" &&
+    id
+  ){
+
+    if(
+      !/^\d{15,25}$/.test(id)
+    ){
+
+      setStatus(
+        "❌ User ID không hợp lệ"
+      );
+
+      return null;
+
+    }
+
+
+    p.content =
+      "<@" + id + ">";
+
+    p.allowed_mentions = {
+      users:[id]
+    };
+
+  }
+
+
   return p;
+
 }
+
+
+/* SEND DONE */
 
 function sendDone(i){
-  const d=dones[i];
-  const p=makePayload(d.title,d.message,d.color,d.pingMode);
-  if(p)post(p);
+
+  const d =
+    dones[i];
+
+  const p =
+    makePayload(
+      d.title,
+      d.message,
+      d.color,
+      d.pingMode
+    );
+
+
+  if(p){
+
+    post(p);
+
+  }
+
 }
+
+
+/* TEST WEBHOOK */
 
 function testWebhook(){
-  const p=makePayload("🔔 TEST DISCORD","Webhook đang hoạt động!", "#635bff","global");
-  if(p)post(p);
+
+  const p =
+    makePayload(
+      "🔔 TEST DISCORD",
+      "Webhook đang hoạt động! ✨",
+      "#9b4dff",
+      "global"
+    );
+
+
+  if(p){
+
+    post(p);
+
+  }
+
 }
 
+
+/* INITIAL */
+
 render();
+
 </script>
+
 </body>
 </html>
