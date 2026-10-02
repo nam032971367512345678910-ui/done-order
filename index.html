@@ -3,25 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Done Order Builder — Neon Purple</title>
+
+<title>DONE ORDER BUILDER • RGB NEON</title>
 
 <style>
+
+/* ==============================
+   🌈 RGB NEON THEME
+================================ */
+
 *{
   box-sizing:border-box;
 }
 
 :root{
-  --bg:#07030f;
-  --card:rgba(19,10,35,.78);
-  --card2:rgba(28,13,50,.72);
-  --border:rgba(190,92,255,.28);
-  --purple:#9b4dff;
-  --purple2:#c45cff;
-  --pink:#ff4fd8;
-  --text:#faf7ff;
-  --muted:#aaa0bc;
-  --danger:#ff477e;
-  --green:#38e59b;
+  --rgb-speed:7s;
+
+  --bg:#05030a;
+  --panel:rgba(12,8,22,.78);
+
+  --white:#fff;
+  --muted:#aaa2b8;
+
+  --purple:#9d4dff;
+  --pink:#ff35d1;
+  --blue:#29bfff;
+  --green:#30e69a;
+  --red:#ff3d6e;
 }
 
 html{
@@ -31,474 +39,1045 @@ html{
 body{
   margin:0;
   min-height:100vh;
-  color:var(--text);
-  font-family:Arial,sans-serif;
+
   padding:20px;
+
+  color:white;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background:#05030a;
+
+  overflow-x:hidden;
+}
+
+
+/* =================================
+   🌌 ANIMATED RGB BACKGROUND
+================================= */
+
+body::before{
+  content:"";
+
+  position:fixed;
+
+  width:160%;
+  height:160%;
+
+  left:-30%;
+  top:-30%;
+
+  z-index:-3;
 
   background:
     linear-gradient(
-      rgba(7,3,15,.76),
-      rgba(7,3,15,.90)
-    ),
-    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s");
+      120deg,
+      #5400ff,
+      #a000ff,
+      #ff00cc,
+      #ff0059,
+      #006cff,
+      #00d9ff,
+      #5400ff
+    );
 
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
+  background-size:500% 500%;
+
+  animation:
+    rgbBackground
+    var(--rgb-speed)
+    ease
+    infinite;
+
+  filter:blur(100px);
+
+  opacity:.35;
 }
 
-/* Ánh sáng nền */
-body::before{
+
+@keyframes rgbBackground{
+
+  0%{
+    background-position:0% 50%;
+  }
+
+  25%{
+    background-position:100% 50%;
+  }
+
+  50%{
+    background-position:100% 100%;
+  }
+
+  75%{
+    background-position:0% 100%;
+  }
+
+  100%{
+    background-position:0% 50%;
+  }
+
+}
+
+
+/* =================================
+   ✨ LIGHT ORBS
+================================= */
+
+body::after{
   content:"";
+
   position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:-1;
+
+  width:500px;
+  height:500px;
+
+  left:50%;
+  top:50%;
+
+  transform:translate(-50%,-50%);
+
+  border-radius:50%;
 
   background:
-    radial-gradient(circle at 15% 15%,rgba(160,50,255,.24),transparent 30%),
-    radial-gradient(circle at 85% 20%,rgba(255,50,220,.16),transparent 28%),
-    radial-gradient(circle at 50% 90%,rgba(100,40,255,.18),transparent 32%);
+    radial-gradient(
+      circle,
+      rgba(255,0,220,.14),
+      transparent 70%
+    );
+
+  filter:blur(25px);
+
+  animation:
+    orbMove
+    10s
+    ease-in-out
+    infinite;
+
+  pointer-events:none;
+
+  z-index:-2;
 }
 
+
+@keyframes orbMove{
+
+  0%{
+    transform:
+      translate(-60%,-50%)
+      scale(.8);
+  }
+
+  50%{
+    transform:
+      translate(20%,-40%)
+      scale(1.25);
+  }
+
+  100%{
+    transform:
+      translate(-60%,-50%)
+      scale(.8);
+  }
+
+}
+
+
+/* =================================
+   MAIN
+================================= */
+
 .wrap{
+  width:100%;
   max-width:980px;
+
   margin:auto;
 }
 
-/* CARD */
-.card{
-  position:relative;
-  background:linear-gradient(
-    145deg,
-    rgba(31,13,52,.84),
-    rgba(12,7,24,.82)
-  );
 
-  border:1px solid var(--border);
-  border-radius:22px;
+/* =================================
+   CARD
+================================= */
+
+.card{
+
+  position:relative;
+
   padding:20px;
+
   margin-bottom:16px;
 
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
+  border-radius:22px;
+
+  background:
+    linear-gradient(
+      rgba(13,8,25,.9),
+      rgba(9,5,18,.9)
+    )
+    padding-box,
+
+    linear-gradient(
+      90deg,
+      #812cff,
+      #ff26d5,
+      #ff3c78,
+      #29bfff,
+      #812cff
+    )
+    border-box;
+
+  border:2px solid transparent;
+
+  background-size:
+    100% 100%,
+    400% 100%;
+
+  animation:
+    cardRGB
+    6s
+    linear
+    infinite;
 
   box-shadow:
-    0 0 0 1px rgba(255,255,255,.025) inset,
-    0 15px 50px rgba(0,0,0,.55),
-    0 0 35px rgba(150,50,255,.10);
+    0 0 20px rgba(140,40,255,.16),
+    0 20px 55px rgba(0,0,0,.55);
+
+  backdrop-filter:blur(18px);
 
   overflow:hidden;
 }
 
-.card::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:1px;
 
-  background:linear-gradient(
-    90deg,
-    transparent,
-    #b44cff,
-    #ff5de2,
-    #8d4dff,
-    transparent
-  );
+@keyframes cardRGB{
 
-  box-shadow:0 0 14px #b44cff;
+  0%{
+    background-position:
+      0 0,
+      0% 50%;
+  }
+
+  50%{
+    background-position:
+      0 0,
+      100% 50%;
+  }
+
+  100%{
+    background-position:
+      0 0,
+      0% 50%;
+  }
+
 }
 
-/* HEADER */
-h1{
-  margin:0 0 6px;
-  font-size:26px;
-  letter-spacing:.5px;
 
-  background:linear-gradient(
-    90deg,
-    #ffffff,
-    #d99cff,
-    #ff75e6
-  );
+/* shine */
+
+.card::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:-100%;
+  left:-50%;
+
+  width:30%;
+  height:300%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.12),
+      transparent
+    );
+
+  transform:rotate(20deg);
+
+  animation:
+    shine
+    6s
+    ease-in-out
+    infinite;
+
+  pointer-events:none;
+}
+
+
+@keyframes shine{
+
+  0%{
+    left:-70%;
+  }
+
+  50%{
+    left:140%;
+  }
+
+  100%{
+    left:140%;
+  }
+
+}
+
+
+/* =================================
+   TEXT
+================================= */
+
+h1{
+
+  margin:
+    0
+    0
+    6px;
+
+  font-size:26px;
+
+  letter-spacing:.6px;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      #9b4dff,
+      #ff38d5,
+      #ff3979,
+      #2fc5ff,
+      #9b4dff
+    );
+
+  background-size:400% auto;
 
   -webkit-background-clip:text;
+
   background-clip:text;
+
   color:transparent;
 
-  text-shadow:0 0 25px rgba(190,80,255,.35);
+  animation:
+    textRGB
+    5s
+    linear
+    infinite;
+
+  text-shadow:
+    0 0 25px rgba(170,50,255,.25);
 }
+
+
+@keyframes textRGB{
+
+  to{
+    background-position:
+      400% center;
+  }
+
+}
+
 
 h2{
-  color:#f7edff;
+  margin-top:0;
 }
 
+
 .sub{
-  color:#a99bb9;
+  color:#aaa1b5;
+
   font-size:13px;
 }
 
-/* LABEL */
+
+/* =================================
+   FORM
+================================= */
+
 label{
+
   display:block;
-  color:#c9b9d8;
+
+  color:#c8bdd4;
+
   font-size:12px;
-  margin:13px 0 7px;
+
+  margin:
+    13px
+    0
+    7px;
 }
 
-/* INPUT */
+
 input,
 textarea,
 select{
+
   width:100%;
-  border:1px solid rgba(180,90,255,.25);
+
+  color:white;
+
+  background:
+    rgba(5,3,12,.78);
+
+  border:
+    1px solid
+    rgba(170,80,255,.3);
+
   border-radius:12px;
 
-  background:rgba(7,3,15,.72);
-  color:#fff;
-
   padding:12px;
+
   outline:none;
 
-  transition:
-    border .2s,
-    box-shadow .2s,
-    background .2s,
-    transform .2s;
+  transition:.25s;
 }
+
 
 input{
   height:44px;
 }
 
+
 textarea{
   min-height:95px;
+
   resize:vertical;
 }
 
+
 input::placeholder,
 textarea::placeholder{
-  color:#756b83;
+  color:#6e657a;
 }
+
 
 input:focus,
 textarea:focus,
 select:focus{
-  border-color:#b75cff;
 
-  background:rgba(15,7,27,.88);
+  border-color:#c34dff;
 
   box-shadow:
-    0 0 0 2px rgba(180,80,255,.08),
-    0 0 20px rgba(160,70,255,.22);
 
-  transform:translateY(-1px);
+    0 0 8px
+    rgba(180,50,255,.55),
+
+    0 0 25px
+    rgba(255,20,210,.2);
+
+  transform:
+    translateY(-1px);
 }
 
-/* GRID */
+
 .row{
+
   display:grid;
-  grid-template-columns:1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap:12px;
 }
 
-/* BUTTON GRID */
+
+/* =================================
+   BUTTONS
+================================= */
+
 .btns{
+
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+
+  grid-template-columns:
+    repeat(2,1fr);
+
   gap:10px;
+
   margin-top:14px;
 }
 
-/* BUTTON */
-button{
+
+button,
+.server-btn{
+
   position:relative;
-  border:1px solid rgba(210,130,255,.16);
+
+  border:0;
+
   border-radius:12px;
 
   padding:12px 14px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(57,29,81,.95),
-      rgba(28,13,47,.95)
-    );
+  color:white;
 
-  color:#fff;
   font-weight:700;
+
   cursor:pointer;
 
-  transition:
-    transform .18s,
-    box-shadow .18s,
-    filter .18s,
-    border .18s;
+  text-decoration:none;
 
-  box-shadow:
-    0 5px 18px rgba(0,0,0,.28);
-}
-
-button:hover{
-  transform:translateY(-2px);
-  filter:brightness(1.15);
-
-  border-color:rgba(210,110,255,.55);
-
-  box-shadow:
-    0 7px 25px rgba(0,0,0,.4),
-    0 0 20px rgba(170,70,255,.18);
-}
-
-button:active{
-  transform:translateY(0);
-}
-
-/* PRIMARY */
-.primary{
-  background:
-    linear-gradient(
-      135deg,
-      #7134d9,
-      #a63eff,
-      #d14bff
-    );
-
-  border-color:#b96aff;
-
-  box-shadow:
-    0 0 18px rgba(166,62,255,.35),
-    0 7px 22px rgba(75,20,120,.45);
-}
-
-.primary:hover{
-  box-shadow:
-    0 0 28px rgba(194,76,255,.55),
-    0 8px 28px rgba(75,20,120,.55);
-}
-
-/* GREEN */
-.green{
-  background:
-    linear-gradient(
-      135deg,
-      #147b59,
-      #18aa76,
-      #28d994
-    );
-
-  border-color:rgba(70,255,181,.5);
-
-  box-shadow:
-    0 0 18px rgba(40,220,150,.2);
-}
-
-.green:hover{
-  box-shadow:
-    0 0 27px rgba(40,220,150,.38);
-}
-
-/* DANGER */
-.danger{
-  background:
-    linear-gradient(
-      135deg,
-      #8e2548,
-      #c52d61,
-      #ed3f75
-    );
-
-  border-color:rgba(255,80,130,.4);
-}
-
-.danger:hover{
-  box-shadow:
-    0 0 25px rgba(255,60,120,.35);
-}
-
-/* STATUS */
-.status{
   text-align:center;
-  color:#c9b9d8;
-  font-size:12px;
-  min-height:20px;
-  margin-top:13px;
+
+  overflow:hidden;
+
+  transition:.2s;
+
+  background:
+    linear-gradient(
+      135deg,
+      #25123c,
+      #160a28
+    );
+
+  box-shadow:
+    0 7px 20px rgba(0,0,0,.3);
 }
 
-/* LIST */
+
+button:hover,
+.server-btn:hover{
+
+  transform:
+    translateY(-3px)
+    scale(1.01);
+
+  box-shadow:
+
+    0 0 15px
+    rgba(180,50,255,.35),
+
+    0 10px 30px
+    rgba(0,0,0,.4);
+}
+
+
+button:active,
+.server-btn:active{
+
+  transform:
+    scale(.96);
+}
+
+
+/* =================================
+   🌈 RGB PRIMARY BUTTON
+================================= */
+
+.primary{
+
+  background:
+
+    linear-gradient(
+      90deg,
+      #7200ff,
+      #c000ff,
+      #ff00cc,
+      #ff246e,
+      #7200ff
+    );
+
+  background-size:400% 100%;
+
+  animation:
+    buttonRGB
+    4s
+    linear
+    infinite;
+
+  box-shadow:
+
+    0 0 15px
+    rgba(170,50,255,.35),
+
+    0 0 30px
+    rgba(255,0,210,.15);
+}
+
+
+@keyframes buttonRGB{
+
+  0%{
+    background-position:0% 50%;
+  }
+
+  100%{
+    background-position:400% 50%;
+  }
+
+}
+
+
+/* =================================
+   💜 SERVER BUTTON
+================================= */
+
+.server-box{
+
+  text-align:center;
+
+  padding:6px 0 2px;
+}
+
+
+.server-btn{
+
+  display:block;
+
+  width:100%;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      #5865f2,
+      #9b4dff,
+      #ff39d4,
+      #5865f2
+    );
+
+  background-size:400% 100%;
+
+  animation:
+    serverRGB
+    5s
+    linear
+    infinite;
+
+  box-shadow:
+
+    0 0 20px
+    rgba(88,101,242,.4),
+
+    0 0 40px
+    rgba(200,50,255,.18);
+}
+
+
+@keyframes serverRGB{
+
+  0%{
+    background-position:0% 50%;
+  }
+
+  100%{
+    background-position:400% 50%;
+  }
+
+}
+
+
+/* =================================
+   GREEN
+================================= */
+
+.green{
+
+  background:
+    linear-gradient(
+      90deg,
+      #08794f,
+      #18bd7d,
+      #38e69c,
+      #08794f
+    );
+
+  background-size:300% 100%;
+
+  animation:
+    greenRGB
+    4s
+    linear
+    infinite;
+}
+
+
+@keyframes greenRGB{
+
+  0%{
+    background-position:0%;
+  }
+
+  100%{
+    background-position:300%;
+  }
+
+}
+
+
+/* =================================
+   RED
+================================= */
+
+.danger{
+
+  background:
+    linear-gradient(
+      90deg,
+      #8c1944,
+      #ff276d,
+      #ff4d8a,
+      #8c1944
+    );
+
+  background-size:300% 100%;
+
+  animation:
+    redRGB
+    4s
+    linear
+    infinite;
+}
+
+
+@keyframes redRGB{
+
+  to{
+    background-position:
+      300% 0;
+  }
+
+}
+
+
+/* =================================
+   LIST
+================================= */
+
 .list{
+
   display:grid;
+
   gap:10px;
+
   margin-top:14px;
 }
 
+
 .item{
+
   display:flex;
+
   align-items:center;
+
   gap:9px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(25,12,42,.82),
-      rgba(10,6,19,.82)
-    );
-
-  border:1px solid rgba(180,90,255,.18);
-  border-radius:14px;
 
   padding:11px;
 
-  transition:
-    border .2s,
-    box-shadow .2s,
-    transform .2s;
+  border-radius:14px;
+
+  background:
+    rgba(10,5,20,.72);
+
+  border:
+    1px solid
+    rgba(180,80,255,.2);
+
+  transition:.25s;
 }
+
 
 .item:hover{
-  transform:translateY(-1px);
 
-  border-color:rgba(190,90,255,.45);
+  transform:
+    translateY(-2px);
+
+  border-color:
+    rgba(210,80,255,.7);
 
   box-shadow:
-    0 0 22px rgba(150,60,255,.12);
+    0 0 22px
+    rgba(160,50,255,.18);
 }
 
+
 .item-main{
+
   flex:1;
+
   min-width:0;
 }
 
+
 .item-title{
+
   font-weight:700;
-  color:#fff;
+
+  color:white;
 
   text-shadow:
-    0 0 12px rgba(190,90,255,.22);
+    0 0 12px
+    rgba(210,80,255,.3);
 }
+
 
 .item-msg{
-  font-size:12px;
-  color:#9c91aa;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 
   margin-top:4px;
+
+  color:#968ba2;
+
+  font-size:12px;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
 }
 
+
 .small{
-  padding:8px 10px;
+
+  padding:
+    8px 10px;
+
   font-size:12px;
 }
 
-/* EMPTY */
-.empty{
-  color:#756b83;
-  text-align:center;
-  padding:22px;
-  font-size:13px;
 
-  border:1px dashed rgba(170,90,255,.2);
+/* =================================
+   EMPTY
+================================= */
+
+.empty{
+
+  color:#756b80;
+
+  text-align:center;
+
+  padding:22px;
+
+  border:
+    1px dashed
+    rgba(180,80,255,.3);
+
   border-radius:12px;
 }
 
-/* NOTE */
+
+/* =================================
+   STATUS
+================================= */
+
+.status{
+
+  min-height:22px;
+
+  margin-top:13px;
+
+  text-align:center;
+
+  color:#cdbdde;
+
+  font-size:12px;
+
+  transition:.2s;
+}
+
+
+/* =================================
+   NOTE
+================================= */
+
 .note{
-  color:#776d86;
+
+  color:#776d84;
+
   font-size:11px;
+
   line-height:1.5;
-  margin-top:11px;
+
+  margin-top:10px;
 }
 
-/* EDITOR */
-#editor{
-  animation:editorIn .3s ease;
-}
 
-@keyframes editorIn{
-  from{
-    opacity:0;
-    transform:translateY(12px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
+/* =================================
+   COLOR
+================================= */
 
-/* COLOR INPUT */
 input[type="color"]{
-  height:44px;
-  cursor:pointer;
+
   padding:4px;
-}
 
-/* SELECT */
-select{
-  height:44px;
   cursor:pointer;
 }
 
-select option{
-  background:#160b25;
-  color:white;
+
+/* =================================
+   RIPPLE CLICK EFFECT
+================================= */
+
+.ripple{
+
+  position:absolute;
+
+  border-radius:50%;
+
+  transform:scale(0);
+
+  animation:
+    rippleEffect
+    .65s
+    linear;
+
+  background:
+    rgba(255,255,255,.55);
+
+  pointer-events:none;
 }
 
-/* RESPONSIVE */
+
+@keyframes rippleEffect{
+
+  to{
+
+    transform:
+      scale(5);
+
+    opacity:0;
+
+  }
+
+}
+
+
+/* =================================
+   SUCCESS EFFECT
+================================= */
+
+.success{
+
+  animation:
+    successPulse
+    .6s
+    ease;
+}
+
+
+@keyframes successPulse{
+
+  0%{
+    transform:scale(1);
+  }
+
+  50%{
+
+    transform:
+      scale(1.05);
+
+    box-shadow:
+      0 0 35px
+      rgba(50,255,170,.8);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
 @media(max-width:650px){
 
   body{
     padding:12px;
-    background-attachment:scroll;
   }
+
 
   .card{
     padding:16px;
+
     border-radius:18px;
   }
+
 
   h1{
     font-size:22px;
   }
 
+
   .row{
     grid-template-columns:1fr;
   }
+
 
   .btns{
     grid-template-columns:1fr;
   }
 
+
   .item{
     align-items:flex-start;
+
     flex-wrap:wrap;
   }
 
+
   .item-main{
     width:100%;
+
     flex-basis:100%;
   }
+
 }
+
+
+/* =================================
+   REDUCED MOTION
+================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+
+    animation-duration:.01ms!important;
+
+    animation-iteration-count:1!important;
+
+    scroll-behavior:auto!important;
+
+  }
+
+}
+
 </style>
 </head>
 
+
 <body>
+
 
 <div class="wrap">
 
+
+<!-- =================================
+     HEADER / WEBHOOK
+================================= -->
+
 <div class="card">
 
-  <h1>⚡ DONE ORDER BUILDER</h1>
+  <h1>
+    ⚡ DONE ORDER BUILDER
+  </h1>
 
   <div class="sub">
-    Tự tạo, sửa, xóa nút DONE — giao diện Neon Purple ✨
+    🌈 RGB Neon • Auto Color • Discord Order System
   </div>
 
-  <label>Discord Webhook</label>
+
+  <label>
+    Discord Webhook
+  </label>
 
   <input
     id="webhook"
@@ -506,62 +1085,132 @@ select option{
     placeholder="Dán webhook mới vào đây"
   >
 
+
   <div class="row">
 
+
     <div>
-      <label>Discord User ID để ping (tùy chọn)</label>
+
+      <label>
+        Discord User ID để ping
+        (tùy chọn)
+      </label>
 
       <input
         id="userid"
         inputmode="numeric"
         placeholder="123456789012345678"
       >
+
     </div>
 
+
     <div>
-      <label>Ảnh Embed URL (tùy chọn)</label>
+
+      <label>
+        Ảnh Embed URL
+        (tùy chọn)
+      </label>
 
       <input
         id="image"
         placeholder="https://.../image.jpg"
       >
+
     </div>
+
 
   </div>
 
+
   <div class="btns">
+
 
     <button
       class="primary"
-      onclick="testWebhook()"
+      id="testBtn"
+      type="button"
     >
       🔔 TEST WEBHOOK
     </button>
 
+
     <button
       class="green"
-      onclick="openEditor()"
+      id="addBtn"
+      type="button"
     >
       ➕ THÊM DONE
     </button>
 
+
   </div>
 
-  <div id="status" class="status"></div>
+
+  <div
+    id="status"
+    class="status"
+    aria-live="polite"
+  ></div>
+
 
   <div class="note">
-    Webhook chỉ lưu trong trình duyệt của bạn.
+
+    🔐 Webhook chỉ được lưu trong
+    trình duyệt của bạn.
     Không dùng webhook đã từng bị lộ.
+
   </div>
 
 </div>
 
+
+
+<!-- =================================
+     DISCORD SERVER
+================================= -->
+
+<div class="card">
+
+  <div class="server-box">
+
+    <div
+      style="
+        font-size:12px;
+        color:#aaa0b8;
+        margin-bottom:8px;
+      "
+    >
+      💜 DISCORD SERVER
+    </div>
+
+
+    <a
+      class="server-btn"
+      href="https://discord.gg/QfSHWECJ2"
+      target="_blank"
+      rel="noopener noreferrer"
+      id="serverBtn"
+    >
+      💜 THAM GIA SERVER DISCORD
+    </a>
+
+  </div>
+
+</div>
+
+
+
+<!-- =================================
+     EDITOR
+================================= -->
 
 <div
   class="card"
   id="editor"
   style="display:none"
 >
+
 
   <h2
     id="editorTitle"
@@ -570,11 +1219,15 @@ select option{
     ➕ Thêm Done
   </h2>
 
+
   <div class="row">
+
 
     <div>
 
-      <label>Tên nút</label>
+      <label>
+        Tên nút
+      </label>
 
       <input
         id="name"
@@ -583,9 +1236,12 @@ select option{
 
     </div>
 
+
     <div>
 
-      <label>Tiêu đề Discord</label>
+      <label>
+        Tiêu đề Discord
+      </label>
 
       <input
         id="title"
@@ -594,33 +1250,43 @@ select option{
 
     </div>
 
+
   </div>
 
-  <label>Nội dung thông báo</label>
+
+  <label>
+    Nội dung thông báo
+  </label>
 
   <textarea
     id="message"
     placeholder="VD: đã done Kitsune / mong quý khách ủng hộ típ nhé"
   ></textarea>
 
+
   <div class="row">
+
 
     <div>
 
-      <label>Màu Embed</label>
+      <label>
+        Màu Embed
+      </label>
 
       <input
         id="color"
         type="color"
         value="#9b4dff"
-        style="padding:4px"
       >
 
     </div>
 
+
     <div>
 
-      <label>Chế độ ping</label>
+      <label>
+        Chế độ ping
+      </label>
 
       <select id="pingMode">
 
@@ -636,83 +1302,132 @@ select option{
 
     </div>
 
+
   </div>
+
 
   <div class="btns">
 
+
     <button
       class="primary"
-      onclick="saveDone()"
+      id="saveBtn"
+      type="button"
     >
       💾 LƯU DONE
     </button>
 
-    <button onclick="closeEditor()">
+
+    <button
+      id="cancelBtn"
+      type="button"
+    >
       ✖ HỦY
     </button>
+
 
   </div>
 
 </div>
 
 
+
+<!-- =================================
+     LIST
+================================= -->
+
 <div class="card">
 
+
   <h2 style="margin:0">
-    📋 Danh sách DONE
+    📋 DANH SÁCH DONE
   </h2>
+
 
   <div
     class="sub"
     style="margin-top:4px"
   >
-    Các nút này được lưu tự động trên trình duyệt.
+    Các nút được lưu tự động trên
+    trình duyệt.
   </div>
+
 
   <div
     id="list"
     class="list"
   ></div>
 
+
 </div>
+
 
 </div>
 
 
 <script>
 
-const $ = id => document.getElementById(id);
+/* =================================
+   ELEMENT HELPER
+================================= */
+
+const $ =
+  id =>
+  document.getElementById(id);
+
+
+/* =================================
+   STATE
+================================= */
 
 let dones =
   JSON.parse(
-    localStorage.getItem("done_buttons") || "[]"
+    localStorage.getItem(
+      "done_buttons"
+    ) || "[]"
   );
+
 
 let editing = -1;
 
 
-/* LOAD SETTINGS */
+/* =================================
+   LOAD SETTINGS
+================================= */
 
 $("webhook").value =
-  localStorage.getItem("done_webhook") || "";
+  localStorage.getItem(
+    "done_webhook"
+  ) || "";
+
 
 $("userid").value =
-  localStorage.getItem("done_userid") || "";
+  localStorage.getItem(
+    "done_userid"
+  ) || "";
+
 
 $("image").value =
-  localStorage.getItem("done_image") || "";
+  localStorage.getItem(
+    "done_image"
+  ) || "";
 
 
-/* STATUS */
+/* =================================
+   STATUS
+================================= */
 
-function setStatus(x){
+function setStatus(text){
 
-  $("status").textContent = x;
+  $("status").textContent =
+    text;
 
 }
 
 
-/* SAVE SETTINGS */
+/* =================================
+   SETTINGS
+================================= */
 
 function saveSettings(){
 
@@ -734,83 +1449,186 @@ function saveSettings(){
 }
 
 
-$("webhook").addEventListener(
-  "change",
-  saveSettings
+[
+  "webhook",
+  "userid",
+  "image"
+].forEach(id => {
+
+  $(id).addEventListener(
+    "change",
+    saveSettings
+  );
+
+});
+
+
+/* =================================
+   RIPPLE
+================================= */
+
+document.addEventListener(
+  "click",
+  function(e){
+
+    const button =
+      e.target.closest(
+        "button,.server-btn"
+      );
+
+    if(!button) return;
+
+
+    const rect =
+      button.getBoundingClientRect();
+
+
+    const ripple =
+      document.createElement(
+        "span"
+      );
+
+
+    const size =
+      Math.max(
+        rect.width,
+        rect.height
+      );
+
+
+    ripple.className =
+      "ripple";
+
+
+    ripple.style.width =
+      size + "px";
+
+
+    ripple.style.height =
+      size + "px";
+
+
+    ripple.style.left =
+      (
+        e.clientX -
+        rect.left -
+        size / 2
+      ) + "px";
+
+
+    ripple.style.top =
+      (
+        e.clientY -
+        rect.top -
+        size / 2
+      ) + "px";
+
+
+    button.appendChild(
+      ripple
+    );
+
+
+    setTimeout(
+      () =>
+        ripple.remove(),
+      700
+    );
+
+  }
 );
 
-$("userid").addEventListener(
-  "change",
-  saveSettings
-);
 
-$("image").addEventListener(
-  "change",
-  saveSettings
-);
-
-
-/* OPEN EDITOR */
+/* =================================
+   OPEN EDITOR
+================================= */
 
 function openEditor(index=-1){
 
   editing = index;
 
-  $("editor").style.display = "block";
+  $("editor").style.display =
+    "block";
+
 
   if(index < 0){
 
     $("editorTitle").textContent =
       "➕ Thêm Done";
 
+
     $("name").value = "";
+
 
     $("title").value =
       "📦 ĐƠN HÀNG";
 
+
     $("message").value = "";
+
 
     $("color").value =
       "#9b4dff";
 
+
     $("pingMode").value =
       "global";
 
-  }else{
+  }
 
-    const d = dones[index];
+  else{
+
+    const d =
+      dones[index];
+
 
     $("editorTitle").textContent =
       "✏️ Sửa Done";
 
+
     $("name").value =
       d.name;
+
 
     $("title").value =
       d.title;
 
+
     $("message").value =
       d.message;
 
+
     $("color").value =
-      d.color || "#9b4dff";
+      d.color ||
+      "#9b4dff";
+
 
     $("pingMode").value =
-      d.pingMode || "global";
+      d.pingMode ||
+      "global";
 
   }
 
+
   $("name").focus();
 
+
   window.scrollTo({
-    top:document.body.scrollHeight,
-    behavior:"smooth"
+
+    top:
+      document.body.scrollHeight,
+
+    behavior:
+      "smooth"
+
   });
 
 }
 
 
-/* CLOSE EDITOR */
+/* =================================
+   CLOSE EDITOR
+================================= */
 
 function closeEditor(){
 
@@ -822,21 +1640,30 @@ function closeEditor(){
 }
 
 
-/* SAVE DONE */
+/* =================================
+   SAVE DONE
+================================= */
 
 function saveDone(){
 
   const d = {
 
     name:
-      $("name").value.trim(),
+      $("name")
+      .value
+      .trim(),
 
     title:
-      $("title").value.trim()
-      || "📦 ĐƠN HÀNG",
+      $("title")
+      .value
+      .trim()
+      ||
+      "📦 ĐƠN HÀNG",
 
     message:
-      $("message").value.trim(),
+      $("message")
+      .value
+      .trim(),
 
     color:
       $("color").value,
@@ -847,13 +1674,17 @@ function saveDone(){
   };
 
 
-  if(!d.name || !d.message){
+  if(
+    !d.name ||
+    !d.message
+  ){
 
     alert(
-      "Nhập tên nút và nội dung DONE trước."
+      "⚠️ Nhập tên nút và nội dung DONE trước."
     );
 
     return;
+
   }
 
 
@@ -861,9 +1692,12 @@ function saveDone(){
 
     dones.push(d);
 
-  }else{
+  }
 
-    dones[editing] = d;
+  else{
+
+    dones[editing] =
+      d;
 
   }
 
@@ -876,47 +1710,68 @@ function saveDone(){
 
   render();
 
+
   closeEditor();
 
+
   setStatus(
-    "✅ Đã lưu nút DONE"
+    "✅ Đã lưu nút DONE ✨"
   );
 
 }
 
 
-/* DELETE */
+/* =================================
+   DELETE
+================================= */
 
 function deleteDone(i){
 
   if(
-    confirm("Xóa nút này?")
-  ){
+    !confirm(
+      "Xóa nút DONE này?"
+    )
+  )
+    return;
 
-    dones.splice(i,1);
 
-    localStorage.setItem(
-      "done_buttons",
-      JSON.stringify(dones)
-    );
+  dones.splice(
+    i,
+    1
+  );
 
-    render();
 
-  }
+  localStorage.setItem(
+    "done_buttons",
+    JSON.stringify(dones)
+  );
+
+
+  render();
+
+
+  setStatus(
+    "🗑️ Đã xóa DONE"
+  );
 
 }
 
 
-/* MOVE */
+/* =================================
+   MOVE
+================================= */
 
 function move(i,dir){
 
-  const j = i + dir;
+  const j =
+    i + dir;
+
 
   if(
     j < 0 ||
     j >= dones.length
-  ) return;
+  )
+    return;
 
 
   [
@@ -934,31 +1789,37 @@ function move(i,dir){
     JSON.stringify(dones)
   );
 
+
   render();
 
 }
 
 
-/* ESCAPE HTML */
+/* =================================
+   ESCAPE
+================================= */
 
 function esc(s){
 
-  return String(s).replace(
-    /[&<>"']/g,
-    m =>
+  return String(s)
+    .replace(
+      /[&<>"']/g,
+      m =>
       ({
         "&":"&amp;",
         "<":"&lt;",
         ">":"&gt;",
         '"':"&quot;",
         "'":"&#039;"
-      }[m])
-  );
+      })[m]
+    );
 
 }
 
 
-/* RENDER */
+/* =================================
+   RENDER
+================================= */
 
 function render(){
 
@@ -966,13 +1827,18 @@ function render(){
     $("list");
 
 
-  if(!dones.length){
+  if(
+    !dones.length
+  ){
 
     box.innerHTML =
-      '<div class="empty">' +
-      'Chưa có nút DONE. ' +
-      'Bấm “THÊM DONE” để tạo.' +
-      '</div>';
+      `
+      <div class="empty">
+        ✨ Chưa có nút DONE.
+        <br>
+        Bấm “THÊM DONE” để tạo.
+      </div>
+      `;
 
     return;
 
@@ -980,67 +1846,185 @@ function render(){
 
 
   box.innerHTML =
-    dones.map(
-      (d,i) => `
+    dones
+      .map(
+        (d,i) => `
 
-      <div class="item">
+        <div class="item">
 
-        <div class="item-main">
+          <div class="item-main">
 
-          <div class="item-title">
-            ${esc(d.name)}
+            <div class="item-title">
+              ${esc(d.name)}
+            </div>
+
+            <div class="item-msg">
+              ${esc(d.message)}
+            </div>
+
           </div>
 
-          <div class="item-msg">
-            ${esc(d.message)}
-          </div>
+
+          <button
+            class="small primary send-btn"
+            data-index="${i}"
+            type="button"
+          >
+            🚀 GỬI
+          </button>
+
+
+          <button
+            class="small edit-btn"
+            data-index="${i}"
+            type="button"
+          >
+            ✏️ SỬA
+          </button>
+
+
+          <button
+            class="small up-btn"
+            data-index="${i}"
+            type="button"
+          >
+            ↑
+          </button>
+
+
+          <button
+            class="small down-btn"
+            data-index="${i}"
+            type="button"
+          >
+            ↓
+          </button>
+
+
+          <button
+            class="small danger delete-btn"
+            data-index="${i}"
+            type="button"
+          >
+            🗑️
+          </button>
 
         </div>
 
-        <button
-          class="small primary"
-          onclick="sendDone(${i})"
-        >
-          GỬI
-        </button>
+        `
+      )
+      .join("");
 
-        <button
-          class="small"
-          onclick="openEditor(${i})"
-        >
-          SỬA
-        </button>
 
-        <button
-          class="small"
-          onclick="move(${i},-1)"
-        >
-          ↑
-        </button>
+  document
+    .querySelectorAll(
+      ".send-btn"
+    )
+    .forEach(btn => {
 
-        <button
-          class="small"
-          onclick="move(${i},1)"
-        >
-          ↓
-        </button>
+      btn.addEventListener(
+        "click",
+        () => {
 
-        <button
-          class="small danger"
-          onclick="deleteDone(${i})"
-        >
-          XÓA
-        </button>
+          const index =
+            Number(
+              btn.dataset.index
+            );
 
-      </div>
+          sendDone(
+            index,
+            btn
+          );
 
-      `
-    ).join("");
+        }
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      ".edit-btn"
+    )
+    .forEach(btn => {
+
+      btn.addEventListener(
+        "click",
+        () =>
+          openEditor(
+            Number(
+              btn.dataset.index
+            )
+          )
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      ".up-btn"
+    )
+    .forEach(btn => {
+
+      btn.addEventListener(
+        "click",
+        () =>
+          move(
+            Number(
+              btn.dataset.index
+            ),
+            -1
+          )
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      ".down-btn"
+    )
+    .forEach(btn => {
+
+      btn.addEventListener(
+        "click",
+        () =>
+          move(
+            Number(
+              btn.dataset.index
+            ),
+            1
+          )
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      ".delete-btn"
+    )
+    .forEach(btn => {
+
+      btn.addEventListener(
+        "click",
+        () =>
+          deleteDone(
+            Number(
+              btn.dataset.index
+            )
+          )
+      );
+
+    });
 
 }
 
 
-/* HEX -> INTEGER */
+/* =================================
+   HEX COLOR
+================================= */
 
 function hexToInt(hex){
 
@@ -1052,96 +2036,9 @@ function hexToInt(hex){
 }
 
 
-/* DISCORD POST */
-
-async function post(payload){
-
-  saveSettings();
-
-  const url =
-    $("webhook").value.trim();
-
-
-  if(!url){
-
-    setStatus(
-      "❌ Chưa nhập webhook"
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !/^https:\/\/(discord\.com|discordapp\.com)\/api\/webhooks\//
-      .test(url)
-  ){
-
-    setStatus(
-      "❌ Webhook không đúng định dạng"
-    );
-
-    return;
-
-  }
-
-
-  setStatus(
-    "⏳ Đang gửi..."
-  );
-
-
-  try{
-
-    const r =
-      await fetch(
-        url,
-        {
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify(payload)
-        }
-      );
-
-
-    if(
-      r.ok ||
-      r.status === 204
-    ){
-
-      setStatus(
-        "✅ Đã gửi Discord"
-      );
-
-    }else{
-
-      setStatus(
-        "❌ Discord HTTP " +
-        r.status
-      );
-
-    }
-
-
-  }catch(e){
-
-    setStatus(
-      "❌ Trình duyệt chặn request (CORS)."
-    );
-
-  }
-
-}
-
-
-/* CREATE PAYLOAD */
+/* =================================
+   PAYLOAD
+================================= */
 
 function makePayload(
   title,
@@ -1150,53 +2047,60 @@ function makePayload(
   ping
 ){
 
-  const p = {
+  const embed = {
 
-    embeds:[{
+    title:
+      title,
 
-      title:title,
+    description:
+      message,
 
-      description:message,
+    color:
+      hexToInt(
+        color ||
+        "#9b4dff"
+      ),
 
-      color:
-        hexToInt(
-          color || "#9b4dff"
-        ),
+    footer:{
+      text:
+        "🌈 Done Order Builder • RGB Neon"
+    },
 
-      image:
-        $("image").value.trim()
-        ?
-        {
-          url:
-            $("image").value.trim()
-        }
-        :
-        undefined,
-
-      footer:{
-        text:
-          "⚡ Done Order Builder • Neon Purple"
-      },
-
-      timestamp:
-        new Date().toISOString()
-
-    }]
+    timestamp:
+      new Date()
+      .toISOString()
 
   };
 
 
-  if(
-    p.embeds[0].image === undefined
-  ){
+  const image =
+    $("image")
+    .value
+    .trim();
 
-    delete p.embeds[0].image;
+
+  if(image){
+
+    embed.image = {
+      url:image
+    };
 
   }
 
 
+  const payload = {
+
+    embeds:[
+      embed
+    ]
+
+  };
+
+
   const id =
-    $("userid").value.trim();
+    $("userid")
+    .value
+    .trim();
 
 
   if(
@@ -1217,29 +2121,185 @@ function makePayload(
     }
 
 
-    p.content =
-      "<@" + id + ">";
+    payload.content =
+      "<@" +
+      id +
+      ">";
 
-    p.allowed_mentions = {
-      users:[id]
+
+    payload.allowed_mentions = {
+
+      users:[
+        id
+      ]
+
     };
 
   }
 
 
-  return p;
+  return payload;
 
 }
 
 
-/* SEND DONE */
+/* =================================
+   POST DISCORD
+================================= */
 
-function sendDone(i){
+async function post(
+  payload,
+  button=null
+){
+
+  saveSettings();
+
+
+  const url =
+    $("webhook")
+    .value
+    .trim();
+
+
+  if(!url){
+
+    setStatus(
+      "❌ Chưa nhập webhook"
+    );
+
+    return false;
+
+  }
+
+
+  if(
+    !/^https:\/\/(discord\.com|discordapp\.com)\/api\/webhooks\//
+      .test(url)
+  ){
+
+    setStatus(
+      "❌ Webhook không đúng định dạng"
+    );
+
+    return false;
+
+  }
+
+
+  setStatus(
+    "⏳ Đang gửi Discord..."
+  );
+
+
+  try{
+
+    const response =
+      await fetch(
+        url,
+        {
+
+          method:
+            "POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+
+        }
+      );
+
+
+    if(
+      response.ok ||
+      response.status === 204
+    ){
+
+      setStatus(
+        "✅ DONE ĐÃ GỬI DISCORD ✨"
+      );
+
+
+      if(button){
+
+        button.classList.add(
+          "success"
+        );
+
+
+        const old =
+          button.innerHTML;
+
+
+        button.innerHTML =
+          "✅ ĐÃ GỬI";
+
+
+        setTimeout(
+          () => {
+
+            button.classList.remove(
+              "success"
+            );
+
+            button.innerHTML =
+              old;
+
+          },
+          1300
+        );
+
+      }
+
+
+      return true;
+
+    }
+
+
+    setStatus(
+      "❌ Discord HTTP " +
+      response.status
+    );
+
+
+    return false;
+
+  }
+
+
+  catch(error){
+
+    setStatus(
+      "❌ Trình duyệt chặn request (CORS)."
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =================================
+   SEND DONE
+================================= */
+
+function sendDone(
+  i,
+  button
+){
 
   const d =
     dones[i];
 
-  const p =
+
+  const payload =
     makePayload(
       d.title,
       d.message,
@@ -1248,38 +2308,80 @@ function sendDone(i){
     );
 
 
-  if(p){
+  if(payload){
 
-    post(p);
+    post(
+      payload,
+      button
+    );
 
   }
 
 }
 
 
-/* TEST WEBHOOK */
+/* =================================
+   TEST WEBHOOK
+================================= */
 
 function testWebhook(){
 
-  const p =
+  const payload =
     makePayload(
       "🔔 TEST DISCORD",
-      "Webhook đang hoạt động! ✨",
+      "Webhook đang hoạt động! 🌈✨",
       "#9b4dff",
       "global"
     );
 
 
-  if(p){
+  if(payload){
 
-    post(p);
+    post(
+      payload
+    );
 
   }
 
 }
 
 
-/* INITIAL */
+/* =================================
+   BUTTON EVENTS
+================================= */
+
+$("testBtn")
+  .addEventListener(
+    "click",
+    testWebhook
+  );
+
+
+$("addBtn")
+  .addEventListener(
+    "click",
+    () =>
+      openEditor()
+  );
+
+
+$("saveBtn")
+  .addEventListener(
+    "click",
+    saveDone
+  );
+
+
+$("cancelBtn")
+  .addEventListener(
+    "click",
+    closeEditor
+  );
+
+
+/* =================================
+   START
+================================= */
 
 render();
 
