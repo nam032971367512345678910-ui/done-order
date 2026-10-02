@@ -1,2389 +1,3607 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>DONE ORDER BUILDER • RGB NEON</title>
+<title>DONE ORDER • VIP</title>
 
 <style>
-
-/* ==============================
-   🌈 RGB NEON THEME
-================================ */
-
-*{
-  box-sizing:border-box;
-}
-
 :root{
-  --rgb-speed:7s;
-
-  --bg:#05030a;
-  --panel:rgba(12,8,22,.78);
-
-  --white:#fff;
-  --muted:#aaa2b8;
-
-  --purple:#9d4dff;
-  --pink:#ff35d1;
-  --blue:#29bfff;
-  --green:#30e69a;
-  --red:#ff3d6e;
+  --primary:#8d63ff;
+  --primary2:#ff00e6;
+  --accent:#00eaff;
+  --bg:#060711;
+  --card:#101326dd;
+  --text:#fff;
+  --muted:#aeb3cd;
+  --radius:21px;
+  --glass:.82;
+  --glow:1;
+  --overlay:.72;
 }
 
-html{
-  scroll-behavior:smooth;
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
+  color:var(--text)
 }
 
 body{
-  margin:0;
-  min-height:100vh;
-
-  padding:20px;
-
-  color:white;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  background:#05030a;
-
-  overflow-x:hidden;
+  background:var(--bg);
+  overflow-x:hidden
 }
 
-
-/* =================================
-   🌌 ANIMATED RGB BACKGROUND
-================================= */
-
-body::before{
+body:before{
   content:"";
-
   position:fixed;
-
-  width:160%;
-  height:160%;
-
-  left:-30%;
-  top:-30%;
-
+  inset:-25%;
   z-index:-3;
-
-  background:
-    linear-gradient(
-      120deg,
-      #5400ff,
-      #a000ff,
-      #ff00cc,
-      #ff0059,
-      #006cff,
-      #00d9ff,
-      #5400ff
-    );
-
-  background-size:500% 500%;
-
-  animation:
-    rgbBackground
-    var(--rgb-speed)
-    ease
-    infinite;
-
-  filter:blur(100px);
-
-  opacity:.35;
+  background:conic-gradient(
+    var(--primary2),
+    var(--primary),
+    var(--accent),
+    #20f0a0,
+    #ffed00,
+    var(--primary2)
+  );
+  filter:blur(120px);
+  opacity:calc(.22 * var(--glow));
+  animation:spin 18s linear infinite
 }
 
-
-@keyframes rgbBackground{
-
-  0%{
-    background-position:0% 50%;
-  }
-
-  25%{
-    background-position:100% 50%;
-  }
-
-  50%{
-    background-position:100% 100%;
-  }
-
-  75%{
-    background-position:0% 100%;
-  }
-
-  100%{
-    background-position:0% 50%;
-  }
-
-}
-
-
-/* =================================
-   ✨ LIGHT ORBS
-================================= */
-
-body::after{
+body:after{
   content:"";
-
   position:fixed;
-
-  width:500px;
-  height:500px;
-
-  left:50%;
-  top:50%;
-
-  transform:translate(-50%,-50%);
-
-  border-radius:50%;
-
+  inset:0;
+  z-index:-2;
   background:
     radial-gradient(
-      circle,
-      rgba(255,0,220,.14),
-      transparent 70%
-    );
-
-  filter:blur(25px);
-
-  animation:
-    orbMove
-    10s
-    ease-in-out
-    infinite;
-
-  pointer-events:none;
-
-  z-index:-2;
+      circle at 15% 20%,
+      color-mix(in srgb,var(--primary2) 20%,transparent),
+      transparent 25%
+    ),
+    linear-gradient(
+      120deg,
+      rgba(7,8,18,var(--overlay)),
+      rgba(7,8,18,.72)
+    ),
+    var(--custom-bg) center/cover fixed;
 }
 
-
-@keyframes orbMove{
-
-  0%{
-    transform:
-      translate(-60%,-50%)
-      scale(.8);
-  }
-
-  50%{
-    transform:
-      translate(20%,-40%)
-      scale(1.25);
-  }
-
-  100%{
-    transform:
-      translate(-60%,-50%)
-      scale(.8);
-  }
-
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes grad{to{background-position:300%}}
+@keyframes hue{to{filter:hue-rotate(360deg)}}
+@keyframes pop{
+  from{opacity:0;transform:translateY(10px) scale(.98)}
+  to{opacity:1;transform:none}
 }
 
-
-/* =================================
-   MAIN
-================================= */
+body.no-animation *,
+body.no-animation *:before,
+body.no-animation *:after{
+  animation:none!important;
+  transition:none!important
+}
 
 .wrap{
-  width:100%;
-  max-width:980px;
-
+  width:min(1450px,94%);
   margin:auto;
+  padding:24px 0 60px
 }
 
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px
+}
 
-/* =================================
-   CARD
-================================= */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px
+}
 
-.card{
-
-  position:relative;
-
-  padding:20px;
-
-  margin-bottom:16px;
-
-  border-radius:22px;
-
-  background:
-    linear-gradient(
-      rgba(13,8,25,.9),
-      rgba(9,5,18,.9)
-    )
-    padding-box,
-
-    linear-gradient(
-      90deg,
-      #812cff,
-      #ff26d5,
-      #ff3c78,
-      #29bfff,
-      #812cff
-    )
-    border-box;
-
-  border:2px solid transparent;
-
-  background-size:
-    100% 100%,
-    400% 100%;
-
-  animation:
-    cardRGB
-    6s
-    linear
-    infinite;
-
+.logo{
+  width:52px;
+  height:52px;
+  border-radius:17px;
+  display:grid;
+  place-items:center;
+  font-size:26px;
+  background:linear-gradient(
+    135deg,
+    var(--primary2),
+    var(--primary),
+    var(--accent)
+  );
   box-shadow:
-    0 0 20px rgba(140,40,255,.16),
-    0 20px 55px rgba(0,0,0,.55);
-
-  backdrop-filter:blur(18px);
-
-  overflow:hidden;
+    0 0 calc(32px * var(--glow))
+    color-mix(in srgb,var(--primary) 55%,transparent);
+  animation:hue 5s linear infinite
 }
-
-
-@keyframes cardRGB{
-
-  0%{
-    background-position:
-      0 0,
-      0% 50%;
-  }
-
-  50%{
-    background-position:
-      0 0,
-      100% 50%;
-  }
-
-  100%{
-    background-position:
-      0 0,
-      0% 50%;
-  }
-
-}
-
-
-/* shine */
-
-.card::before{
-
-  content:"";
-
-  position:absolute;
-
-  top:-100%;
-  left:-50%;
-
-  width:30%;
-  height:300%;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,255,255,.12),
-      transparent
-    );
-
-  transform:rotate(20deg);
-
-  animation:
-    shine
-    6s
-    ease-in-out
-    infinite;
-
-  pointer-events:none;
-}
-
-
-@keyframes shine{
-
-  0%{
-    left:-70%;
-  }
-
-  50%{
-    left:140%;
-  }
-
-  100%{
-    left:140%;
-  }
-
-}
-
-
-/* =================================
-   TEXT
-================================= */
 
 h1{
-
-  margin:
-    0
-    0
-    6px;
-
-  font-size:26px;
-
-  letter-spacing:.6px;
-
-  background:
-
-    linear-gradient(
-      90deg,
-      #9b4dff,
-      #ff38d5,
-      #ff3979,
-      #2fc5ff,
-      #9b4dff
-    );
-
-  background-size:400% auto;
-
+  margin:0;
+  font-size:clamp(25px,4vw,42px);
+  font-weight:950;
+  letter-spacing:-1.5px;
+  background:linear-gradient(
+    90deg,
+    #fff,
+    var(--primary2),
+    var(--primary),
+    var(--accent),
+    #fff
+  );
+  background-size:300%;
   -webkit-background-clip:text;
-
   background-clip:text;
-
   color:transparent;
-
-  animation:
-    textRGB
-    5s
-    linear
-    infinite;
-
-  text-shadow:
-    0 0 25px rgba(170,50,255,.25);
+  animation:grad 5s linear infinite
 }
-
-
-@keyframes textRGB{
-
-  to{
-    background-position:
-      400% center;
-  }
-
-}
-
-
-h2{
-  margin-top:0;
-}
-
 
 .sub{
-  color:#aaa1b5;
-
+  color:var(--muted);
   font-size:13px;
+  margin-top:3px
 }
 
+.server,
+.logout{
+  color:#fff;
+  text-decoration:none;
+  border:0;
+  padding:11px 15px;
+  border-radius:14px;
+  font-weight:900;
+  cursor:pointer;
+}
 
-/* =================================
-   FORM
-================================= */
+.server{
+  background:linear-gradient(
+    100deg,
+    #5865f2,
+    var(--primary),
+    var(--primary2),
+    #5865f2
+  );
+  background-size:300%;
+  animation:grad 4s linear infinite
+}
+
+.logout{
+  background:#ffffff10;
+  border:1px solid #ffffff16
+}
+
+.top-actions{
+  display:flex;
+  gap:8px;
+  align-items:center
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin-bottom:16px
+}
+
+.stat,
+.panel,
+.done,
+.preview{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #ffffff16;
+  border-radius:var(--radius);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb,var(--card) 95%,transparent),
+      rgba(8,10,22,.85)
+    );
+  backdrop-filter:blur(18px);
+  box-shadow:
+    0 18px 60px rgba(0,0,0,.32),
+    0 0 calc(25px * var(--glow))
+    color-mix(in srgb,var(--primary) 10%,transparent)
+}
+
+.stat{
+  padding:15px
+}
+
+.stat small{
+  color:var(--muted);
+  font-weight:800
+}
+
+.stat strong{
+  display:block;
+  font-size:26px;
+  margin-top:5px
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);
+  gap:16px
+}
+
+.panel{
+  padding:18px;
+  margin-bottom:16px;
+  animation:pop .3s ease
+}
+
+.panel h2{
+  margin:0 0 14px;
+  font-size:17px
+}
+
+.panel h2 span{
+  color:var(--primary)
+}
 
 label{
-
   display:block;
-
-  color:#c8bdd4;
-
+  color:#b8bdd5;
   font-size:12px;
-
-  margin:
-    13px
-    0
-    7px;
+  font-weight:850;
+  margin:11px 0 6px
 }
-
 
 input,
 textarea,
 select{
-
   width:100%;
-
-  color:white;
-
-  background:
-    rgba(5,3,12,.78);
-
-  border:
-    1px solid
-    rgba(170,80,255,.3);
-
+  padding:11px 12px;
   border-radius:12px;
-
-  padding:12px;
-
+  border:1px solid #ffffff14;
+  background:#050711b8;
+  color:#fff;
   outline:none;
-
-  transition:.25s;
+  font:inherit
 }
-
-
-input{
-  height:44px;
-}
-
-
-textarea{
-  min-height:95px;
-
-  resize:vertical;
-}
-
-
-input::placeholder,
-textarea::placeholder{
-  color:#6e657a;
-}
-
 
 input:focus,
 textarea:focus,
 select:focus{
-
-  border-color:#c34dff;
-
+  border-color:var(--primary);
   box-shadow:
-
-    0 0 8px
-    rgba(180,50,255,.55),
-
-    0 0 25px
-    rgba(255,20,210,.2);
-
-  transform:
-    translateY(-1px);
+    0 0 0 3px
+    color-mix(in srgb,var(--primary) 12%,transparent)
 }
 
+textarea{
+  min-height:88px;
+  resize:vertical
+}
+
+input[type=color]{
+  height:43px;
+  padding:4px
+}
+
+input[type=range]{
+  padding:0
+}
 
 .row{
-
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:12px;
+  grid-template-columns:1fr 1fr;
+  gap:11px
 }
 
-
-/* =================================
-   BUTTONS
-================================= */
-
-.btns{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(2,1fr);
-
-  gap:10px;
-
-  margin-top:14px;
-}
-
-
-button,
-.server-btn{
-
-  position:relative;
-
-  border:0;
-
-  border-radius:12px;
-
-  padding:12px 14px;
-
-  color:white;
-
-  font-weight:700;
-
-  cursor:pointer;
-
-  text-decoration:none;
-
-  text-align:center;
-
-  overflow:hidden;
-
-  transition:.2s;
-
-  background:
-    linear-gradient(
-      135deg,
-      #25123c,
-      #160a28
-    );
-
-  box-shadow:
-    0 7px 20px rgba(0,0,0,.3);
-}
-
-
-button:hover,
-.server-btn:hover{
-
-  transform:
-    translateY(-3px)
-    scale(1.01);
-
-  box-shadow:
-
-    0 0 15px
-    rgba(180,50,255,.35),
-
-    0 10px 30px
-    rgba(0,0,0,.4);
-}
-
-
-button:active,
-.server-btn:active{
-
-  transform:
-    scale(.96);
-}
-
-
-/* =================================
-   🌈 RGB PRIMARY BUTTON
-================================= */
-
-.primary{
-
-  background:
-
-    linear-gradient(
-      90deg,
-      #7200ff,
-      #c000ff,
-      #ff00cc,
-      #ff246e,
-      #7200ff
-    );
-
-  background-size:400% 100%;
-
-  animation:
-    buttonRGB
-    4s
-    linear
-    infinite;
-
-  box-shadow:
-
-    0 0 15px
-    rgba(170,50,255,.35),
-
-    0 0 30px
-    rgba(255,0,210,.15);
-}
-
-
-@keyframes buttonRGB{
-
-  0%{
-    background-position:0% 50%;
-  }
-
-  100%{
-    background-position:400% 50%;
-  }
-
-}
-
-
-/* =================================
-   💜 SERVER BUTTON
-================================= */
-
-.server-box{
-
-  text-align:center;
-
-  padding:6px 0 2px;
-}
-
-
-.server-btn{
-
-  display:block;
-
-  width:100%;
-
-  background:
-
-    linear-gradient(
-      90deg,
-      #5865f2,
-      #9b4dff,
-      #ff39d4,
-      #5865f2
-    );
-
-  background-size:400% 100%;
-
-  animation:
-    serverRGB
-    5s
-    linear
-    infinite;
-
-  box-shadow:
-
-    0 0 20px
-    rgba(88,101,242,.4),
-
-    0 0 40px
-    rgba(200,50,255,.18);
-}
-
-
-@keyframes serverRGB{
-
-  0%{
-    background-position:0% 50%;
-  }
-
-  100%{
-    background-position:400% 50%;
-  }
-
-}
-
-
-/* =================================
-   GREEN
-================================= */
-
-.green{
-
-  background:
-    linear-gradient(
-      90deg,
-      #08794f,
-      #18bd7d,
-      #38e69c,
-      #08794f
-    );
-
-  background-size:300% 100%;
-
-  animation:
-    greenRGB
-    4s
-    linear
-    infinite;
-}
-
-
-@keyframes greenRGB{
-
-  0%{
-    background-position:0%;
-  }
-
-  100%{
-    background-position:300%;
-  }
-
-}
-
-
-/* =================================
-   RED
-================================= */
-
-.danger{
-
-  background:
-    linear-gradient(
-      90deg,
-      #8c1944,
-      #ff276d,
-      #ff4d8a,
-      #8c1944
-    );
-
-  background-size:300% 100%;
-
-  animation:
-    redRGB
-    4s
-    linear
-    infinite;
-}
-
-
-@keyframes redRGB{
-
-  to{
-    background-position:
-      300% 0;
-  }
-
-}
-
-
-/* =================================
-   LIST
-================================= */
-
-.list{
-
-  display:grid;
-
-  gap:10px;
-
-  margin-top:14px;
-}
-
-
-.item{
-
+.actions{
   display:flex;
-
-  align-items:center;
-
-  gap:9px;
-
-  padding:11px;
-
-  border-radius:14px;
-
-  background:
-    rgba(10,5,20,.72);
-
-  border:
-    1px solid
-    rgba(180,80,255,.2);
-
-  transition:.25s;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px
 }
 
+button{
+  border:0;
+  color:#fff;
+  cursor:pointer;
+  font-weight:850;
+  border-radius:11px;
+  padding:10px 13px;
+  background:linear-gradient(
+    100deg,
+    var(--primary),
+    var(--primary2),
+    var(--accent),
+    var(--primary)
+  );
+  background-size:300%;
+  animation:grad 5s linear infinite;
+  transition:.2s
+}
 
-.item:hover{
-
-  transform:
-    translateY(-2px);
-
-  border-color:
-    rgba(210,80,255,.7);
-
+button:hover{
+  transform:translateY(-2px);
   box-shadow:
-    0 0 22px
-    rgba(160,50,255,.18);
+    0 10px 26px
+    color-mix(in srgb,var(--primary) 25%,transparent)
 }
 
-
-.item-main{
-
-  flex:1;
-
-  min-width:0;
+button:active{
+  transform:scale(.96)
 }
 
-
-.item-title{
-
-  font-weight:700;
-
-  color:white;
-
-  text-shadow:
-    0 0 12px
-    rgba(210,80,255,.3);
+button.secondary{
+  background:#ffffff0d;
+  animation:none;
+  border:1px solid #ffffff13
 }
 
+button.green{
+  background:linear-gradient(
+    100deg,#00a879,#20f0a0,#00d9ff
+  )
+}
 
-.item-msg{
+button.red{
+  background:linear-gradient(
+    100deg,#a91649,#ff4d7d,#ff8b6b
+  )
+}
 
-  margin-top:4px;
+.customer-list{
+  max-height:290px;
+  overflow:auto;
+  display:grid;
+  gap:7px;
+  margin-top:10px
+}
 
-  color:#968ba2;
+.customer{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border-radius:13px;
+  background:#ffffff08;
+  border:1px solid #ffffff0b
+}
 
+.customer input{
+  width:auto
+}
+
+.customer-info{
+  flex:1
+}
+
+.customer-name{
+  font-weight:850
+}
+
+.customer-id{
+  color:#8e94b0;
+  font-size:11px
+}
+
+.mini{
+  padding:6px 8px;
+  font-size:11px
+}
+
+.done-list{
+  display:grid;
+  gap:11px
+}
+
+.done{
+  padding:15px
+}
+
+.done-name{
+  font-size:16px;
+  font-weight:900
+}
+
+.done-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px
+}
+
+.badge{
+  font-size:10px;
+  padding:5px 8px;
+  border-radius:999px;
+  background:#8d7aff1c;
+  color:#bcb4ff;
+  border:1px solid #8d7aff35
+}
+
+.preview{
+  padding:16px;
+  position:sticky;
+  top:15px
+}
+
+.discord{
+  border-left:4px solid #5865f2;
+  background:#11131d;
+  border-radius:10px;
+  padding:13px
+}
+
+.discord-head{
+  display:flex;
+  gap:9px;
+  align-items:center
+}
+
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(
+    135deg,#5865f2,var(--primary2)
+  );
+  font-weight:900
+}
+
+.bot{
+  font-weight:850
+}
+
+.tag{
+  font-size:10px;
+  background:#5865f2;
+  padding:3px 5px;
+  border-radius:4px
+}
+
+.time{
+  font-size:10px;
+  color:#777b8e
+}
+
+.embed{
+  margin-top:10px;
+  border-left:4px solid var(--primary);
+  background:#191b27;
+  padding:11px;
+  border-radius:7px
+}
+
+.embed-title{
+  font-weight:900
+}
+
+.embed-desc{
+  white-space:pre-wrap;
+  color:#c5c8d7;
+  font-size:13px;
+  margin-top:5px
+}
+
+.embed img{
+  width:100%;
+  max-height:260px;
+  object-fit:cover;
+  border-radius:7px;
+  margin-top:9px
+}
+
+.preview-ping{
+  color:#9c9fff;
   font-size:12px;
+  margin-bottom:6px
+}
 
-  white-space:nowrap;
+.photo-preview{
+  display:none;
+  position:relative;
+  margin-top:9px
+}
 
+.photo-preview img{
+  width:100%;
+  max-height:230px;
+  object-fit:cover;
+  border-radius:13px
+}
+
+.remove-photo{
+  position:absolute;
+  top:7px;
+  right:7px
+}
+
+.progress{
+  display:none;
+  height:7px;
+  background:#ffffff0c;
+  border-radius:99px;
   overflow:hidden;
-
-  text-overflow:ellipsis;
+  margin-top:10px
 }
 
-
-.small{
-
-  padding:
-    8px 10px;
-
-  font-size:12px;
+.progress i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(
+    90deg,var(--primary2),var(--primary),var(--accent)
+  )
 }
 
+.toast{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:100;
+  min-width:240px;
+  padding:13px 15px;
+  border-radius:14px;
+  background:#121528ee;
+  border:1px solid #ffffff18;
+  box-shadow:0 18px 50px #0008;
+  transform:translateY(25px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s
+}
 
-/* =================================
-   EMPTY
-================================= */
+.toast.show{
+  transform:none;
+  opacity:1
+}
 
 .empty{
-
-  color:#756b80;
-
   text-align:center;
-
-  padding:22px;
-
-  border:
-    1px dashed
-    rgba(180,80,255,.3);
-
-  border-radius:12px;
+  color:#777d98;
+  padding:20px;
+  border:1px dashed #ffffff15;
+  border-radius:15px
 }
 
 
-/* =================================
-   STATUS
-================================= */
+/* LOGIN */
 
-.status{
+#loginScreen{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px
+}
 
-  min-height:22px;
+.login-card{
+  width:min(430px,100%);
+  padding:28px;
+  border-radius:28px;
+  border:1px solid #ffffff18;
+  background:#0d1020e8;
+  backdrop-filter:blur(25px);
+  box-shadow:
+    0 30px 100px #0008,
+    0 0 50px
+    color-mix(in srgb,var(--primary) 20%,transparent);
+  animation:pop .5s ease
+}
 
-  margin-top:13px;
+.login-logo{
+  width:70px;
+  height:70px;
+  margin:0 auto 15px;
+  display:grid;
+  place-items:center;
+  border-radius:23px;
+  font-size:34px;
+  background:linear-gradient(
+    135deg,var(--primary2),
+    var(--primary),
+    var(--accent)
+  )
+}
 
+.login-card h1{
   text-align:center;
+  font-size:31px;
+  margin-bottom:5px
+}
 
-  color:#cdbdde;
+.login-sub{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:20px
+}
 
+.login-error{
+  color:#ff7897;
   font-size:12px;
-
-  transition:.2s;
+  min-height:18px;
+  margin-top:8px
 }
 
-
-/* =================================
-   NOTE
-================================= */
-
-.note{
-
-  color:#776d84;
-
+.demo{
+  margin-top:14px;
+  padding:10px;
+  border-radius:12px;
+  background:#ffffff08;
+  color:#aeb3cd;
   font-size:11px;
-
-  line-height:1.5;
-
-  margin-top:10px;
+  text-align:center
 }
 
 
-/* =================================
-   COLOR
-================================= */
+/* ADMIN */
 
-input[type="color"]{
+.user-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  background:#ffffff08;
+  border:1px solid #ffffff0b;
+  border-radius:14px;
+  margin-bottom:8px
+}
 
-  padding:4px;
+.user-avatar{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(
+    135deg,var(--primary),var(--primary2)
+  );
+  font-weight:900
+}
 
-  cursor:pointer;
+.user-info{
+  flex:1
+}
+
+.user-role{
+  font-size:10px;
+  color:#aaa
+}
+
+.permission-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px
+}
+
+.permission{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px;
+  border-radius:11px;
+  background:#ffffff07;
+  font-size:12px
+}
+
+.permission input{
+  width:auto
 }
 
 
-/* =================================
-   RIPPLE CLICK EFFECT
-================================= */
+/* THEME */
 
-.ripple{
+.theme-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
 
-  position:absolute;
+.theme-box{
+  padding:12px;
+  border-radius:15px;
+  background:#ffffff07;
+  border:1px solid #ffffff0c
+}
 
-  border-radius:50%;
+.theme-box.full{
+  grid-column:1/-1
+}
 
-  transform:scale(0);
-
-  animation:
-    rippleEffect
-    .65s
-    linear;
-
-  background:
-    rgba(255,255,255,.55);
-
-  pointer-events:none;
+.theme-value{
+  color:var(--primary);
+  font-weight:900;
+  float:right
 }
 
 
-@keyframes rippleEffect{
+/* HIDDEN */
 
-  to{
+.hidden{
+  display:none!important
+}
 
-    transform:
-      scale(5);
 
-    opacity:0;
+/* MOBILE */
 
+@media(max-width:1000px){
+  .stats{
+    grid-template-columns:repeat(3,1fr)
   }
 
-}
-
-
-/* =================================
-   SUCCESS EFFECT
-================================= */
-
-.success{
-
-  animation:
-    successPulse
-    .6s
-    ease;
-}
-
-
-@keyframes successPulse{
-
-  0%{
-    transform:scale(1);
+  .layout{
+    grid-template-columns:1fr
   }
 
-  50%{
-
-    transform:
-      scale(1.05);
-
-    box-shadow:
-      0 0 35px
-      rgba(50,255,170,.8);
+  .preview{
+    position:relative;
+    top:auto
   }
-
-  100%{
-    transform:scale(1);
-  }
-
 }
-
-
-/* =================================
-   MOBILE
-================================= */
 
 @media(max-width:650px){
 
-  body{
-    padding:12px;
+  .wrap{
+    width:92%;
+    padding-top:15px
   }
 
-
-  .card{
-    padding:16px;
-
-    border-radius:18px;
+  header{
+    align-items:flex-start
   }
 
-
-  h1{
-    font-size:22px;
-  }
-
-
-  .row{
-    grid-template-columns:1fr;
-  }
-
-
-  .btns{
-    grid-template-columns:1fr;
-  }
-
-
-  .item{
-    align-items:flex-start;
-
+  .top-actions{
     flex-wrap:wrap;
+    justify-content:flex-end
   }
 
-
-  .item-main{
-    width:100%;
-
-    flex-basis:100%;
+  .server{
+    font-size:10px;
+    padding:9px
   }
 
+  .stats{
+    grid-template-columns:1fr 1fr
+  }
+
+  .row,
+  .theme-grid,
+  .permission-grid{
+    grid-template-columns:1fr
+  }
+
+  .theme-box.full{
+    grid-column:auto
+  }
+
+  .stat strong{
+    font-size:22px
+  }
+
+  .login-card{
+    padding:22px
+  }
 }
-
-
-/* =================================
-   REDUCED MOTION
-================================= */
-
-@media(prefers-reduced-motion:reduce){
-
-  *,
-  *::before,
-  *::after{
-
-    animation-duration:.01ms!important;
-
-    animation-iteration-count:1!important;
-
-    scroll-behavior:auto!important;
-
-  }
-
-}
-
 </style>
 </head>
 
-
 <body>
 
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+  <div class="login-card">
+
+    <div class="login-logo">⚡</div>
+
+    <h1>DONE ORDER</h1>
+
+    <div class="login-sub">
+      VIP Dashboard • Secure Login
+    </div>
+
+    <label>Tài khoản</label>
+
+    <input
+      id="loginUser"
+      placeholder="Username"
+      autocomplete="username"
+    >
+
+    <label>Mật khẩu</label>
+
+    <input
+      id="loginPass"
+      type="password"
+      placeholder="Password"
+      autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')login()"
+    >
+
+    <div
+      id="loginError"
+      class="login-error"
+    ></div>
+
+    <button
+      style="width:100%;margin-top:6px"
+      onclick="login()"
+    >
+      🔐 ĐĂNG NHẬP
+    </button>
+
+    <div class="demo">
+      Demo Admin: <b>admin</b> / <b>admin123</b>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- APP -->
+
+<div
+  id="app"
+  class="hidden"
+>
 
 <div class="wrap">
 
+<header>
 
-<!-- =================================
-     HEADER / WEBHOOK
-================================= -->
+  <div class="brand">
 
-<div class="card">
-
-  <h1>
-    ⚡ DONE ORDER BUILDER
-  </h1>
-
-  <div class="sub">
-    🌈 RGB Neon • Auto Color • Discord Order System
-  </div>
-
-
-  <label>
-    Discord Webhook
-  </label>
-
-  <input
-    id="webhook"
-    type="password"
-    placeholder="Dán webhook mới vào đây"
-  >
-
-
-  <div class="row">
-
+    <div class="logo">⚡</div>
 
     <div>
+      <h1>DONE ORDER</h1>
 
-      <label>
-        Discord User ID để ping
-        (tùy chọn)
-      </label>
-
-      <input
-        id="userid"
-        inputmode="numeric"
-        placeholder="123456789012345678"
-      >
-
+      <div class="sub">
+        Premium Discord Order Dashboard
+        • <span id="currentUserLabel"></span>
+      </div>
     </div>
-
-
-    <div>
-
-      <label>
-        Ảnh Embed URL
-        (tùy chọn)
-      </label>
-
-      <input
-        id="image"
-        placeholder="https://.../image.jpg"
-      >
-
-    </div>
-
 
   </div>
 
-
-  <div class="btns">
-
-
-    <button
-      class="primary"
-      id="testBtn"
-      type="button"
-    >
-      🔔 TEST WEBHOOK
-    </button>
-
-
-    <button
-      class="green"
-      id="addBtn"
-      type="button"
-    >
-      ➕ THÊM DONE
-    </button>
-
-
-  </div>
-
-
-  <div
-    id="status"
-    class="status"
-    aria-live="polite"
-  ></div>
-
-
-  <div class="note">
-
-    🔐 Webhook chỉ được lưu trong
-    trình duyệt của bạn.
-    Không dùng webhook đã từng bị lộ.
-
-  </div>
-
-</div>
-
-
-
-<!-- =================================
-     DISCORD SERVER
-================================= -->
-
-<div class="card">
-
-  <div class="server-box">
-
-    <div
-      style="
-        font-size:12px;
-        color:#aaa0b8;
-        margin-bottom:8px;
-      "
-    >
-      💜 DISCORD SERVER
-    </div>
-
+  <div class="top-actions">
 
     <a
-      class="server-btn"
+      class="server"
       href="https://discord.gg/QfSHWECJ2"
       target="_blank"
-      rel="noopener noreferrer"
-      id="serverBtn"
+      rel="noopener"
     >
-      💜 THAM GIA SERVER DISCORD
+      💜 SERVER
     </a>
+
+    <button
+      class="logout"
+      onclick="logout()"
+    >
+      🚪 Thoát
+    </button>
 
   </div>
 
+</header>
+
+
+<!-- STATS -->
+
+<section class="stats">
+
+  <div class="stat">
+    <small>👥 Khách</small>
+    <strong id="statCustomers">0</strong>
+  </div>
+
+  <div class="stat">
+    <small>📦 DONE</small>
+    <strong id="statDone">0</strong>
+  </div>
+
+  <div class="stat">
+    <small>📨 Đã gửi</small>
+    <strong id="statSent">0</strong>
+  </div>
+
+  <div class="stat">
+    <small>❌ Lỗi</small>
+    <strong id="statFail">0</strong>
+  </div>
+
+  <div class="stat">
+    <small>🔔 Đang chọn</small>
+    <strong id="statSelected">0</strong>
+  </div>
+
+</section>
+
+
+<div class="layout">
+
+<main>
+
+
+<!-- ADMIN ACCOUNT MANAGEMENT -->
+
+<section
+  class="panel admin-only"
+  id="adminAccounts"
+>
+
+<h2>👑 <span>Quản lý tài khoản</span></h2>
+
+<div class="row">
+
+<div>
+<label>Username</label>
+<input
+  id="newUsername"
+  placeholder="Tên tài khoản"
+>
 </div>
 
+<div>
+<label>Password</label>
+<input
+  id="newPassword"
+  type="password"
+  placeholder="Mật khẩu"
+>
+</div>
 
+</div>
 
-<!-- =================================
-     EDITOR
-================================= -->
+<label>Quyền tài khoản</label>
+
+<select id="newRole">
+
+<option value="user">
+👤 User
+</option>
+
+<option value="admin">
+👑 Admin
+</option>
+
+</select>
+
+<label>Quyền User</label>
+
+<div class="permission-grid">
+
+<label class="permission">
+<input
+  type="checkbox"
+  id="pSend"
+  checked
+>
+ Gửi DONE
+</label>
+
+<label class="permission">
+<input
+  type="checkbox"
+  id="pCustomer"
+  checked
+>
+ Quản lý khách
+</label>
+
+<label class="permission">
+<input
+  type="checkbox"
+  id="pDone"
+  checked
+>
+ Quản lý DONE
+</label>
+
+<label class="permission">
+<input
+  type="checkbox"
+  id="pTheme"
+>
+ Chỉnh giao diện
+</label>
+
+<label class="permission">
+<input
+  type="checkbox"
+  id="pWebhook"
+>
+ Xem Webhook
+</label>
+
+<label class="permission">
+<input
+  type="checkbox"
+  id="pBackup"
+>
+ Backup
+</label>
+
+</div>
+
+<div class="actions">
+
+<button onclick="createUser()">
+➕ Tạo tài khoản
+</button>
+
+</div>
 
 <div
-  class="card"
-  id="editor"
+  id="userList"
+  style="margin-top:14px"
+></div>
+
+</section>
+
+
+<!-- THEME EDITOR -->
+
+<section
+  class="panel admin-only theme-panel"
+>
+
+<h2>🎨 <span>Tùy chỉnh giao diện</span></h2>
+
+<div class="theme-grid">
+
+<div class="theme-box">
+
+<label>Màu chính</label>
+
+<input
+  type="color"
+  id="themePrimary"
+  value="#8d63ff"
+  oninput="themePreview()"
+>
+
+</div>
+
+<div class="theme-box">
+
+<label>Màu phụ</label>
+
+<input
+  type="color"
+  id="themeSecondary"
+  value="#ff00e6"
+  oninput="themePreview()"
+>
+
+</div>
+
+<div class="theme-box">
+
+<label>Màu Accent</label>
+
+<input
+  type="color"
+  id="themeAccent"
+  value="#00eaff"
+  oninput="themePreview()"
+>
+
+</div>
+
+<div class="theme-box">
+
+<label>Bo góc</label>
+
+<span
+  class="theme-value"
+  id="radiusValue"
+>
+21px
+</span>
+
+<input
+  type="range"
+  id="themeRadius"
+  min="5"
+  max="35"
+  value="21"
+  oninput="themePreview()"
+>
+
+</div>
+
+<div class="theme-box">
+
+<label>Độ neon</label>
+
+<span
+  class="theme-value"
+  id="glowValue"
+>
+100%
+</span>
+
+<input
+  type="range"
+  id="themeGlow"
+  min="0"
+  max="200"
+  value="100"
+  oninput="themePreview()"
+>
+
+</div>
+
+<div class="theme-box">
+
+<label>Độ tối nền</label>
+
+<span
+  class="theme-value"
+  id="overlayValue"
+>
+72%
+</span>
+
+<input
+  type="range"
+  id="themeOverlay"
+  min="20"
+  max="95"
+  value="72"
+  oninput="themePreview()"
+>
+
+</div>
+
+<div class="theme-box">
+
+<label>Độ trong suốt</label>
+
+<span
+  class="theme-value"
+  id="glassValue"
+>
+82%
+</span>
+
+<input
+  type="range"
+  id="themeGlass"
+  min="30"
+  max="100"
+  value="82"
+  oninput="themePreview()"
+>
+
+</div>
+
+<div class="theme-box">
+
+<label>Animation</label>
+
+<select
+  id="themeAnimation"
+  onchange="themePreview()"
+>
+
+<option value="on">
+✨ Bật
+</option>
+
+<option value="off">
+⛔ Tắt
+</option>
+
+</select>
+
+</div>
+
+<div class="theme-box full">
+
+<label>🖼️ Ảnh nền</label>
+
+<input
+  id="themeBgUrl"
+  placeholder="Dán URL ảnh nền..."
+  oninput="themePreview()"
+>
+
+<div class="actions">
+
+<button onclick="chooseBg()">
+📁 Chọn ảnh từ máy
+</button>
+
+<button
+  class="secondary"
+  onclick="resetTheme()"
+>
+↩️ Reset Theme
+</button>
+
+<button
+  class="green"
+  onclick="saveTheme()"
+>
+💾 Lưu giao diện
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- WEBHOOK -->
+
+<section
+  class="panel"
+  id="webhookPanel"
+>
+
+<h2>⚙️ <span>Cấu hình Webhook</span></h2>
+
+<label>Discord Webhook URL</label>
+
+<input
+  id="webhook"
+  type="password"
+  placeholder="https://discord.com/api/webhooks/..."
+>
+
+<label>Discord Bot Name</label>
+
+<input
+  id="botName"
+  value="Done Bot"
+>
+
+<div class="actions">
+
+<button onclick="testWebhook()">
+🧪 Test Webhook
+</button>
+
+<button
+  class="secondary"
+  onclick="toggleWebhook()"
+>
+👁 Hiện/ẩn
+</button>
+
+</div>
+
+</section>
+
+
+<!-- CUSTOMERS -->
+
+<section
+  class="panel"
+  id="customerPanel"
+>
+
+<h2>👥 <span>Khách hàng</span></h2>
+
+<div class="row">
+
+<div>
+<label>Tên khách</label>
+
+<input
+  id="customerName"
+  placeholder="VD: Nguyễn Văn A"
+>
+</div>
+
+<div>
+<label>Discord User ID</label>
+
+<input
+  id="customerId"
+  placeholder="123456789012345678"
+>
+</div>
+
+</div>
+
+<div class="actions">
+
+<button onclick="addCustomer()">
+➕ Thêm khách
+</button>
+
+<button
+  class="secondary"
+  onclick="clearCustomerForm()"
+>
+↺ Xóa ô nhập
+</button>
+
+</div>
+
+<label>🔎 Tìm khách</label>
+
+<input
+  id="customerSearch"
+  oninput="renderCustomers()"
+  placeholder="Tìm theo tên hoặc ID..."
+>
+
+<div
+  class="customer-list"
+  id="customerList"
+></div>
+
+<div class="actions">
+
+<button
+  class="secondary"
+  onclick="selectAllCustomers()"
+>
+☑ Chọn tất cả
+</button>
+
+<button
+  class="secondary"
+  onclick="clearCustomers()"
+>
+☐ Bỏ chọn
+</button>
+
+<button
+  class="secondary backup-only"
+  onclick="exportCustomers()"
+>
+💾 Backup khách
+</button>
+
+<button
+  class="secondary backup-only"
+  onclick="importCustomers()"
+>
+📥 Import khách
+</button>
+
+</div>
+
+</section>
+
+
+<!-- DONE -->
+
+<section
+  class="panel"
+  id="donePanel"
+>
+
+<h2>📦 <span>Tạo / sửa DONE</span></h2>
+
+<div class="row">
+
+<div>
+<label>Tên DONE</label>
+
+<input
+  id="doneName"
+  placeholder="VD: Đơn hoàn tất"
+>
+</div>
+
+<div>
+<label>Tiêu đề Embed</label>
+
+<input
+  id="doneTitle"
+  placeholder="Đơn hàng đã hoàn tất"
+>
+</div>
+
+</div>
+
+<label>Nội dung</label>
+
+<textarea
+  id="doneMessage"
+  placeholder="Nhập nội dung gửi cho khách..."
+></textarea>
+
+<div class="row">
+
+<div>
+
+<label>Màu Embed</label>
+
+<input
+  id="doneColor"
+  type="color"
+  value="#8d63ff"
+>
+
+</div>
+
+<div>
+
+<label>Ping</label>
+
+<select id="pingMode">
+
+<option value="yes">
+🔔 Ping khách
+</option>
+
+<option value="no">
+🔕 Không ping
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<label>📸 Ảnh Done</label>
+
+<input
+  id="photoInput"
+  type="file"
+  accept="image/*"
+  capture="environment"
+  onchange="previewPhoto(this)"
+>
+
+<div
+  class="photo-preview"
+  id="photoPreview"
+>
+
+<img id="photoImg">
+
+<button
+  class="red remove-photo"
+  onclick="removePhoto()"
+>
+✕
+</button>
+
+</div>
+
+<div class="actions">
+
+<button onclick="saveDone()">
+💾 Lưu DONE
+</button>
+
+<button
+  class="secondary"
+  onclick="clearDoneForm()"
+>
+↺ Làm mới
+</button>
+
+</div>
+
+</section>
+
+
+<!-- DONE LIST -->
+
+<section class="panel">
+
+<h2>🚀 <span>DANH SÁCH DONE</span></h2>
+
+<div
+  id="doneList"
+  class="done-list"
+></div>
+
+</section>
+
+
+<!-- DATA -->
+
+<section
+  class="panel backup-only"
+>
+
+<h2>🛠️ <span>Dữ liệu</span></h2>
+
+<div class="actions">
+
+<button
+  class="secondary"
+  onclick="exportAll()"
+>
+💾 Backup tất cả
+</button>
+
+<button
+  class="secondary"
+  onclick="importAll()"
+>
+📥 Import tất cả
+</button>
+
+<button
+  class="red"
+  onclick="resetAll()"
+>
+🧹 Reset toàn bộ
+</button>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- PREVIEW -->
+
+<aside>
+
+<section class="preview">
+
+<h2>👀 Preview Discord</h2>
+
+<div class="discord">
+
+<div class="discord-head">
+
+<div class="avatar">D</div>
+
+<div>
+
+<div
+  class="bot"
+  id="pvBot"
+>
+Done Bot
+<span class="tag">BOT</span>
+</div>
+
+<div class="time">
+now
+</div>
+
+</div>
+
+</div>
+
+<div
+  class="preview-ping"
+  id="pvPing"
+></div>
+
+<div
+  class="embed"
+  id="pvEmbed"
+>
+
+<div
+  class="embed-title"
+  id="pvTitle"
+>
+Đơn hàng đã hoàn tất
+</div>
+
+<div
+  class="embed-desc"
+  id="pvDesc"
+>
+Nội dung DONE sẽ hiện ở đây...
+</div>
+
+<img
+  id="pvImg"
   style="display:none"
 >
 
-
-  <h2
-    id="editorTitle"
-    style="margin:0 0 8px"
-  >
-    ➕ Thêm Done
-  </h2>
-
-
-  <div class="row">
-
-
-    <div>
-
-      <label>
-        Tên nút
-      </label>
-
-      <input
-        id="name"
-        placeholder="VD: 🐉 DONE KITSUNE"
-      >
-
-    </div>
-
-
-    <div>
-
-      <label>
-        Tiêu đề Discord
-      </label>
-
-      <input
-        id="title"
-        placeholder="VD: 🐉 ĐƠN HÀNG"
-      >
-
-    </div>
-
-
-  </div>
-
-
-  <label>
-    Nội dung thông báo
-  </label>
-
-  <textarea
-    id="message"
-    placeholder="VD: đã done Kitsune / mong quý khách ủng hộ típ nhé"
-  ></textarea>
-
-
-  <div class="row">
-
-
-    <div>
-
-      <label>
-        Màu Embed
-      </label>
-
-      <input
-        id="color"
-        type="color"
-        value="#9b4dff"
-      >
-
-    </div>
-
-
-    <div>
-
-      <label>
-        Chế độ ping
-      </label>
-
-      <select id="pingMode">
-
-        <option value="global">
-          Dùng User ID ở trên
-        </option>
-
-        <option value="none">
-          Không ping
-        </option>
-
-      </select>
-
-    </div>
-
-
-  </div>
-
-
-  <div class="btns">
-
-
-    <button
-      class="primary"
-      id="saveBtn"
-      type="button"
-    >
-      💾 LƯU DONE
-    </button>
-
-
-    <button
-      id="cancelBtn"
-      type="button"
-    >
-      ✖ HỦY
-    </button>
-
-
-  </div>
+</div>
 
 </div>
 
+<div
+  class="progress"
+  id="progress"
+>
+<i id="progressBar"></i>
+</div>
 
+<div class="actions">
 
-<!-- =================================
-     LIST
-================================= -->
-
-<div class="card">
-
-
-  <h2 style="margin:0">
-    📋 DANH SÁCH DONE
-  </h2>
-
-
-  <div
-    class="sub"
-    style="margin-top:4px"
-  >
-    Các nút được lưu tự động trên
-    trình duyệt.
-  </div>
-
-
-  <div
-    id="list"
-    class="list"
-  ></div>
-
+<button
+  class="green"
+  style="width:100%"
+  onclick="sendCurrent()"
+>
+🚀 GỬI DONE NGAY
+</button>
 
 </div>
 
+</section>
+
+</aside>
 
 </div>
+
+</div>
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
 
 
 <script>
 
-/* =================================
-   ELEMENT HELPER
-================================= */
+/* =========================
+   DATABASE LOCAL
+========================= */
 
-const $ =
-  id =>
-  document.getElementById(id);
+const KEY='done_vip_v2';
 
+let db=
+JSON.parse(
+  localStorage.getItem(KEY)||'null'
+)
+||
+{
+  users:[
+    {
+      username:'admin',
+      password:'admin123',
+      role:'admin',
+      permissions:{
+        send:true,
+        customer:true,
+        done:true,
+        theme:true,
+        webhook:true,
+        backup:true
+      }
+    }
+  ],
 
-/* =================================
-   STATE
-================================= */
+  webhook:'',
+  botName:'Done Bot',
+  customers:[],
+  dones:[],
+  sent:0,
+  fail:0,
 
-let dones =
-  JSON.parse(
-    localStorage.getItem(
-      "done_buttons"
-    ) || "[]"
-  );
-
-
-let editing = -1;
-
-
-/* =================================
-   LOAD SETTINGS
-================================= */
-
-$("webhook").value =
-  localStorage.getItem(
-    "done_webhook"
-  ) || "";
-
-
-$("userid").value =
-  localStorage.getItem(
-    "done_userid"
-  ) || "";
-
-
-$("image").value =
-  localStorage.getItem(
-    "done_image"
-  ) || "";
-
-
-/* =================================
-   STATUS
-================================= */
-
-function setStatus(text){
-
-  $("status").textContent =
-    text;
-
-}
+  theme:{
+    primary:'#8d63ff',
+    secondary:'#ff00e6',
+    accent:'#00eaff',
+    radius:21,
+    glow:100,
+    overlay:72,
+    glass:82,
+    animation:'on',
+    bg:''
+  }
+};
 
 
-/* =================================
-   SETTINGS
-================================= */
+let currentUser=null;
+let editIndex=-1;
+let photoData=null;
 
-function saveSettings(){
+
+const $=
+id=>document.getElementById(id);
+
+
+function saveDB(){
 
   localStorage.setItem(
-    "done_webhook",
-    $("webhook").value.trim()
-  );
-
-  localStorage.setItem(
-    "done_userid",
-    $("userid").value.trim()
-  );
-
-  localStorage.setItem(
-    "done_image",
-    $("image").value.trim()
+    KEY,
+    JSON.stringify(db)
   );
 
 }
 
 
-[
-  "webhook",
-  "userid",
-  "image"
-].forEach(id => {
+/* =========================
+   TOAST
+========================= */
 
-  $(id).addEventListener(
-    "change",
-    saveSettings
+function toast(msg){
+
+  const t=$('toast');
+
+  t.textContent=msg;
+
+  t.classList.add('show');
+
+  clearTimeout(
+    window.toastTimer
   );
 
-});
-
-
-/* =================================
-   RIPPLE
-================================= */
-
-document.addEventListener(
-  "click",
-  function(e){
-
-    const button =
-      e.target.closest(
-        "button,.server-btn"
-      );
-
-    if(!button) return;
-
-
-    const rect =
-      button.getBoundingClientRect();
-
-
-    const ripple =
-      document.createElement(
-        "span"
-      );
-
-
-    const size =
-      Math.max(
-        rect.width,
-        rect.height
-      );
-
-
-    ripple.className =
-      "ripple";
-
-
-    ripple.style.width =
-      size + "px";
-
-
-    ripple.style.height =
-      size + "px";
-
-
-    ripple.style.left =
-      (
-        e.clientX -
-        rect.left -
-        size / 2
-      ) + "px";
-
-
-    ripple.style.top =
-      (
-        e.clientY -
-        rect.top -
-        size / 2
-      ) + "px";
-
-
-    button.appendChild(
-      ripple
-    );
-
-
+  window.toastTimer=
     setTimeout(
-      () =>
-        ripple.remove(),
-      700
+      ()=>t.classList.remove('show'),
+      2600
     );
 
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+function login(){
+
+  const username=
+    $('loginUser').value.trim();
+
+  const password=
+    $('loginPass').value;
+
+  const user=
+    db.users.find(
+      x=>
+        x.username===username &&
+        x.password===password
+    );
+
+  if(!user){
+
+    $('loginError').textContent=
+      '❌ Sai tài khoản hoặc mật khẩu';
+
+    return;
+
+  }
+
+  currentUser=user;
+
+  $('loginError').textContent='';
+
+  $('loginScreen')
+    .classList
+    .add('hidden');
+
+  $('app')
+    .classList
+    .remove('hidden');
+
+  $('currentUserLabel').textContent=
+    user.role==='admin'
+      ?
+      '👑 ADMIN'
+      :
+      '👤 '+user.username;
+
+  applyTheme();
+
+  applyPermissions();
+
+  renderAll();
+
+  toast(
+    '✅ Đăng nhập thành công'
+  );
+
+}
+
+
+function logout(){
+
+  currentUser=null;
+
+  $('app')
+    .classList
+    .add('hidden');
+
+  $('loginScreen')
+    .classList
+    .remove('hidden');
+
+  $('loginPass').value='';
+
+}
+
+
+/* =========================
+   PERMISSIONS
+========================= */
+
+function can(permission){
+
+  if(!currentUser)
+    return false;
+
+  if(currentUser.role==='admin')
+    return true;
+
+  return !!(
+    currentUser.permissions &&
+    currentUser.permissions[permission]
+  );
+
+}
+
+
+function applyPermissions(){
+
+  document
+    .querySelectorAll('.admin-only')
+    .forEach(
+      el=>
+        el.classList.toggle(
+          'hidden',
+          currentUser.role!=='admin'
+        )
+    );
+
+
+  $('webhookPanel')
+    .classList.toggle(
+      'hidden',
+      !can('webhook')
+    );
+
+
+  $('customerPanel')
+    .classList.toggle(
+      'hidden',
+      !can('customer')
+    );
+
+
+  $('donePanel')
+    .classList.toggle(
+      'hidden',
+      !can('done')
+    );
+
+
+  document
+    .querySelectorAll('.backup-only')
+    .forEach(
+      el=>
+        el.classList.toggle(
+          'hidden',
+          !can('backup')
+        )
+    );
+
+}
+
+
+/* =========================
+   ACCOUNT ADMIN
+========================= */
+
+function createUser(){
+
+  if(currentUser?.role!=='admin')
+    return;
+
+  const username=
+    $('newUsername')
+    .value
+    .trim();
+
+  const password=
+    $('newPassword')
+    .value;
+
+  const role=
+    $('newRole')
+    .value;
+
+  if(!username||!password){
+
+    return toast(
+      '⚠️ Nhập username và password'
+    );
+
+  }
+
+  if(
+    db.users.some(
+      x=>x.username===username
+    )
+  ){
+
+    return toast(
+      '⚠️ Username đã tồn tại'
+    );
+
+  }
+
+
+  db.users.push({
+
+    username,
+    password,
+    role,
+
+    permissions:{
+      send:$('pSend').checked,
+      customer:$('pCustomer').checked,
+      done:$('pDone').checked,
+      theme:$('pTheme').checked,
+      webhook:$('pWebhook').checked,
+      backup:$('pBackup').checked
+    }
+
+  });
+
+
+  saveDB();
+
+  $('newUsername').value='';
+  $('newPassword').value='';
+
+  renderUsers();
+
+  toast(
+    '✅ Đã tạo tài khoản'
+  );
+
+}
+
+
+function renderUsers(){
+
+  if(currentUser?.role!=='admin')
+    return;
+
+  const el=$('userList');
+
+  el.innerHTML=
+    db.users.map(
+      (u,i)=>`
+
+      <div class="user-row">
+
+        <div class="user-avatar">
+          ${u.username[0].toUpperCase()}
+        </div>
+
+        <div class="user-info">
+
+          <b>${esc(u.username)}</b>
+
+          <div class="user-role">
+            ${
+              u.role==='admin'
+              ?
+              '👑 ADMIN'
+              :
+              '👤 USER'
+            }
+          </div>
+
+        </div>
+
+        ${
+          u.username!=='admin'
+          ?
+          `
+          <button
+            class="red mini"
+            onclick="deleteUser(${i})"
+          >
+            🗑
+          </button>
+          `
+          :
+          ''
+        }
+
+      </div>
+      `
+    ).join('');
+
+}
+
+
+function deleteUser(i){
+
+  if(
+    db.users[i].username==='admin'
+  ){
+
+    return toast(
+      '⚠️ Không thể xóa Admin gốc'
+    );
+
+  }
+
+  if(
+    !confirm(
+      'Xóa tài khoản này?'
+    )
+  )return;
+
+  db.users.splice(i,1);
+
+  saveDB();
+
+  renderUsers();
+
+  toast(
+    '🗑 Đã xóa tài khoản'
+  );
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function loadThemeInputs(){
+
+  const t=db.theme;
+
+  $('themePrimary').value=t.primary;
+  $('themeSecondary').value=t.secondary;
+  $('themeAccent').value=t.accent;
+
+  $('themeRadius').value=t.radius;
+  $('themeGlow').value=t.glow;
+  $('themeOverlay').value=t.overlay;
+  $('themeGlass').value=t.glass;
+
+  $('themeAnimation').value=
+    t.animation;
+
+  $('themeBgUrl').value=
+    t.bg||'';
+
+}
+
+
+function themePreview(){
+
+  const root=
+    document.documentElement;
+
+  root.style.setProperty(
+    '--primary',
+    $('themePrimary').value
+  );
+
+  root.style.setProperty(
+    '--primary2',
+    $('themeSecondary').value
+  );
+
+  root.style.setProperty(
+    '--accent',
+    $('themeAccent').value
+  );
+
+  root.style.setProperty(
+    '--radius',
+    $('themeRadius').value+'px'
+  );
+
+  root.style.setProperty(
+    '--glow',
+    Number(
+      $('themeGlow').value
+    )/100
+  );
+
+  root.style.setProperty(
+    '--overlay',
+    Number(
+      $('themeOverlay').value
+    )/100
+  );
+
+
+  root.style.setProperty(
+    '--card',
+    `rgba(16,19,38,${
+      Number(
+        $('themeGlass').value
+      )/100
+    })`
+  );
+
+
+  $('radiusValue').textContent=
+    $('themeRadius').value+'px';
+
+  $('glowValue').textContent=
+    $('themeGlow').value+'%';
+
+  $('overlayValue').textContent=
+    $('themeOverlay').value+'%';
+
+  $('glassValue').textContent=
+    $('themeGlass').value+'%';
+
+
+  document.body.classList.toggle(
+    'no-animation',
+    $('themeAnimation').value==='off'
+  );
+
+
+  const bg=
+    $('themeBgUrl').value.trim();
+
+  if(bg){
+
+    root.style.setProperty(
+      '--custom-bg',
+      `url("${bg}")`
+    );
+
+  }else{
+
+    root.style.setProperty(
+      '--custom-bg',
+      'linear-gradient(120deg,#17192f,#080a16)'
+    );
+
+  }
+
+}
+
+
+function saveTheme(){
+
+  if(currentUser?.role!=='admin'){
+
+    return toast(
+      '❌ Chỉ Admin được chỉnh giao diện'
+    );
+
+  }
+
+  db.theme={
+
+    primary:
+      $('themePrimary').value,
+
+    secondary:
+      $('themeSecondary').value,
+
+    accent:
+      $('themeAccent').value,
+
+    radius:
+      Number(
+        $('themeRadius').value
+      ),
+
+    glow:
+      Number(
+        $('themeGlow').value
+      ),
+
+    overlay:
+      Number(
+        $('themeOverlay').value
+      ),
+
+    glass:
+      Number(
+        $('themeGlass').value
+      ),
+
+    animation:
+      $('themeAnimation').value,
+
+    bg:
+      $('themeBgUrl').value.trim()
+
+  };
+
+
+  saveDB();
+
+  toast(
+    '🎨 Đã lưu giao diện'
+  );
+
+}
+
+
+function resetTheme(){
+
+  db.theme={
+    primary:'#8d63ff',
+    secondary:'#ff00e6',
+    accent:'#00eaff',
+    radius:21,
+    glow:100,
+    overlay:72,
+    glass:82,
+    animation:'on',
+    bg:''
+  };
+
+  saveDB();
+
+  loadThemeInputs();
+
+  applyTheme();
+
+  toast(
+    '↩️ Đã reset giao diện'
+  );
+
+}
+
+
+function applyTheme(){
+
+  loadThemeInputs();
+
+  themePreview();
+
+}
+
+
+function chooseBg(){
+
+  const input=
+    document.createElement('input');
+
+  input.type='file';
+  input.accept='image/*';
+
+  input.onchange=()=>{
+
+    const file=
+      input.files?.[0];
+
+    if(!file)return;
+
+    if(
+      file.size>
+      5*1024*1024
+    ){
+
+      return toast(
+        '⚠️ Ảnh nền tối đa 5MB'
+      );
+
+    }
+
+    const reader=
+      new FileReader();
+
+    reader.onload=()=>{
+
+      /*
+       Lưu data URL trực tiếp.
+       Nếu ảnh rất lớn nên dùng URL thay thế.
+      */
+
+      $('themeBgUrl').value=
+        reader.result;
+
+      themePreview();
+
+      toast(
+        '🖼️ Đã chọn ảnh nền'
+      );
+
+    };
+
+    reader.readAsDataURL(file);
+
+  };
+
+  input.click();
+
+}
+
+
+/* =========================
+   WEBHOOK
+========================= */
+
+function updateStats(){
+
+  $('statCustomers').textContent=
+    db.customers.length;
+
+  $('statDone').textContent=
+    db.dones.length;
+
+  $('statSent').textContent=
+    db.sent;
+
+  $('statFail').textContent=
+    db.fail;
+
+  $('statSelected').textContent=
+    db.customers.filter(
+      x=>x.selected
+    ).length;
+
+}
+
+
+$('botName')
+.addEventListener(
+  'input',
+  ()=>{
+    db.botName=
+      $('botName').value;
+
+    saveDB();
+
+    updatePreview();
   }
 );
 
 
-/* =================================
-   OPEN EDITOR
-================================= */
+$('webhook')
+.addEventListener(
+  'input',
+  ()=>{
+    db.webhook=
+      $('webhook').value.trim();
 
-function openEditor(index=-1){
-
-  editing = index;
-
-  $("editor").style.display =
-    "block";
-
-
-  if(index < 0){
-
-    $("editorTitle").textContent =
-      "➕ Thêm Done";
+    saveDB();
+  }
+);
 
 
-    $("name").value = "";
+function toggleWebhook(){
+
+  $('webhook').type=
+    $('webhook').type==='password'
+    ?
+    'text'
+    :
+    'password';
+
+}
 
 
-    $("title").value =
-      "📦 ĐƠN HÀNG";
+async function testWebhook(){
+
+  if(!can('webhook'))
+    return;
+
+  const url=
+    $('webhook')
+    .value
+    .trim();
+
+  if(!url)
+    return toast(
+      '⚠️ Chưa nhập Webhook'
+    );
 
 
-    $("message").value = "";
+  try{
+
+    const res=
+      await fetch(
+        url,
+        {
+          method:'POST',
+
+          headers:{
+            'Content-Type':
+              'application/json'
+          },
+
+          body:
+            JSON.stringify({
+
+              username:
+                db.botName||
+                'Done Bot',
+
+              content:
+                '🧪 Webhook Test thành công!',
+
+              embeds:[
+                {
+                  title:
+                    '⚡ DONE ORDER TEST',
+
+                  description:
+                    'Webhook đang hoạt động.',
+
+                  color:
+                    0x8d63ff
+                }
+              ]
+
+            })
+        }
+      );
 
 
-    $("color").value =
-      "#9b4dff";
+    if(!res.ok)
+      throw new Error(
+        'HTTP '+res.status
+      );
 
 
-    $("pingMode").value =
-      "global";
+    toast(
+      '✅ Webhook hoạt động!'
+    );
+
+  }catch(e){
+
+    console.error(e);
+
+    toast(
+      '❌ Không gửi được Webhook'
+    );
 
   }
 
-  else{
-
-    const d =
-      dones[index];
+}
 
 
-    $("editorTitle").textContent =
-      "✏️ Sửa Done";
+/* =========================
+   CUSTOMERS
+========================= */
+
+function addCustomer(){
+
+  if(!can('customer'))
+    return;
+
+  const name=
+    $('customerName')
+    .value
+    .trim();
+
+  const id=
+    $('customerId')
+    .value
+    .trim();
+
+  if(!name||!id)
+    return toast(
+      '⚠️ Nhập đủ tên và Discord ID'
+    );
+
+  if(!/^\d{15,25}$/.test(id))
+    return toast(
+      '⚠️ Discord ID không hợp lệ'
+    );
 
 
-    $("name").value =
-      d.name;
+  const old=
+    db.customers.find(
+      x=>x.id===id
+    );
 
+  if(old){
 
-    $("title").value =
-      d.title;
+    old.name=name;
 
+    toast(
+      '✅ Đã cập nhật khách'
+    );
 
-    $("message").value =
-      d.message;
+  }else{
 
+    db.customers.push({
+      name,
+      id,
+      selected:false
+    });
 
-    $("color").value =
-      d.color ||
-      "#9b4dff";
-
-
-    $("pingMode").value =
-      d.pingMode ||
-      "global";
+    toast(
+      '✅ Đã thêm khách'
+    );
 
   }
 
+  saveDB();
 
-  $("name").focus();
+  renderCustomers();
 
+  clearCustomerForm();
+
+}
+
+
+function clearCustomerForm(){
+
+  $('customerName').value='';
+  $('customerId').value='';
+
+}
+
+
+function renderCustomers(){
+
+  const q=
+    $('customerSearch')
+    .value
+    .toLowerCase();
+
+  const list=
+    db.customers.filter(
+      x=>
+        (
+          x.name+
+          x.id
+        )
+        .toLowerCase()
+        .includes(q)
+    );
+
+
+  $('customerList').innerHTML=
+    list.length
+
+    ?
+
+    list.map(
+      x=>{
+
+        const idx=
+          db.customers.indexOf(x);
+
+        return `
+        <div class="customer">
+
+          <input
+            type="checkbox"
+            ${x.selected?'checked':''}
+            onchange="toggleCustomer(${idx},this.checked)"
+          >
+
+          <div class="customer-info">
+
+            <div class="customer-name">
+              ${esc(x.name)}
+            </div>
+
+            <div class="customer-id">
+              ${esc(x.id)}
+            </div>
+
+          </div>
+
+          <button
+            class="secondary mini"
+            onclick="editCustomer(${idx})"
+          >
+            ✏️
+          </button>
+
+          <button
+            class="red mini"
+            onclick="deleteCustomer(${idx})"
+          >
+            🗑
+          </button>
+
+        </div>
+        `;
+
+      }
+    ).join('')
+
+    :
+
+    '<div class="empty">Chưa có khách</div>';
+
+
+  updateStats();
+  updatePreview();
+
+}
+
+
+function toggleCustomer(i,v){
+
+  db.customers[i].selected=v;
+
+  saveDB();
+
+  renderCustomers();
+
+}
+
+
+function editCustomer(i){
+
+  $('customerName').value=
+    db.customers[i].name;
+
+  $('customerId').value=
+    db.customers[i].id;
 
   window.scrollTo({
-
-    top:
-      document.body.scrollHeight,
-
-    behavior:
-      "smooth"
-
+    top:document.querySelector(
+      '#customerPanel'
+    ).offsetTop,
+    behavior:'smooth'
   });
 
 }
 
 
-/* =================================
-   CLOSE EDITOR
-================================= */
+function deleteCustomer(i){
 
-function closeEditor(){
+  if(
+    !confirm(
+      'Xóa khách này?'
+    )
+  )return;
 
-  editing = -1;
+  db.customers.splice(i,1);
 
-  $("editor").style.display =
-    "none";
+  saveDB();
+
+  renderCustomers();
 
 }
 
 
-/* =================================
-   SAVE DONE
-================================= */
+function selectAllCustomers(){
+
+  db.customers.forEach(
+    x=>x.selected=true
+  );
+
+  saveDB();
+
+  renderCustomers();
+
+}
+
+
+function clearCustomers(){
+
+  db.customers.forEach(
+    x=>x.selected=false
+  );
+
+  saveDB();
+
+  renderCustomers();
+
+}
+
+
+/* =========================
+   DONE
+========================= */
+
+[
+  'doneName',
+  'doneTitle',
+  'doneMessage',
+  'doneColor',
+  'pingMode'
+].forEach(
+  id=>
+    $(id).addEventListener(
+      'input',
+      updatePreview
+    )
+);
+
+
+function updatePreview(){
+
+  $('pvBot').innerHTML=
+    esc(
+      db.botName||
+      'Done Bot'
+    )
+    +
+    ' <span class="tag">BOT</span>';
+
+  $('pvTitle').textContent=
+    $('doneTitle').value||
+    'Đơn hàng đã hoàn tất';
+
+  $('pvDesc').textContent=
+    $('doneMessage').value||
+    'Nội dung DONE sẽ hiện ở đây...';
+
+  $('pvEmbed')
+    .style
+    .borderLeftColor=
+    $('doneColor').value;
+
+
+  const selected=
+    db.customers.filter(
+      x=>x.selected
+    );
+
+
+  $('pvPing').textContent=
+    $('pingMode').value==='yes'
+    &&
+    selected.length
+    ?
+    selected
+      .map(
+        x=>'@'+x.name
+      )
+      .join(' ')
+    :
+    '';
+
+
+  if(photoData){
+
+    $('pvImg').src=
+      photoData;
+
+    $('pvImg')
+      .style
+      .display='block';
+
+  }else{
+
+    $('pvImg')
+      .style
+      .display='none';
+
+  }
+
+}
+
+
+function previewPhoto(input){
+
+  const file=
+    input.files?.[0];
+
+  if(!file)return;
+
+  if(
+    file.size>
+    7*1024*1024
+  ){
+
+    return toast(
+      '⚠️ Ảnh tối đa 7MB'
+    );
+
+  }
+
+  const reader=
+    new FileReader();
+
+  reader.onload=()=>{
+
+    photoData=
+      reader.result;
+
+    $('photoImg').src=
+      photoData;
+
+    $('photoPreview')
+      .style
+      .display='block';
+
+    updatePreview();
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+function removePhoto(){
+
+  photoData=null;
+
+  $('photoInput').value='';
+
+  $('photoPreview')
+    .style
+    .display='none';
+
+  updatePreview();
+
+}
+
 
 function saveDone(){
 
-  const d = {
+  if(!can('done'))
+    return;
+
+  const d={
 
     name:
-      $("name")
-      .value
-      .trim(),
-
-    title:
-      $("title")
+      $('doneName')
       .value
       .trim()
       ||
-      "📦 ĐƠN HÀNG",
+      'DONE',
+
+    title:
+      $('doneTitle')
+      .value
+      .trim()
+      ||
+      'Đơn hàng đã hoàn tất',
 
     message:
-      $("message")
-      .value
-      .trim(),
+      $('doneMessage').value,
 
     color:
-      $("color").value,
+      $('doneColor').value,
 
-    pingMode:
-      $("pingMode").value
+    ping:
+      $('pingMode').value
 
   };
 
 
-  if(
-    !d.name ||
-    !d.message
-  ){
+  if(editIndex>=0){
 
-    alert(
-      "⚠️ Nhập tên nút và nội dung DONE trước."
+    db.dones[editIndex]=d;
+
+    editIndex=-1;
+
+    toast(
+      '✅ Đã cập nhật DONE'
     );
+
+  }else{
+
+    db.dones.push(d);
+
+    toast(
+      '✅ Đã thêm DONE'
+    );
+
+  }
+
+
+  saveDB();
+
+  renderDones();
+
+  clearDoneForm();
+
+}
+
+
+function clearDoneForm(){
+
+  editIndex=-1;
+
+  $('doneName').value='';
+  $('doneTitle').value='';
+  $('doneMessage').value='';
+  $('doneColor').value=
+    '#8d63ff';
+  $('pingMode').value='yes';
+
+  removePhoto();
+
+}
+
+
+function renderDones(){
+
+  const el=
+    $('doneList');
+
+  if(!db.dones.length){
+
+    el.innerHTML=
+      '<div class="empty">Chưa có DONE. Tạo mẫu ở phía trên.</div>';
 
     return;
 
   }
 
 
-  if(editing < 0){
+  el.innerHTML=
+    db.dones.map(
+      (d,i)=>`
 
-    dones.push(d);
+      <div class="done">
 
-  }
+        <div class="done-head">
 
-  else{
+          <div>
 
-    dones[editing] =
-      d;
+            <div class="done-name">
+              📦 ${esc(d.name)}
+            </div>
 
-  }
+            <div
+              style="
+                color:#858ba6;
+                font-size:12px
+              "
+            >
+              ${esc(d.title)}
+            </div>
 
+          </div>
 
-  localStorage.setItem(
-    "done_buttons",
-    JSON.stringify(dones)
-  );
+          <span class="badge">
+            ${
+              d.ping==='yes'
+              ?
+              '🔔 PING'
+              :
+              '🔕 NO PING'
+            }
+          </span>
 
+        </div>
 
-  render();
+        <div
+          style="
+            color:#aeb3ca;
+            font-size:12px;
+            margin-top:9px;
+            white-space:pre-wrap
+          "
+        >
+          ${esc(d.message).slice(0,220)}
+        </div>
 
+        <div class="actions">
 
-  closeEditor();
+          <button
+            onclick="useDone(${i})"
+          >
+            ✏️ Sửa
+          </button>
 
+          <button
+            class="green"
+            onclick="sendDone(${i})"
+          >
+            🚀 Gửi
+          </button>
 
-  setStatus(
-    "✅ Đã lưu nút DONE ✨"
-  );
+          <button
+            class="secondary"
+            onclick="duplicateDone(${i})"
+          >
+            📋 Nhân bản
+          </button>
+
+          <button
+            class="red"
+            onclick="deleteDone(${i})"
+          >
+            🗑
+          </button>
+
+        </div>
+
+      </div>
+
+      `
+    ).join('');
 
 }
 
 
-/* =================================
-   DELETE
-================================= */
+function useDone(i){
+
+  const d=
+    db.dones[i];
+
+  editIndex=i;
+
+  $('doneName').value=d.name;
+  $('doneTitle').value=d.title;
+  $('doneMessage').value=d.message;
+  $('doneColor').value=d.color;
+  $('pingMode').value=d.ping;
+
+  updatePreview();
+
+  window.scrollTo({
+    top:
+      $('donePanel').offsetTop,
+    behavior:'smooth'
+  });
+
+}
+
+
+function duplicateDone(i){
+
+  db.dones.splice(
+    i+1,
+    0,
+    {
+      ...db.dones[i],
+      name:
+        db.dones[i].name+
+        ' Copy'
+    }
+  );
+
+  saveDB();
+
+  renderDones();
+
+  toast(
+    '📋 Đã nhân bản'
+  );
+
+}
+
 
 function deleteDone(i){
 
   if(
     !confirm(
-      "Xóa nút DONE này?"
+      'Xóa DONE này?'
     )
-  )
-    return;
+  )return;
+
+  db.dones.splice(i,1);
+
+  saveDB();
+
+  renderDones();
+
+}
 
 
-  dones.splice(
-    i,
-    1
-  );
+/* =========================
+   SEND
+========================= */
 
+function sleep(ms){
 
-  localStorage.setItem(
-    "done_buttons",
-    JSON.stringify(dones)
-  );
-
-
-  render();
-
-
-  setStatus(
-    "🗑️ Đã xóa DONE"
+  return new Promise(
+    r=>setTimeout(r,ms)
   );
 
 }
 
 
-/* =================================
-   MOVE
-================================= */
+async function sendCurrent(){
 
-function move(i,dir){
-
-  const j =
-    i + dir;
-
-
-  if(
-    j < 0 ||
-    j >= dones.length
-  )
-    return;
-
-
-  [
-    dones[i],
-    dones[j]
-  ] =
-  [
-    dones[j],
-    dones[i]
-  ];
-
-
-  localStorage.setItem(
-    "done_buttons",
-    JSON.stringify(dones)
-  );
-
-
-  render();
-
-}
-
-
-/* =================================
-   ESCAPE
-================================= */
-
-function esc(s){
-
-  return String(s)
-    .replace(
-      /[&<>"']/g,
-      m =>
-      ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#039;"
-      })[m]
+  if(!can('send'))
+    return toast(
+      '❌ Tài khoản không có quyền gửi DONE'
     );
 
-}
-
-
-/* =================================
-   RENDER
-================================= */
-
-function render(){
-
-  const box =
-    $("list");
-
-
-  if(
-    !dones.length
-  ){
-
-    box.innerHTML =
-      `
-      <div class="empty">
-        ✨ Chưa có nút DONE.
-        <br>
-        Bấm “THÊM DONE” để tạo.
-      </div>
-      `;
-
-    return;
-
-  }
-
-
-  box.innerHTML =
-    dones
-      .map(
-        (d,i) => `
-
-        <div class="item">
-
-          <div class="item-main">
-
-            <div class="item-title">
-              ${esc(d.name)}
-            </div>
-
-            <div class="item-msg">
-              ${esc(d.message)}
-            </div>
-
-          </div>
-
-
-          <button
-            class="small primary send-btn"
-            data-index="${i}"
-            type="button"
-          >
-            🚀 GỬI
-          </button>
-
-
-          <button
-            class="small edit-btn"
-            data-index="${i}"
-            type="button"
-          >
-            ✏️ SỬA
-          </button>
-
-
-          <button
-            class="small up-btn"
-            data-index="${i}"
-            type="button"
-          >
-            ↑
-          </button>
-
-
-          <button
-            class="small down-btn"
-            data-index="${i}"
-            type="button"
-          >
-            ↓
-          </button>
-
-
-          <button
-            class="small danger delete-btn"
-            data-index="${i}"
-            type="button"
-          >
-            🗑️
-          </button>
-
-        </div>
-
-        `
-      )
-      .join("");
-
-
-  document
-    .querySelectorAll(
-      ".send-btn"
-    )
-    .forEach(btn => {
-
-      btn.addEventListener(
-        "click",
-        () => {
-
-          const index =
-            Number(
-              btn.dataset.index
-            );
-
-          sendDone(
-            index,
-            btn
-          );
-
-        }
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(
-      ".edit-btn"
-    )
-    .forEach(btn => {
-
-      btn.addEventListener(
-        "click",
-        () =>
-          openEditor(
-            Number(
-              btn.dataset.index
-            )
-          )
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(
-      ".up-btn"
-    )
-    .forEach(btn => {
-
-      btn.addEventListener(
-        "click",
-        () =>
-          move(
-            Number(
-              btn.dataset.index
-            ),
-            -1
-          )
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(
-      ".down-btn"
-    )
-    .forEach(btn => {
-
-      btn.addEventListener(
-        "click",
-        () =>
-          move(
-            Number(
-              btn.dataset.index
-            ),
-            1
-          )
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(
-      ".delete-btn"
-    )
-    .forEach(btn => {
-
-      btn.addEventListener(
-        "click",
-        () =>
-          deleteDone(
-            Number(
-              btn.dataset.index
-            )
-          )
-      );
-
-    });
-
-}
-
-
-/* =================================
-   HEX COLOR
-================================= */
-
-function hexToInt(hex){
-
-  return parseInt(
-    hex.replace("#",""),
-    16
-  );
-
-}
-
-
-/* =================================
-   PAYLOAD
-================================= */
-
-function makePayload(
-  title,
-  message,
-  color,
-  ping
-){
-
-  const embed = {
+  const d={
 
     title:
-      title,
+      $('doneTitle').value||
+      'Đơn hàng đã hoàn tất',
 
-    description:
-      message,
+    message:
+      $('doneMessage').value,
 
     color:
-      hexToInt(
-        color ||
-        "#9b4dff"
-      ),
+      $('doneColor').value,
 
-    footer:{
-      text:
-        "🌈 Done Order Builder • RGB Neon"
-    },
-
-    timestamp:
-      new Date()
-      .toISOString()
+    ping:
+      $('pingMode').value
 
   };
 
-
-  const image =
-    $("image")
-    .value
-    .trim();
-
-
-  if(image){
-
-    embed.image = {
-      url:image
-    };
-
-  }
-
-
-  const payload = {
-
-    embeds:[
-      embed
-    ]
-
-  };
-
-
-  const id =
-    $("userid")
-    .value
-    .trim();
-
-
-  if(
-    ping === "global" &&
-    id
-  ){
-
-    if(
-      !/^\d{15,25}$/.test(id)
-    ){
-
-      setStatus(
-        "❌ User ID không hợp lệ"
-      );
-
-      return null;
-
-    }
-
-
-    payload.content =
-      "<@" +
-      id +
-      ">";
-
-
-    payload.allowed_mentions = {
-
-      users:[
-        id
-      ]
-
-    };
-
-  }
-
-
-  return payload;
+  await sendPayload(d);
 
 }
 
 
-/* =================================
-   POST DISCORD
-================================= */
+async function sendDone(i){
 
-async function post(
-  payload,
-  button=null
-){
-
-  saveSettings();
-
-
-  const url =
-    $("webhook")
-    .value
-    .trim();
-
-
-  if(!url){
-
-    setStatus(
-      "❌ Chưa nhập webhook"
+  if(!can('send'))
+    return toast(
+      '❌ Tài khoản không có quyền gửi DONE'
     );
 
-    return false;
+  await sendPayload(
+    db.dones[i]
+  );
+
+}
+
+
+async function sendPayload(d){
+
+  if(!db.webhook){
+
+    return toast(
+      '⚠️ Chưa nhập Webhook'
+    );
+
+  }
+
+  const selected=
+    db.customers.filter(
+      x=>x.selected
+    );
+
+  if(!selected.length){
+
+    return toast(
+      '⚠️ Chưa chọn khách'
+    );
 
   }
 
 
   if(
-    !/^https:\/\/(discord\.com|discordapp\.com)\/api\/webhooks\//
-      .test(url)
+    !confirm(
+      `Gửi DONE cho ${selected.length} khách?`
+    )
+  )return;
+
+
+  const bar=
+    $('progress');
+
+  const fill=
+    $('progressBar');
+
+  bar.style.display='block';
+
+  fill.style.width='0%';
+
+
+  let ok=0;
+  let bad=0;
+
+
+  for(
+    let i=0;
+    i<selected.length;
+    i++
   ){
 
-    setStatus(
-      "❌ Webhook không đúng định dạng"
-    );
+    const c=
+      selected[i];
 
-    return false;
+    try{
 
-  }
+      const embed={
 
+        title:d.title,
 
-  setStatus(
-    "⏳ Đang gửi Discord..."
-  );
+        description:
+          `👤 **Khách:** ${c.name}\n`+
+          `🆔 ${c.id}\n\n`+
+          `${d.message||''}`,
 
+        color:
+          parseInt(
+            d.color
+              .replace('#',''),
+            16
+          ),
 
-  try{
+        footer:{
+          text:
+            'Done Order • VIP Dashboard'
+        },
 
-    const response =
-      await fetch(
-        url,
-        {
+        timestamp:
+          new Date().toISOString()
 
-          method:
-            "POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify(
-              payload
-            )
-
-        }
-      );
+      };
 
 
-    if(
-      response.ok ||
-      response.status === 204
-    ){
+      if(photoData){
 
-      setStatus(
-        "✅ DONE ĐÃ GỬI DISCORD ✨"
-      );
-
-
-      if(button){
-
-        button.classList.add(
-          "success"
-        );
-
-
-        const old =
-          button.innerHTML;
-
-
-        button.innerHTML =
-          "✅ ĐÃ GỬI";
-
-
-        setTimeout(
-          () => {
-
-            button.classList.remove(
-              "success"
-            );
-
-            button.innerHTML =
-              old;
-
-          },
-          1300
-        );
+        embed.image={
+          url:
+            'attachment://done.jpg'
+        };
 
       }
 
 
-      return true;
+      const body={
+
+        username:
+          db.botName||
+          'Done Bot',
+
+        content:
+          d.ping==='yes'
+          ?
+          `<@${c.id}>`
+          :
+          undefined,
+
+        embeds:[
+          embed
+        ]
+
+      };
+
+
+      if(photoData){
+
+        const blob=
+          await(
+            await fetch(photoData)
+          ).blob();
+
+        const fd=
+          new FormData();
+
+        fd.append(
+          'payload_json',
+          JSON.stringify(body)
+        );
+
+        fd.append(
+          'files[0]',
+          blob,
+          'done.jpg'
+        );
+
+
+        const res=
+          await fetch(
+            db.webhook,
+            {
+              method:'POST',
+              body:fd
+            }
+          );
+
+
+        if(!res.ok)
+          throw new Error(
+            'HTTP '+res.status
+          );
+
+
+      }else{
+
+        const res=
+          await fetch(
+            db.webhook,
+            {
+              method:'POST',
+
+              headers:{
+                'Content-Type':
+                  'application/json'
+              },
+
+              body:
+                JSON.stringify(body)
+            }
+          );
+
+
+        if(!res.ok)
+          throw new Error(
+            'HTTP '+res.status
+          );
+
+      }
+
+
+      ok++;
+      db.sent++;
+
+
+    }catch(e){
+
+      console.error(e);
+
+      bad++;
+      db.fail++;
 
     }
 
 
-    setStatus(
-      "❌ Discord HTTP " +
-      response.status
-    );
+    fill.style.width=
+      Math.round(
+        (i+1)/
+        selected.length*
+        100
+      )+
+      '%';
 
 
-    return false;
+    saveDB();
+
+    updateStats();
+
+
+    if(
+      i<
+      selected.length-1
+    ){
+
+      await sleep(900);
+
+    }
 
   }
 
 
-  catch(error){
+  setTimeout(
+    ()=>{
+      bar.style.display='none'
+    },
+    900
+  );
 
-    setStatus(
-      "❌ Trình duyệt chặn request (CORS)."
-    );
 
-    return false;
-
-  }
+  toast(
+    bad
+    ?
+    `⚠️ ${ok}/${selected.length} khách gửi thành công`
+    :
+    `✅ ${ok}/${selected.length} khách đã gửi thành công`
+  );
 
 }
 
 
-/* =================================
-   SEND DONE
-================================= */
+/* =========================
+   BACKUP
+========================= */
 
-function sendDone(
-  i,
-  button
+function downloadJSON(
+  filename,
+  data
 ){
 
-  const d =
-    dones[i];
-
-
-  const payload =
-    makePayload(
-      d.title,
-      d.message,
-      d.color,
-      d.pingMode
+  const blob=
+    new Blob(
+      [
+        JSON.stringify(
+          data,
+          null,
+          2
+        )
+      ],
+      {
+        type:
+          'application/json'
+      }
     );
 
 
-  if(payload){
+  const url=
+    URL.createObjectURL(blob);
 
-    post(
-      payload,
-      button
+  const a=
+    document.createElement('a');
+
+  a.href=url;
+  a.download=filename;
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+function exportCustomers(){
+
+  downloadJSON(
+    'customers.json',
+    db.customers
+  );
+
+  toast(
+    '💾 Đã backup khách'
+  );
+
+}
+
+
+function importCustomers(){
+
+  const input=
+    document.createElement('input');
+
+  input.type='file';
+  input.accept='.json';
+
+  input.onchange=
+    async()=>{
+
+      try{
+
+        const data=
+          JSON.parse(
+            await input.files[0].text()
+          );
+
+        if(!Array.isArray(data))
+          throw 0;
+
+        db.customers=data;
+
+        saveDB();
+
+        renderCustomers();
+
+        toast(
+          '📥 Import thành công'
+        );
+
+      }catch{
+
+        toast(
+          '❌ File không hợp lệ'
+        );
+
+      }
+
+    };
+
+  input.click();
+
+}
+
+
+function exportAll(){
+
+  downloadJSON(
+    'done-order-vip.json',
+    db
+  );
+
+  toast(
+    '💾 Đã backup toàn bộ'
+  );
+
+}
+
+
+function importAll(){
+
+  const input=
+    document.createElement('input');
+
+  input.type='file';
+  input.accept='.json';
+
+  input.onchange=
+    async()=>{
+
+      try{
+
+        const data=
+          JSON.parse(
+            await input.files[0].text()
+          );
+
+        if(
+          !data.users||
+          !data.customers||
+          !data.dones
+        )
+          throw 0;
+
+        db=data;
+
+        saveDB();
+
+        location.reload();
+
+      }catch{
+
+        toast(
+          '❌ Backup không hợp lệ'
+        );
+
+      }
+
+    };
+
+  input.click();
+
+}
+
+
+function resetAll(){
+
+  if(
+    currentUser?.role!=='admin'
+  )
+    return;
+
+  if(
+    !confirm(
+      '⚠️ Xóa toàn bộ dữ liệu?'
+    )
+  )return;
+
+  localStorage.removeItem(KEY);
+
+  location.reload();
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function esc(s){
+
+  return String(s??'')
+    .replace(
+      /[&<>"']/g,
+      c=>({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#039;'
+      }[c])
     );
+
+}
+
+
+function renderAll(){
+
+  $('webhook').value=
+    db.webhook||'';
+
+  $('botName').value=
+    db.botName||'Done Bot';
+
+  renderCustomers();
+  renderDones();
+  updateStats();
+  updatePreview();
+
+  if(
+    currentUser?.role==='admin'
+  ){
+
+    renderUsers();
 
   }
 
 }
 
 
-/* =================================
-   TEST WEBHOOK
-================================= */
-
-function testWebhook(){
-
-  const payload =
-    makePayload(
-      "🔔 TEST DISCORD",
-      "Webhook đang hoạt động! 🌈✨",
-      "#9b4dff",
-      "global"
-    );
-
-
-  if(payload){
-
-    post(
-      payload
-    );
-
-  }
-
-}
-
-
-/* =================================
-   BUTTON EVENTS
-================================= */
-
-$("testBtn")
-  .addEventListener(
-    "click",
-    testWebhook
-  );
-
-
-$("addBtn")
-  .addEventListener(
-    "click",
-    () =>
-      openEditor()
-  );
-
-
-$("saveBtn")
-  .addEventListener(
-    "click",
-    saveDone
-  );
-
-
-$("cancelBtn")
-  .addEventListener(
-    "click",
-    closeEditor
-  );
-
-
-/* =================================
+/* =========================
    START
-================================= */
+========================= */
 
-render();
+applyTheme();
 
 </script>
 
