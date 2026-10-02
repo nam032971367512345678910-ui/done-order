@@ -1,3607 +1,2693 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DONE ORDER • VIP</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>DONE ORDER • VIP Dashboard</title>
 
 <style>
 :root{
-  --primary:#8d63ff;
-  --primary2:#ff00e6;
-  --accent:#00eaff;
-  --bg:#060711;
-  --card:#101326dd;
-  --text:#fff;
-  --muted:#aeb3cd;
-  --radius:21px;
-  --glass:.82;
-  --glow:1;
+  --p:#8d63ff;
+  --s:#ff00e6;
+  --a:#00eaff;
+  --bg:#070710;
+  --glass:rgba(15,15,30,.72);
+  --glass2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.13);
+  --radius:20px;
+  --glow:35px;
   --overlay:.72;
+  --speed:5s;
 }
 
 *{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,Arial,sans-serif;background:var(--bg);color:#fff}
+body{overflow-x:hidden}
 
-html,body{
-  margin:0;
-  min-height:100%;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
-  color:var(--text)
-}
-
-body{
-  background:var(--bg);
-  overflow-x:hidden
-}
-
-body:before{
-  content:"";
+#bg{
   position:fixed;
-  inset:-25%;
+  inset:0;
+  z-index:-5;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(141,99,255,.22),transparent 30%),
+    radial-gradient(circle at 80% 30%,rgba(0,234,255,.15),transparent 28%),
+    radial-gradient(circle at 50% 90%,rgba(255,0,230,.14),transparent 30%),
+    #070710 center/cover no-repeat;
+}
+#shade{
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  background:rgba(0,0,0,var(--overlay));
+  pointer-events:none;
+}
+#rgb{
+  position:fixed;
+  inset:-30%;
   z-index:-3;
-  background:conic-gradient(
-    var(--primary2),
-    var(--primary),
-    var(--accent),
-    #20f0a0,
-    #ffed00,
-    var(--primary2)
-  );
-  filter:blur(120px);
-  opacity:calc(.22 * var(--glow));
-  animation:spin 18s linear infinite
+  pointer-events:none;
+  background:conic-gradient(from 0deg,
+    #ff00e6,#7a00ff,#00eaff,#00ff88,
+    #fff000,#ff6500,#ff005d,#ff00e6);
+  filter:blur(100px);
+  opacity:.10;
+  animation:rgbMove var(--speed) linear infinite;
+}
+@keyframes rgbMove{
+  to{transform:rotate(360deg)}
 }
 
-body:after{
-  content:"";
+#particles{
   position:fixed;
   inset:0;
   z-index:-2;
-  background:
-    radial-gradient(
-      circle at 15% 20%,
-      color-mix(in srgb,var(--primary2) 20%,transparent),
-      transparent 25%
-    ),
-    linear-gradient(
-      120deg,
-      rgba(7,8,18,var(--overlay)),
-      rgba(7,8,18,.72)
-    ),
-    var(--custom-bg) center/cover fixed;
+  pointer-events:none;
 }
 
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes grad{to{background-position:300%}}
-@keyframes hue{to{filter:hue-rotate(360deg)}}
-@keyframes pop{
-  from{opacity:0;transform:translateY(10px) scale(.98)}
-  to{opacity:1;transform:none}
+.cursorGlow{
+  position:fixed;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(0,234,255,.15),transparent 68%);
+  mix-blend-mode:screen;
 }
 
-body.no-animation *,
-body.no-animation *:before,
-body.no-animation *:after{
-  animation:none!important;
-  transition:none!important
+.ripple{
+  position:fixed;
+  width:20px;
+  height:20px;
+  border:2px solid var(--a);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9998;
+  animation:ripple .65s ease-out forwards;
+}
+@keyframes ripple{
+  from{opacity:.9;transform:translate(-50%,-50%) scale(.2)}
+  to{opacity:0;transform:translate(-50%,-50%) scale(8)}
 }
 
-.wrap{
-  width:min(1450px,94%);
-  margin:auto;
-  padding:24px 0 60px
-}
+.hidden{display:none!important}
 
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  margin-bottom:18px
+button,input,textarea,select{
+  font:inherit;
 }
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:13px
-}
-
-.logo{
-  width:52px;
-  height:52px;
-  border-radius:17px;
-  display:grid;
-  place-items:center;
-  font-size:26px;
-  background:linear-gradient(
-    135deg,
-    var(--primary2),
-    var(--primary),
-    var(--accent)
-  );
-  box-shadow:
-    0 0 calc(32px * var(--glow))
-    color-mix(in srgb,var(--primary) 55%,transparent);
-  animation:hue 5s linear infinite
-}
-
-h1{
-  margin:0;
-  font-size:clamp(25px,4vw,42px);
-  font-weight:950;
-  letter-spacing:-1.5px;
-  background:linear-gradient(
-    90deg,
-    #fff,
-    var(--primary2),
-    var(--primary),
-    var(--accent),
-    #fff
-  );
-  background-size:300%;
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  animation:grad 5s linear infinite
-}
-
-.sub{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:3px
-}
-
-.server,
-.logout{
-  color:#fff;
-  text-decoration:none;
-  border:0;
-  padding:11px 15px;
-  border-radius:14px;
-  font-weight:900;
+button{
   cursor:pointer;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.07);
+  border-radius:13px;
+  padding:11px 14px;
+  transition:.2s;
 }
+button:hover{
+  transform:translateY(-2px);
+  border-color:var(--a);
+  box-shadow:0 0 22px rgba(0,234,255,.18);
+}
+button.primary{
+  background:linear-gradient(135deg,var(--p),var(--s));
+  border:0;
+}
+button.danger{background:rgba(255,50,80,.13);border-color:#ff506c}
+button.good{background:rgba(0,255,150,.11);border-color:#00ff9d}
+button.small{padding:7px 10px;font-size:12px}
+button.full{width:100%}
 
-.server{
-  background:linear-gradient(
-    100deg,
-    #5865f2,
-    var(--primary),
-    var(--primary2),
-    #5865f2
-  );
-  background-size:300%;
-  animation:grad 4s linear infinite
+input,textarea,select{
+  width:100%;
+  background:rgba(0,0,0,.28);
+  color:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:11px 12px;
+  outline:none;
 }
-
-.logout{
-  background:#ffffff10;
-  border:1px solid #ffffff16
+input:focus,textarea:focus,select:focus{
+  border-color:var(--a);
+  box-shadow:0 0 0 3px rgba(0,234,255,.08);
 }
-
-.top-actions{
-  display:flex;
-  gap:8px;
-  align-items:center
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:12px;
-  margin-bottom:16px
-}
-
-.stat,
-.panel,
-.done,
-.preview{
-  position:relative;
-  overflow:hidden;
-  border:1px solid #ffffff16;
-  border-radius:var(--radius);
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb,var(--card) 95%,transparent),
-      rgba(8,10,22,.85)
-    );
-  backdrop-filter:blur(18px);
-  box-shadow:
-    0 18px 60px rgba(0,0,0,.32),
-    0 0 calc(25px * var(--glow))
-    color-mix(in srgb,var(--primary) 10%,transparent)
-}
-
-.stat{
-  padding:15px
-}
-
-.stat small{
-  color:var(--muted);
-  font-weight:800
-}
-
-.stat strong{
-  display:block;
-  font-size:26px;
-  margin-top:5px
-}
-
-.layout{
-  display:grid;
-  grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);
-  gap:16px
-}
-
-.panel{
-  padding:18px;
-  margin-bottom:16px;
-  animation:pop .3s ease
-}
-
-.panel h2{
-  margin:0 0 14px;
-  font-size:17px
-}
-
-.panel h2 span{
-  color:var(--primary)
-}
+textarea{min-height:100px;resize:vertical}
 
 label{
   display:block;
-  color:#b8bdd5;
   font-size:12px;
-  font-weight:850;
-  margin:11px 0 6px
+  color:#b9bdd1;
+  margin-bottom:6px;
 }
 
-input,
-textarea,
-select{
-  width:100%;
-  padding:11px 12px;
-  border-radius:12px;
-  border:1px solid #ffffff14;
-  background:#050711b8;
-  color:#fff;
-  outline:none;
-  font:inherit
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:var(--primary);
-  box-shadow:
-    0 0 0 3px
-    color-mix(in srgb,var(--primary) 12%,transparent)
-}
-
-textarea{
-  min-height:88px;
-  resize:vertical
-}
-
-input[type=color]{
-  height:43px;
-  padding:4px
-}
-
-input[type=range]{
-  padding:0
-}
-
-.row{
+.login{
+  min-height:100vh;
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px
+  place-items:center;
+  padding:20px;
+}
+.loginBox{
+  width:min(430px,100%);
+  padding:28px;
+  border:1px solid var(--border);
+  background:rgba(8,8,20,.75);
+  backdrop-filter:blur(25px);
+  border-radius:28px;
+  box-shadow:0 0 var(--glow) rgba(141,99,255,.2);
+}
+.logo{
+  font-size:25px;
+  font-weight:900;
+  text-align:center;
+  letter-spacing:1px;
+  margin-bottom:7px;
+}
+.logo span{
+  background:linear-gradient(90deg,var(--a),var(--p),var(--s));
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.sub{
+  text-align:center;
+  color:#8e93a9;
+  font-size:12px;
+  margin-bottom:22px;
 }
 
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:12px
+.app{
+  min-height:100vh;
 }
-
-button{
-  border:0;
-  color:#fff;
-  cursor:pointer;
-  font-weight:850;
-  border-radius:11px;
-  padding:10px 13px;
-  background:linear-gradient(
-    100deg,
-    var(--primary),
-    var(--primary2),
-    var(--accent),
-    var(--primary)
-  );
-  background-size:300%;
-  animation:grad 5s linear infinite;
-  transition:.2s
-}
-
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:
-    0 10px 26px
-    color-mix(in srgb,var(--primary) 25%,transparent)
-}
-
-button:active{
-  transform:scale(.96)
-}
-
-button.secondary{
-  background:#ffffff0d;
-  animation:none;
-  border:1px solid #ffffff13
-}
-
-button.green{
-  background:linear-gradient(
-    100deg,#00a879,#20f0a0,#00d9ff
-  )
-}
-
-button.red{
-  background:linear-gradient(
-    100deg,#a91649,#ff4d7d,#ff8b6b
-  )
-}
-
-.customer-list{
-  max-height:290px;
-  overflow:auto;
-  display:grid;
-  gap:7px;
-  margin-top:10px
-}
-
-.customer{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px;
-  border-radius:13px;
-  background:#ffffff08;
-  border:1px solid #ffffff0b
-}
-
-.customer input{
-  width:auto
-}
-
-.customer-info{
-  flex:1
-}
-
-.customer-name{
-  font-weight:850
-}
-
-.customer-id{
-  color:#8e94b0;
-  font-size:11px
-}
-
-.mini{
-  padding:6px 8px;
-  font-size:11px
-}
-
-.done-list{
-  display:grid;
-  gap:11px
-}
-
-.done{
-  padding:15px
-}
-
-.done-name{
-  font-size:16px;
-  font-weight:900
-}
-
-.done-head{
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:100;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:10px
+  gap:12px;
+  padding:13px 18px;
+  background:rgba(7,7,16,.68);
+  backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--border);
+}
+.brand{
+  font-weight:900;
+  letter-spacing:.5px;
+}
+.userBadge{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#cfd2e5;
+  font-size:12px;
+}
+.avatar{
+  width:34px;height:34px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--p),var(--s));
+  font-weight:800;
 }
 
-.badge{
-  font-size:10px;
-  padding:5px 8px;
-  border-radius:999px;
-  background:#8d7aff1c;
-  color:#bcb4ff;
-  border:1px solid #8d7aff35
+.container{
+  width:min(1450px,calc(100% - 28px));
+  margin:18px auto 60px;
 }
 
-.preview{
-  padding:16px;
-  position:sticky;
-  top:15px
+.nav{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  padding:5px;
+  margin-bottom:15px;
+}
+.nav button{
+  white-space:nowrap;
+}
+.nav button.active{
+  background:linear-gradient(135deg,var(--p),var(--s));
+  border-color:transparent;
 }
 
-.discord{
-  border-left:4px solid #5865f2;
-  background:#11131d;
-  border-radius:10px;
-  padding:13px
+.page{display:none}
+.page.active{display:block}
+
+.grid{
+  display:grid;
+  gap:14px;
+}
+.stats{
+  grid-template-columns:repeat(5,minmax(0,1fr));
+}
+.two{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.three{
+  grid-template-columns:repeat(3,minmax(0,1fr));
 }
 
-.discord-head{
+.card{
+  position:relative;
+  overflow:hidden;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:17px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 15px 45px rgba(0,0,0,.18);
+  transform-style:preserve-3d;
+  transition:transform .12s ease,box-shadow .2s;
+}
+.card:hover{
+  box-shadow:0 0 var(--glow) rgba(141,99,255,.12);
+}
+.card:before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  pointer-events:none;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.06),transparent);
+  transform:translateX(-100%);
+  transition:.6s;
+}
+.card:hover:before{transform:translateX(100%)}
+
+.stat{
+  font-size:27px;
+  font-weight:900;
+}
+.muted{
+  color:#8e93aa;
+  font-size:12px;
+}
+.title{
+  font-weight:800;
+  margin-bottom:13px;
+}
+.sectionTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:13px;
+}
+.row{
   display:flex;
   gap:9px;
-  align-items:center
+  align-items:center;
 }
+.row.wrap{flex-wrap:wrap}
+.row>*{min-width:0}
+.mt{margin-top:12px}
+.mb{margin-bottom:12px}
 
-.avatar{
-  width:36px;
-  height:36px;
-  border-radius:50%;
+.list{
   display:grid;
-  place-items:center;
-  background:linear-gradient(
-    135deg,#5865f2,var(--primary2)
-  );
-  font-weight:900
+  gap:9px;
+  max-height:450px;
+  overflow:auto;
 }
-
-.bot{
-  font-weight:850
+.item{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.035);
+  border-radius:15px;
+  padding:12px;
 }
-
+.item.selected{
+  border-color:var(--a);
+  box-shadow:0 0 20px rgba(0,234,255,.08);
+}
+.item.dragging{opacity:.35}
+.itemHead{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:flex-start;
+}
+.itemName{font-weight:750}
+.actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:9px;
+}
 .tag{
+  display:inline-flex;
+  padding:4px 8px;
+  border-radius:99px;
   font-size:10px;
-  background:#5865f2;
-  padding:3px 5px;
-  border-radius:4px
+  background:rgba(255,255,255,.07);
+  color:#bfc4da;
 }
+.success{color:#00ff9d}
+.fail{color:#ff6680}
+.warn{color:#ffe66d}
 
-.time{
-  font-size:10px;
-  color:#777b8e
+.preview{
+  min-height:250px;
 }
-
 .embed{
-  margin-top:10px;
-  border-left:4px solid var(--primary);
-  background:#191b27;
-  padding:11px;
-  border-radius:7px
+  border-left:4px solid var(--embed,#5865f2);
+  background:#11131a;
+  border-radius:5px;
+  padding:13px;
+  max-width:520px;
 }
-
-.embed-title{
-  font-weight:900
-}
-
-.embed-desc{
-  white-space:pre-wrap;
-  color:#c5c8d7;
-  font-size:13px;
-  margin-top:5px
-}
-
-.embed img{
-  width:100%;
-  max-height:260px;
-  object-fit:cover;
-  border-radius:7px;
-  margin-top:9px
-}
-
-.preview-ping{
-  color:#9c9fff;
+.embedBot{
   font-size:12px;
-  margin-bottom:6px
+  font-weight:800;
+  color:#d9dcf0;
+}
+.embedTitle{
+  margin-top:8px;
+  font-size:16px;
+  font-weight:800;
+}
+.embedMsg{
+  margin-top:7px;
+  white-space:pre-wrap;
+  color:#c6c9d6;
+  font-size:13px;
+}
+.embedFooter{
+  margin-top:14px;
+  color:#7f8497;
+  font-size:10px;
+}
+.embed img{
+  max-width:100%;
+  max-height:260px;
+  border-radius:8px;
+  margin-top:10px;
 }
 
-.photo-preview{
-  display:none;
-  position:relative;
-  margin-top:9px
+.check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 0;
 }
-
-.photo-preview img{
-  width:100%;
-  max-height:230px;
-  object-fit:cover;
-  border-radius:13px
-}
-
-.remove-photo{
-  position:absolute;
-  top:7px;
-  right:7px
-}
+.check input{width:auto}
 
 .progress{
-  display:none;
-  height:7px;
-  background:#ffffff0c;
+  height:9px;
+  background:rgba(255,255,255,.07);
   border-radius:99px;
   overflow:hidden;
-  margin-top:10px
 }
-
 .progress i{
   display:block;
   height:100%;
   width:0;
-  background:linear-gradient(
-    90deg,var(--primary2),var(--primary),var(--accent)
-  )
+  background:linear-gradient(90deg,var(--a),var(--p),var(--s));
+  transition:.2s;
 }
 
-.toast{
+.toastBox{
   position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:100;
-  min-width:240px;
-  padding:13px 15px;
-  border-radius:14px;
-  background:#121528ee;
-  border:1px solid #ffffff18;
-  box-shadow:0 18px 50px #0008;
-  transform:translateY(25px);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s
-}
-
-.toast.show{
-  transform:none;
-  opacity:1
-}
-
-.empty{
-  text-align:center;
-  color:#777d98;
-  padding:20px;
-  border:1px dashed #ffffff15;
-  border-radius:15px
-}
-
-
-/* LOGIN */
-
-#loginScreen{
-  min-height:100vh;
+  right:15px;
+  bottom:15px;
+  z-index:10000;
   display:grid;
-  place-items:center;
-  padding:20px
-}
-
-.login-card{
-  width:min(430px,100%);
-  padding:28px;
-  border-radius:28px;
-  border:1px solid #ffffff18;
-  background:#0d1020e8;
-  backdrop-filter:blur(25px);
-  box-shadow:
-    0 30px 100px #0008,
-    0 0 50px
-    color-mix(in srgb,var(--primary) 20%,transparent);
-  animation:pop .5s ease
-}
-
-.login-logo{
-  width:70px;
-  height:70px;
-  margin:0 auto 15px;
-  display:grid;
-  place-items:center;
-  border-radius:23px;
-  font-size:34px;
-  background:linear-gradient(
-    135deg,var(--primary2),
-    var(--primary),
-    var(--accent)
-  )
-}
-
-.login-card h1{
-  text-align:center;
-  font-size:31px;
-  margin-bottom:5px
-}
-
-.login-sub{
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:20px
-}
-
-.login-error{
-  color:#ff7897;
-  font-size:12px;
-  min-height:18px;
-  margin-top:8px
-}
-
-.demo{
-  margin-top:14px;
-  padding:10px;
-  border-radius:12px;
-  background:#ffffff08;
-  color:#aeb3cd;
-  font-size:11px;
-  text-align:center
-}
-
-
-/* ADMIN */
-
-.user-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:11px;
-  background:#ffffff08;
-  border:1px solid #ffffff0b;
-  border-radius:14px;
-  margin-bottom:8px
-}
-
-.user-avatar{
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(
-    135deg,var(--primary),var(--primary2)
-  );
-  font-weight:900
-}
-
-.user-info{
-  flex:1
-}
-
-.user-role{
-  font-size:10px;
-  color:#aaa
-}
-
-.permission-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px
-}
-
-.permission{
-  display:flex;
-  align-items:center;
   gap:8px;
-  padding:9px;
-  border-radius:11px;
-  background:#ffffff07;
-  font-size:12px
+  width:min(360px,calc(100% - 30px));
+}
+.toast{
+  padding:13px 14px;
+  border:1px solid var(--border);
+  background:rgba(10,10,20,.88);
+  backdrop-filter:blur(18px);
+  border-radius:14px;
+  box-shadow:0 12px 35px rgba(0,0,0,.3);
+  animation:toastIn .25s ease;
+  font-size:13px;
+}
+@keyframes toastIn{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:none}
 }
 
-.permission input{
-  width:auto
+.drop{
+  border:1px dashed rgba(255,255,255,.25);
+  padding:20px;
+  border-radius:14px;
+  text-align:center;
+  color:#969bb0;
 }
 
-
-/* THEME */
-
-.theme-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px
+.history{
+  max-height:520px;
+  overflow:auto;
 }
-
-.theme-box{
-  padding:12px;
-  border-radius:15px;
-  background:#ffffff07;
-  border:1px solid #ffffff0c
-}
-
-.theme-box.full{
-  grid-column:1/-1
-}
-
-.theme-value{
-  color:var(--primary);
-  font-weight:900;
-  float:right
-}
-
-
-/* HIDDEN */
-
-.hidden{
-  display:none!important
-}
-
-
-/* MOBILE */
 
 @media(max-width:1000px){
-  .stats{
-    grid-template-columns:repeat(3,1fr)
-  }
-
-  .layout{
-    grid-template-columns:1fr
-  }
-
-  .preview{
-    position:relative;
-    top:auto
-  }
+  .stats{grid-template-columns:repeat(3,1fr)}
 }
-
-@media(max-width:650px){
-
-  .wrap{
-    width:92%;
-    padding-top:15px
-  }
-
-  header{
-    align-items:flex-start
-  }
-
-  .top-actions{
-    flex-wrap:wrap;
-    justify-content:flex-end
-  }
-
-  .server{
-    font-size:10px;
-    padding:9px
-  }
-
-  .stats{
-    grid-template-columns:1fr 1fr
-  }
-
-  .row,
-  .theme-grid,
-  .permission-grid{
-    grid-template-columns:1fr
-  }
-
-  .theme-box.full{
-    grid-column:auto
-  }
-
-  .stat strong{
-    font-size:22px
-  }
-
-  .login-card{
-    padding:22px
-  }
+@media(max-width:700px){
+  .container{width:min(100% - 16px,1450px)}
+  .two,.three,.stats{grid-template-columns:1fr}
+  .topbar{padding:10px}
+  .topbar .brand{font-size:13px}
+  .card{padding:13px}
+  .stat{font-size:23px}
+  .cursorGlow{display:none}
 }
 </style>
 </head>
 
 <body>
 
+<div id="bg"></div>
+<div id="shade"></div>
+<div id="rgb"></div>
+<canvas id="particles"></canvas>
+<div class="cursorGlow" id="cursorGlow"></div>
+
 <!-- LOGIN -->
+<section id="loginScreen" class="login">
+  <div class="loginBox">
+    <div class="logo"><span>DONE ORDER • VIP</span></div>
+    <div class="sub">Webhook • DONE • Customers • RGB Dashboard</div>
 
-<div id="loginScreen">
+    <div id="loginForm">
+      <label>Tài khoản</label>
+      <input id="loginUser" autocomplete="username" placeholder="Username">
 
-  <div class="login-card">
+      <label class="mt">Mật khẩu</label>
+      <input id="loginPass" type="password" autocomplete="current-password" placeholder="Password">
 
-    <div class="login-logo">⚡</div>
+      <button class="primary full mt" onclick="login()">ĐĂNG NHẬP</button>
 
-    <h1>DONE ORDER</h1>
+      <button class="full mt" onclick="showRegister()">TẠO TÀI KHOẢN</button>
 
-    <div class="login-sub">
-      VIP Dashboard • Secure Login
-    </div>
-
-    <label>Tài khoản</label>
-
-    <input
-      id="loginUser"
-      placeholder="Username"
-      autocomplete="username"
-    >
-
-    <label>Mật khẩu</label>
-
-    <input
-      id="loginPass"
-      type="password"
-      placeholder="Password"
-      autocomplete="current-password"
-      onkeydown="if(event.key==='Enter')login()"
-    >
-
-    <div
-      id="loginError"
-      class="login-error"
-    ></div>
-
-    <button
-      style="width:100%;margin-top:6px"
-      onclick="login()"
-    >
-      🔐 ĐĂNG NHẬP
-    </button>
-
-    <div class="demo">
-      Demo Admin: <b>admin</b> / <b>admin123</b>
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- APP -->
-
-<div
-  id="app"
-  class="hidden"
->
-
-<div class="wrap">
-
-<header>
-
-  <div class="brand">
-
-    <div class="logo">⚡</div>
-
-    <div>
-      <h1>DONE ORDER</h1>
-
-      <div class="sub">
-        Premium Discord Order Dashboard
-        • <span id="currentUserLabel"></span>
+      <div class="muted mt" style="text-align:center">
+        Admin demo mặc định: <b>admin</b> / <b>admin123</b>
       </div>
     </div>
 
+    <div id="registerForm" class="hidden">
+      <label>Username</label>
+      <input id="regUser" placeholder="Tên tài khoản">
+
+      <label class="mt">Mật khẩu</label>
+      <input id="regPass" type="password" placeholder="Mật khẩu">
+
+      <label class="mt">Nhập lại mật khẩu</label>
+      <input id="regPass2" type="password" placeholder="Nhập lại">
+
+      <button class="primary full mt" onclick="registerUser()">ĐĂNG KÝ</button>
+      <button class="full mt" onclick="showLogin()">QUAY LẠI</button>
+
+      <div class="muted mt">
+        Tài khoản đăng ký sẽ là User và được dùng ngay, không cần Admin duyệt.
+      </div>
+    </div>
   </div>
+</section>
 
-  <div class="top-actions">
+<!-- APP -->
+<section id="app" class="app hidden">
 
-    <a
-      class="server"
-      href="https://discord.gg/QfSHWECJ2"
-      target="_blank"
-      rel="noopener"
-    >
-      💜 SERVER
-    </a>
-
-    <button
-      class="logout"
-      onclick="logout()"
-    >
-      🚪 Thoát
-    </button>
-
+<header class="topbar">
+  <div class="brand">⚡ DONE ORDER • VIP</div>
+  <div class="userBadge">
+    <div class="avatar" id="avatar">U</div>
+    <span id="who">User</span>
+    <button class="small" onclick="logout()">Thoát</button>
   </div>
-
 </header>
 
+<div class="container">
 
-<!-- STATS -->
+<nav class="nav" id="nav">
+  <button data-page="dashboard" class="active">📊 Dashboard</button>
+  <button data-page="done">📦 DONE</button>
+  <button data-page="customers">👥 Khách hàng</button>
+  <button data-page="webhook">📢 Webhook</button>
+  <button data-page="history">🧾 Lịch sử</button>
+  <button data-page="theme">🎨 Theme</button>
+  <button data-page="profile">👤 Tài khoản</button>
+  <button data-page="admin" id="adminNav">👑 Admin</button>
+</nav>
 
-<section class="stats">
+<!-- DASHBOARD -->
+<section id="page-dashboard" class="page active">
 
-  <div class="stat">
-    <small>👥 Khách</small>
-    <strong id="statCustomers">0</strong>
+<div class="grid stats">
+  <div class="card">
+    <div class="muted">Khách hàng</div>
+    <div class="stat" id="stCustomers">0</div>
+  </div>
+  <div class="card">
+    <div class="muted">DONE</div>
+    <div class="stat" id="stDone">0</div>
+  </div>
+  <div class="card">
+    <div class="muted">Đã gửi</div>
+    <div class="stat success" id="stSent">0</div>
+  </div>
+  <div class="card">
+    <div class="muted">Thất bại</div>
+    <div class="stat fail" id="stFail">0</div>
+  </div>
+  <div class="card">
+    <div class="muted">Đang chọn</div>
+    <div class="stat" id="stSelected">0</div>
+  </div>
+</div>
+
+<div class="grid two mt">
+  <div class="card">
+    <div class="sectionTitle">
+      <div class="title">🚀 Gửi DONE nhanh</div>
+      <span class="tag" id="webhookStatus">Chưa cấu hình</span>
+    </div>
+
+    <label>Chọn DONE</label>
+    <select id="quickDone"></select>
+
+    <label class="mt">Delay giữa từng khách (giây)</label>
+    <input id="sendDelay" type="number" min=".5" max="60" step=".5" value="1">
+
+    <div class="mt">
+      <button class="primary full" onclick="sendSelectedDone()">GỬI CHO KHÁCH ĐÃ CHỌN</button>
+    </div>
+
+    <div class="mt">
+      <div class="progress"><i id="sendProgress"></i></div>
+      <div class="muted mt" id="sendStatus">Sẵn sàng</div>
+    </div>
   </div>
 
-  <div class="stat">
-    <small>📦 DONE</small>
-    <strong id="statDone">0</strong>
+  <div class="card">
+    <div class="title">📡 Trạng thái hệ thống</div>
+    <div class="item">
+      <div class="itemHead">
+        <span>Webhook</span>
+        <span id="dashWebhook" class="tag">OFF</span>
+      </div>
+    </div>
+    <div class="item mt">
+      <div class="itemHead">
+        <span>Hiệu ứng</span>
+        <span class="tag">RGB / Glass / Particle</span>
+      </div>
+    </div>
+    <div class="item mt">
+      <div class="itemHead">
+        <span>Tài khoản</span>
+        <span class="tag" id="dashRole">USER</span>
+      </div>
+    </div>
   </div>
-
-  <div class="stat">
-    <small>📨 Đã gửi</small>
-    <strong id="statSent">0</strong>
-  </div>
-
-  <div class="stat">
-    <small>❌ Lỗi</small>
-    <strong id="statFail">0</strong>
-  </div>
-
-  <div class="stat">
-    <small>🔔 Đang chọn</small>
-    <strong id="statSelected">0</strong>
-  </div>
-
-</section>
-
-
-<div class="layout">
-
-<main>
-
-
-<!-- ADMIN ACCOUNT MANAGEMENT -->
-
-<section
-  class="panel admin-only"
-  id="adminAccounts"
->
-
-<h2>👑 <span>Quản lý tài khoản</span></h2>
-
-<div class="row">
-
-<div>
-<label>Username</label>
-<input
-  id="newUsername"
-  placeholder="Tên tài khoản"
->
-</div>
-
-<div>
-<label>Password</label>
-<input
-  id="newPassword"
-  type="password"
-  placeholder="Mật khẩu"
->
-</div>
-
-</div>
-
-<label>Quyền tài khoản</label>
-
-<select id="newRole">
-
-<option value="user">
-👤 User
-</option>
-
-<option value="admin">
-👑 Admin
-</option>
-
-</select>
-
-<label>Quyền User</label>
-
-<div class="permission-grid">
-
-<label class="permission">
-<input
-  type="checkbox"
-  id="pSend"
-  checked
->
- Gửi DONE
-</label>
-
-<label class="permission">
-<input
-  type="checkbox"
-  id="pCustomer"
-  checked
->
- Quản lý khách
-</label>
-
-<label class="permission">
-<input
-  type="checkbox"
-  id="pDone"
-  checked
->
- Quản lý DONE
-</label>
-
-<label class="permission">
-<input
-  type="checkbox"
-  id="pTheme"
->
- Chỉnh giao diện
-</label>
-
-<label class="permission">
-<input
-  type="checkbox"
-  id="pWebhook"
->
- Xem Webhook
-</label>
-
-<label class="permission">
-<input
-  type="checkbox"
-  id="pBackup"
->
- Backup
-</label>
-
-</div>
-
-<div class="actions">
-
-<button onclick="createUser()">
-➕ Tạo tài khoản
-</button>
-
-</div>
-
-<div
-  id="userList"
-  style="margin-top:14px"
-></div>
-
-</section>
-
-
-<!-- THEME EDITOR -->
-
-<section
-  class="panel admin-only theme-panel"
->
-
-<h2>🎨 <span>Tùy chỉnh giao diện</span></h2>
-
-<div class="theme-grid">
-
-<div class="theme-box">
-
-<label>Màu chính</label>
-
-<input
-  type="color"
-  id="themePrimary"
-  value="#8d63ff"
-  oninput="themePreview()"
->
-
-</div>
-
-<div class="theme-box">
-
-<label>Màu phụ</label>
-
-<input
-  type="color"
-  id="themeSecondary"
-  value="#ff00e6"
-  oninput="themePreview()"
->
-
-</div>
-
-<div class="theme-box">
-
-<label>Màu Accent</label>
-
-<input
-  type="color"
-  id="themeAccent"
-  value="#00eaff"
-  oninput="themePreview()"
->
-
-</div>
-
-<div class="theme-box">
-
-<label>Bo góc</label>
-
-<span
-  class="theme-value"
-  id="radiusValue"
->
-21px
-</span>
-
-<input
-  type="range"
-  id="themeRadius"
-  min="5"
-  max="35"
-  value="21"
-  oninput="themePreview()"
->
-
-</div>
-
-<div class="theme-box">
-
-<label>Độ neon</label>
-
-<span
-  class="theme-value"
-  id="glowValue"
->
-100%
-</span>
-
-<input
-  type="range"
-  id="themeGlow"
-  min="0"
-  max="200"
-  value="100"
-  oninput="themePreview()"
->
-
-</div>
-
-<div class="theme-box">
-
-<label>Độ tối nền</label>
-
-<span
-  class="theme-value"
-  id="overlayValue"
->
-72%
-</span>
-
-<input
-  type="range"
-  id="themeOverlay"
-  min="20"
-  max="95"
-  value="72"
-  oninput="themePreview()"
->
-
-</div>
-
-<div class="theme-box">
-
-<label>Độ trong suốt</label>
-
-<span
-  class="theme-value"
-  id="glassValue"
->
-82%
-</span>
-
-<input
-  type="range"
-  id="themeGlass"
-  min="30"
-  max="100"
-  value="82"
-  oninput="themePreview()"
->
-
-</div>
-
-<div class="theme-box">
-
-<label>Animation</label>
-
-<select
-  id="themeAnimation"
-  onchange="themePreview()"
->
-
-<option value="on">
-✨ Bật
-</option>
-
-<option value="off">
-⛔ Tắt
-</option>
-
-</select>
-
-</div>
-
-<div class="theme-box full">
-
-<label>🖼️ Ảnh nền</label>
-
-<input
-  id="themeBgUrl"
-  placeholder="Dán URL ảnh nền..."
-  oninput="themePreview()"
->
-
-<div class="actions">
-
-<button onclick="chooseBg()">
-📁 Chọn ảnh từ máy
-</button>
-
-<button
-  class="secondary"
-  onclick="resetTheme()"
->
-↩️ Reset Theme
-</button>
-
-<button
-  class="green"
-  onclick="saveTheme()"
->
-💾 Lưu giao diện
-</button>
-
-</div>
-
-</div>
-
 </div>
 
 </section>
-
-
-<!-- WEBHOOK -->
-
-<section
-  class="panel"
-  id="webhookPanel"
->
-
-<h2>⚙️ <span>Cấu hình Webhook</span></h2>
-
-<label>Discord Webhook URL</label>
-
-<input
-  id="webhook"
-  type="password"
-  placeholder="https://discord.com/api/webhooks/..."
->
-
-<label>Discord Bot Name</label>
-
-<input
-  id="botName"
-  value="Done Bot"
->
-
-<div class="actions">
-
-<button onclick="testWebhook()">
-🧪 Test Webhook
-</button>
-
-<button
-  class="secondary"
-  onclick="toggleWebhook()"
->
-👁 Hiện/ẩn
-</button>
-
-</div>
-
-</section>
-
-
-<!-- CUSTOMERS -->
-
-<section
-  class="panel"
-  id="customerPanel"
->
-
-<h2>👥 <span>Khách hàng</span></h2>
-
-<div class="row">
-
-<div>
-<label>Tên khách</label>
-
-<input
-  id="customerName"
-  placeholder="VD: Nguyễn Văn A"
->
-</div>
-
-<div>
-<label>Discord User ID</label>
-
-<input
-  id="customerId"
-  placeholder="123456789012345678"
->
-</div>
-
-</div>
-
-<div class="actions">
-
-<button onclick="addCustomer()">
-➕ Thêm khách
-</button>
-
-<button
-  class="secondary"
-  onclick="clearCustomerForm()"
->
-↺ Xóa ô nhập
-</button>
-
-</div>
-
-<label>🔎 Tìm khách</label>
-
-<input
-  id="customerSearch"
-  oninput="renderCustomers()"
-  placeholder="Tìm theo tên hoặc ID..."
->
-
-<div
-  class="customer-list"
-  id="customerList"
-></div>
-
-<div class="actions">
-
-<button
-  class="secondary"
-  onclick="selectAllCustomers()"
->
-☑ Chọn tất cả
-</button>
-
-<button
-  class="secondary"
-  onclick="clearCustomers()"
->
-☐ Bỏ chọn
-</button>
-
-<button
-  class="secondary backup-only"
-  onclick="exportCustomers()"
->
-💾 Backup khách
-</button>
-
-<button
-  class="secondary backup-only"
-  onclick="importCustomers()"
->
-📥 Import khách
-</button>
-
-</div>
-
-</section>
-
 
 <!-- DONE -->
+<section id="page-done" class="page">
 
-<section
-  class="panel"
-  id="donePanel"
->
+<div class="grid two">
+<div class="card">
+  <div class="sectionTitle">
+    <div class="title">📦 Quản lý DONE</div>
+    <button class="small" onclick="clearDoneForm()">Làm mới</button>
+  </div>
 
-<h2>📦 <span>Tạo / sửa DONE</span></h2>
+  <input type="hidden" id="doneEditId">
 
-<div class="row">
+  <label>Tên DONE</label>
+  <input id="doneName" placeholder="VD: Đã hoàn thành">
 
-<div>
-<label>Tên DONE</label>
+  <label class="mt">Nội dung</label>
+  <textarea id="doneMessage" placeholder="Nội dung gửi khách..."></textarea>
 
-<input
-  id="doneName"
-  placeholder="VD: Đơn hoàn tất"
->
+  <div class="grid two mt">
+    <div>
+      <label>Bot name</label>
+      <input id="doneBot" value="Done Bot">
+    </div>
+    <div>
+      <label>Embed color</label>
+      <input id="doneColor" type="color" value="#5865f2">
+    </div>
+  </div>
+
+  <label class="mt">Footer</label>
+  <input id="doneFooter" placeholder="DONE ORDER VIP">
+
+  <label class="mt">Ảnh URL</label>
+  <input id="doneImage" placeholder="https://...">
+
+  <label class="check">
+    <input id="doneTimestamp" type="checkbox" checked>
+    Thêm timestamp
+  </label>
+
+  <div class="row mt">
+    <button class="primary" onclick="saveDone()">LƯU DONE</button>
+    <button onclick="duplicateCurrentDone()">NHÂN BẢN</button>
+  </div>
 </div>
 
-<div>
-<label>Tiêu đề Embed</label>
+<div class="card preview">
+  <div class="title">👁️ Preview realtime</div>
+  <div id="donePreview"></div>
+</div>
+</div>
 
-<input
-  id="doneTitle"
-  placeholder="Đơn hàng đã hoàn tất"
->
+<div class="card mt">
+  <div class="sectionTitle">
+    <div class="title">Danh sách DONE</div>
+    <span class="muted">Kéo thả để đổi thứ tự</span>
+  </div>
+  <div id="doneList" class="list"></div>
+</div>
+
+</section>
+
+<!-- CUSTOMERS -->
+<section id="page-customers" class="page">
+
+<div class="grid two">
+<div class="card">
+  <div class="sectionTitle">
+    <div class="title">👥 Khách hàng</div>
+    <button class="small" onclick="clearCustomerForm()">Làm mới</button>
+  </div>
+
+  <input type="hidden" id="customerEditId">
+
+  <label>Tên khách</label>
+  <input id="customerName" placeholder="Tên khách">
+
+  <label class="mt">Discord ID</label>
+  <input id="customerDiscord" placeholder="123456789012345678">
+
+  <button class="primary full mt" onclick="saveCustomer()">LƯU KHÁCH</button>
+
+  <div class="grid two mt">
+    <button onclick="exportCustomers()">EXPORT</button>
+    <button onclick="document.getElementById('importCustomers').click()">IMPORT</button>
+  </div>
+  <input id="importCustomers" type="file" accept=".json" class="hidden" onchange="importCustomers(event)">
+</div>
+
+<div class="card">
+  <div class="sectionTitle">
+    <div class="title">Chọn khách</div>
+    <button class="small" onclick="toggleAllCustomers()">Chọn tất cả</button>
+  </div>
+
+  <input id="customerSearch" placeholder="🔎 Tìm tên hoặc Discord ID..." oninput="renderCustomers()">
+  <div id="customerList" class="list mt"></div>
+</div>
+</div>
+
+</section>
+
+<!-- WEBHOOK -->
+<section id="page-webhook" class="page">
+
+<div class="grid two">
+
+<div class="card">
+  <div class="title">🔗 Webhook riêng của tài khoản</div>
+
+  <label>Discord Webhook URL</label>
+  <input id="webhookUrl" type="password" placeholder="https://discord.com/api/webhooks/...">
+
+  <div class="row mt">
+    <button class="primary" onclick="saveWebhook()">LƯU WEBHOOK</button>
+    <button onclick="toggleWebhookVisibility()">Hiện/ẩn</button>
+  </div>
+
+  <button class="good full mt" onclick="testWebhook()">TEST WEBHOOK</button>
+
+  <div class="muted mt">
+    Mỗi tài khoản lưu webhook riêng. Không dùng chung webhook của tài khoản khác.
+  </div>
+</div>
+
+<div class="card">
+  <div class="title">🧪 Webhook Test / Bulk Test</div>
+
+  <label>Nội dung</label>
+  <textarea id="spamMessage">@everyone Test webhook</textarea>
+
+  <div class="grid two mt">
+    <div>
+      <label>Số tin</label>
+      <input id="spamCount" type="number" min="1" max="50" value="5">
+    </div>
+    <div>
+      <label>Delay (giây)</label>
+      <input id="spamDelay" type="number" min=".5" max="60" step=".5" value="1">
+    </div>
+  </div>
+
+  <div class="row mt">
+    <label class="check" style="margin:0">
+      <input id="allowEveryone" type="checkbox" checked>
+      Cho phép @everyone
+    </label>
+    <label class="check" style="margin:0">
+      <input id="allowHere" type="checkbox">
+      Cho phép @here
+    </label>
+  </div>
+
+  <div class="row mt">
+    <button class="primary" onclick="startWebhookTest()">▶ BẮT ĐẦU</button>
+    <button class="danger" onclick="stopWebhookTest()">■ DỪNG</button>
+  </div>
+
+  <div class="progress mt"><i id="spamProgress"></i></div>
+  <div class="muted mt" id="spamStatus">Sẵn sàng</div>
+
+  <div class="muted mt">
+    Giới hạn tối đa 50 tin/lần và tối thiểu 0.5 giây/tin. Nếu Discord trả rate-limit, hệ thống sẽ tự chờ.
+  </div>
 </div>
 
 </div>
 
-<label>Nội dung</label>
-
-<textarea
-  id="doneMessage"
-  placeholder="Nhập nội dung gửi cho khách..."
-></textarea>
-
-<div class="row">
-
-<div>
-
-<label>Màu Embed</label>
-
-<input
-  id="doneColor"
-  type="color"
-  value="#8d63ff"
->
-
+<div class="card mt">
+  <div class="title">🖼️ Ảnh gửi kèm</div>
+  <input id="webhookPhoto" type="file" accept="image/*" onchange="previewPhoto(event)">
+  <div id="photoPreview" class="mt"></div>
 </div>
 
-<div>
+</section>
 
-<label>Ping</label>
+<!-- HISTORY -->
+<section id="page-history" class="page">
 
-<select id="pingMode">
+<div class="card">
+  <div class="sectionTitle">
+    <div class="title">🧾 Lịch sử hoạt động</div>
+    <div class="row">
+      <button class="small" onclick="exportHistory()">Export</button>
+      <button class="small danger" onclick="clearHistory()">Xóa lịch sử</button>
+    </div>
+  </div>
 
-<option value="yes">
-🔔 Ping khách
-</option>
-
-<option value="no">
-🔕 Không ping
-</option>
-
-</select>
-
+  <input id="historySearch" placeholder="🔎 Tìm lịch sử..." oninput="renderHistory()">
+  <div id="historyList" class="history mt"></div>
 </div>
 
+</section>
+
+<!-- THEME -->
+<section id="page-theme" class="page">
+
+<div class="grid two">
+
+<div class="card">
+  <div class="title">🎨 Màu sắc</div>
+
+  <div class="grid three">
+    <div>
+      <label>Primary</label>
+      <input id="themeP" type="color">
+    </div>
+    <div>
+      <label>Secondary</label>
+      <input id="themeS" type="color">
+    </div>
+    <div>
+      <label>Accent</label>
+      <input id="themeA" type="color">
+    </div>
+  </div>
+
+  <label class="mt">Ảnh nền URL</label>
+  <input id="themeBg" placeholder="https://...">
+
+  <label class="mt">Hoặc chọn ảnh từ máy</label>
+  <input type="file" accept="image/*" onchange="themeImage(event)">
+
+  <label class="mt">Độ tối nền</label>
+  <input id="themeOverlay" type="range" min="0" max="95">
+
+  <label class="mt">Glass transparency</label>
+  <input id="themeGlass" type="range" min="20" max="98">
+
+  <label class="mt">Glow</label>
+  <input id="themeGlow" type="range" min="0" max="100">
+
+  <label class="mt">Border radius</label>
+  <input id="themeRadius" type="range" min="5" max="40">
+
+  <label class="mt">RGB speed</label>
+  <input id="themeSpeed" type="range" min="1" max="20">
+
+  <button class="primary full mt" onclick="saveTheme()">LƯU THEME</button>
+  <button class="full mt" onclick="resetTheme()">RESET THEME</button>
 </div>
 
-<label>📸 Ảnh Done</label>
+<div class="card">
+  <div class="title">✨ Hiệu ứng</div>
 
-<input
-  id="photoInput"
-  type="file"
-  accept="image/*"
-  capture="environment"
-  onchange="previewPhoto(this)"
->
+  <label class="check">
+    <input id="fxRgb" type="checkbox">
+    RGB animation
+  </label>
 
-<div
-  class="photo-preview"
-  id="photoPreview"
->
+  <label class="check">
+    <input id="fxParticles" type="checkbox">
+    Particle / Light
+  </label>
 
-<img id="photoImg">
+  <label class="check">
+    <input id="fxCursor" type="checkbox">
+    Cursor glow
+  </label>
 
-<button
-  class="red remove-photo"
-  onclick="removePhoto()"
->
-✕
-</button>
+  <label class="check">
+    <input id="fxRipple" type="checkbox">
+    Click ripple
+  </label>
 
+  <label class="check">
+    <input id="fx3d" type="checkbox">
+    3D hover
+  </label>
+
+  <label class="mt">Particle density</label>
+  <input id="particleDensity" type="range" min="10" max="120">
+
+  <label class="mt">Particle speed</label>
+  <input id="particleSpeed" type="range" min="1" max="10">
+
+  <div class="drop mt">
+    Theme được lưu riêng cho tài khoản hiện tại.
+  </div>
 </div>
-
-<div class="actions">
-
-<button onclick="saveDone()">
-💾 Lưu DONE
-</button>
-
-<button
-  class="secondary"
-  onclick="clearDoneForm()"
->
-↺ Làm mới
-</button>
 
 </div>
 
 </section>
 
+<!-- PROFILE -->
+<section id="page-profile" class="page">
 
-<!-- DONE LIST -->
+<div class="grid two">
 
-<section class="panel">
+<div class="card">
+  <div class="title">👤 Tài khoản</div>
 
-<h2>🚀 <span>DANH SÁCH DONE</span></h2>
+  <label>Username</label>
+  <input id="profileUsername" disabled>
 
-<div
-  id="doneList"
-  class="done-list"
-></div>
+  <label class="mt">Avatar URL</label>
+  <input id="profileAvatar" placeholder="https://...">
 
-</section>
+  <button class="primary full mt" onclick="saveProfile()">LƯU PROFILE</button>
+</div>
 
+<div class="card">
+  <div class="title">🔐 Đổi mật khẩu</div>
 
-<!-- DATA -->
+  <label>Mật khẩu hiện tại</label>
+  <input id="oldPassword" type="password">
 
-<section
-  class="panel backup-only"
->
+  <label class="mt">Mật khẩu mới</label>
+  <input id="newPassword" type="password">
 
-<h2>🛠️ <span>Dữ liệu</span></h2>
+  <label class="mt">Nhập lại</label>
+  <input id="newPassword2" type="password">
 
-<div class="actions">
-
-<button
-  class="secondary"
-  onclick="exportAll()"
->
-💾 Backup tất cả
-</button>
-
-<button
-  class="secondary"
-  onclick="importAll()"
->
-📥 Import tất cả
-</button>
-
-<button
-  class="red"
-  onclick="resetAll()"
->
-🧹 Reset toàn bộ
-</button>
+  <button class="primary full mt" onclick="changePassword()">ĐỔI MẬT KHẨU</button>
+</div>
 
 </div>
 
 </section>
 
-</main>
+<!-- ADMIN -->
+<section id="page-admin" class="page">
 
+<div class="card">
+  <div class="sectionTitle">
+    <div class="title">👑 Quản lý tài khoản</div>
+    <span class="tag">ADMIN ONLY</span>
+  </div>
 
-<!-- PREVIEW -->
-
-<aside>
-
-<section class="preview">
-
-<h2>👀 Preview Discord</h2>
-
-<div class="discord">
-
-<div class="discord-head">
-
-<div class="avatar">D</div>
-
-<div>
-
-<div
-  class="bot"
-  id="pvBot"
->
-Done Bot
-<span class="tag">BOT</span>
+  <div id="adminUsers"></div>
 </div>
 
-<div class="time">
-now
-</div>
+<div class="card mt">
+  <div class="sectionTitle">
+    <div class="title">💾 Dữ liệu toàn bộ</div>
+  </div>
 
-</div>
+  <div class="row wrap">
+    <button onclick="backupAll()">BACKUP</button>
+    <button onclick="document.getElementById('restoreAll').click()">RESTORE</button>
+    <button class="danger" onclick="resetEverything()">RESET TOÀN BỘ</button>
+  </div>
 
-</div>
-
-<div
-  class="preview-ping"
-  id="pvPing"
-></div>
-
-<div
-  class="embed"
-  id="pvEmbed"
->
-
-<div
-  class="embed-title"
-  id="pvTitle"
->
-Đơn hàng đã hoàn tất
-</div>
-
-<div
-  class="embed-desc"
-  id="pvDesc"
->
-Nội dung DONE sẽ hiện ở đây...
-</div>
-
-<img
-  id="pvImg"
-  style="display:none"
->
-
-</div>
-
-</div>
-
-<div
-  class="progress"
-  id="progress"
->
-<i id="progressBar"></i>
-</div>
-
-<div class="actions">
-
-<button
-  class="green"
-  style="width:100%"
-  onclick="sendCurrent()"
->
-🚀 GỬI DONE NGAY
-</button>
-
+  <input id="restoreAll" type="file" accept=".json" class="hidden" onchange="restoreAll(event)">
 </div>
 
 </section>
 
-</aside>
-
 </div>
+</section>
 
-</div>
-</div>
-
-
-<div
-  class="toast"
-  id="toast"
-></div>
-
+<div class="toastBox" id="toastBox"></div>
 
 <script>
+/* =========================================================
+   DATABASE
+========================================================= */
 
-/* =========================
-   DATABASE LOCAL
-========================= */
+const DB_KEY = "done_vip_full_v1";
 
-const KEY='done_vip_v2';
-
-let db=
-JSON.parse(
-  localStorage.getItem(KEY)||'null'
-)
-||
-{
-  users:[
-    {
-      username:'admin',
-      password:'admin123',
-      role:'admin',
-      permissions:{
-        send:true,
-        customer:true,
-        done:true,
-        theme:true,
-        webhook:true,
-        backup:true
-      }
-    }
-  ],
-
-  webhook:'',
-  botName:'Done Bot',
-  customers:[],
-  dones:[],
-  sent:0,
-  fail:0,
-
-  theme:{
-    primary:'#8d63ff',
-    secondary:'#ff00e6',
-    accent:'#00eaff',
-    radius:21,
-    glow:100,
-    overlay:72,
-    glass:82,
-    animation:'on',
-    bg:''
-  }
+const defaultTheme = {
+  p:"#8d63ff",
+  s:"#ff00e6",
+  a:"#00eaff",
+  bg:"",
+  overlay:72,
+  glass:82,
+  glow:35,
+  radius:20,
+  speed:5,
+  rgb:true,
+  particles:true,
+  cursor:true,
+  ripple:true,
+  fx3d:true,
+  particleDensity:45,
+  particleSpeed:3
 };
 
+function makeDB(){
+  return {
+    users:[
+      {
+        id:"admin-root",
+        username:"admin",
+        password:"admin123",
+        role:"admin",
+        active:true,
+        avatar:"",
+        permissions:{
+          send:true,
+          customer:true,
+          done:true,
+          theme:true,
+          webhook:true,
+          backup:true
+        }
+      }
+    ],
+    workspaces:{},
+    history:[],
+    createdAt:Date.now()
+  };
+}
 
+function loadDB(){
+  try{
+    const raw=localStorage.getItem(DB_KEY);
+    if(!raw){
+      const db=makeDB();
+      localStorage.setItem(DB_KEY,JSON.stringify(db));
+      return db;
+    }
+    const db=JSON.parse(raw);
+
+    if(!db.users) db.users=[];
+    if(!db.workspaces) db.workspaces={};
+    if(!db.history) db.history=[];
+
+    return db;
+  }catch(e){
+    const db=makeDB();
+    localStorage.setItem(DB_KEY,JSON.stringify(db));
+    return db;
+  }
+}
+
+let db=loadDB();
 let currentUser=null;
-let editIndex=-1;
-let photoData=null;
-
-
-const $=
-id=>document.getElementById(id);
-
+let selectedCustomers=new Set();
+let dragDoneId=null;
+let testRunning=false;
+let testStop=false;
+let photoData="";
+let themePhotoData="";
 
 function saveDB(){
-
-  localStorage.setItem(
-    KEY,
-    JSON.stringify(db)
-  );
-
+  localStorage.setItem(DB_KEY,JSON.stringify(db));
 }
 
+function workspace(){
+  if(!currentUser) return null;
 
-/* =========================
-   TOAST
-========================= */
+  if(!db.workspaces[currentUser.id]){
+    db.workspaces[currentUser.id]={
+      webhook:"",
+      customers:[],
+      dones:[],
+      sent:0,
+      fail:0,
+      theme:{...defaultTheme}
+    };
+    saveDB();
+  }
 
-function toast(msg){
+  const w=db.workspaces[currentUser.id];
 
-  const t=$('toast');
+  if(!w.theme) w.theme={...defaultTheme};
+  if(!w.customers) w.customers=[];
+  if(!w.dones) w.dones=[];
+  if(typeof w.sent!=="number")w.sent=0;
+  if(typeof w.fail!=="number")w.fail=0;
 
-  t.textContent=msg;
-
-  t.classList.add('show');
-
-  clearTimeout(
-    window.toastTimer
-  );
-
-  window.toastTimer=
-    setTimeout(
-      ()=>t.classList.remove('show'),
-      2600
-    );
-
+  return w;
 }
 
+/* =========================================================
+   LOGIN / REGISTER
+========================================================= */
 
-/* =========================
-   LOGIN
-========================= */
+function showRegister(){
+  $("loginForm").classList.add("hidden");
+  $("registerForm").classList.remove("hidden");
+}
+
+function showLogin(){
+  $("registerForm").classList.add("hidden");
+  $("loginForm").classList.remove("hidden");
+}
+
+function registerUser(){
+  const username=$("regUser").value.trim();
+  const p=$("regPass").value;
+  const p2=$("regPass2").value;
+
+  if(username.length<3)
+    return toast("Username phải có ít nhất 3 ký tự","bad");
+
+  if(p.length<4)
+    return toast("Mật khẩu quá ngắn","bad");
+
+  if(p!==p2)
+    return toast("Mật khẩu nhập lại không khớp","bad");
+
+  if(db.users.some(u=>u.username.toLowerCase()===username.toLowerCase()))
+    return toast("Username đã tồn tại","bad");
+
+  const id="u_"+Date.now()+"_"+Math.random().toString(36).slice(2,7);
+
+  const user={
+    id,
+    username,
+    password:p,
+    role:"user",
+    active:true,
+    avatar:"",
+    permissions:{
+      send:true,
+      customer:true,
+      done:true,
+      theme:true,
+      webhook:true,
+      backup:false
+    }
+  };
+
+  db.users.push(user);
+  db.workspaces[id]={
+    webhook:"",
+    customers:[],
+    dones:[],
+    sent:0,
+    fail:0,
+    theme:{...defaultTheme}
+  };
+
+  saveDB();
+
+  $("loginUser").value=username;
+  $("loginPass").value=p;
+
+  toast("Tạo tài khoản thành công","good");
+  showLogin();
+}
 
 function login(){
+  const username=$("loginUser").value.trim();
+  const password=$("loginPass").value;
 
-  const username=
-    $('loginUser').value.trim();
+  const user=db.users.find(
+    u=>u.username.toLowerCase()===username.toLowerCase() &&
+       u.password===password
+  );
 
-  const password=
-    $('loginPass').value;
+  if(!user)
+    return toast("Sai tài khoản hoặc mật khẩu","bad");
 
-  const user=
-    db.users.find(
-      x=>
-        x.username===username &&
-        x.password===password
-    );
-
-  if(!user){
-
-    $('loginError').textContent=
-      '❌ Sai tài khoản hoặc mật khẩu';
-
-    return;
-
-  }
+  if(user.active===false)
+    return toast("Tài khoản đang bị khóa","bad");
 
   currentUser=user;
 
-  $('loginError').textContent='';
+  $("loginScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
 
-  $('loginScreen')
-    .classList
-    .add('hidden');
-
-  $('app')
-    .classList
-    .remove('hidden');
-
-  $('currentUserLabel').textContent=
-    user.role==='admin'
-      ?
-      '👑 ADMIN'
-      :
-      '👤 '+user.username;
-
-  applyTheme();
-
-  applyPermissions();
-
-  renderAll();
-
-  toast(
-    '✅ Đăng nhập thành công'
-  );
-
+  initApp();
 }
-
 
 function logout(){
-
   currentUser=null;
-
-  $('app')
-    .classList
-    .add('hidden');
-
-  $('loginScreen')
-    .classList
-    .remove('hidden');
-
-  $('loginPass').value='';
-
+  $("app").classList.add("hidden");
+  $("loginScreen").classList.remove("hidden");
+  showLogin();
 }
 
+function initApp(){
+  const w=workspace();
 
-/* =========================
-   PERMISSIONS
-========================= */
+  $("who").textContent=currentUser.username+" • "+currentUser.role.toUpperCase();
 
-function can(permission){
-
-  if(!currentUser)
-    return false;
-
-  if(currentUser.role==='admin')
-    return true;
-
-  return !!(
-    currentUser.permissions &&
-    currentUser.permissions[permission]
-  );
-
-}
-
-
-function applyPermissions(){
-
-  document
-    .querySelectorAll('.admin-only')
-    .forEach(
-      el=>
-        el.classList.toggle(
-          'hidden',
-          currentUser.role!=='admin'
-        )
-    );
-
-
-  $('webhookPanel')
-    .classList.toggle(
-      'hidden',
-      !can('webhook')
-    );
-
-
-  $('customerPanel')
-    .classList.toggle(
-      'hidden',
-      !can('customer')
-    );
-
-
-  $('donePanel')
-    .classList.toggle(
-      'hidden',
-      !can('done')
-    );
-
-
-  document
-    .querySelectorAll('.backup-only')
-    .forEach(
-      el=>
-        el.classList.toggle(
-          'hidden',
-          !can('backup')
-        )
-    );
-
-}
-
-
-/* =========================
-   ACCOUNT ADMIN
-========================= */
-
-function createUser(){
-
-  if(currentUser?.role!=='admin')
-    return;
-
-  const username=
-    $('newUsername')
-    .value
-    .trim();
-
-  const password=
-    $('newPassword')
-    .value;
-
-  const role=
-    $('newRole')
-    .value;
-
-  if(!username||!password){
-
-    return toast(
-      '⚠️ Nhập username và password'
-    );
-
+  const av=currentUser.avatar;
+  if(av){
+    $("avatar").style.backgroundImage=`url("${av}")`;
+    $("avatar").style.backgroundSize="cover";
+    $("avatar").textContent="";
+  }else{
+    $("avatar").style.backgroundImage="";
+    $("avatar").textContent=currentUser.username[0].toUpperCase();
   }
 
-  if(
-    db.users.some(
-      x=>x.username===username
-    )
-  ){
+  $("adminNav").classList.toggle("hidden",currentUser.role!=="admin");
 
-    return toast(
-      '⚠️ Username đã tồn tại'
-    );
+  applyTheme(w.theme);
+  loadThemeInputs();
+  renderAll();
+}
 
-  }
+/* =========================================================
+   NAV
+========================================================= */
 
+document.querySelectorAll("#nav button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const page=btn.dataset.page;
 
-  db.users.push({
-
-    username,
-    password,
-    role,
-
-    permissions:{
-      send:$('pSend').checked,
-      customer:$('pCustomer').checked,
-      done:$('pDone').checked,
-      theme:$('pTheme').checked,
-      webhook:$('pWebhook').checked,
-      backup:$('pBackup').checked
+    if(page==="admin" && currentUser?.role!=="admin"){
+      return toast("Chỉ Admin được dùng mục này","bad");
     }
 
+    document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+
+    document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+    $("page-"+page).classList.add("active");
+
+    renderAll();
   });
+});
 
-
-  saveDB();
-
-  $('newUsername').value='';
-  $('newPassword').value='';
-
-  renderUsers();
-
-  toast(
-    '✅ Đã tạo tài khoản'
-  );
-
-}
-
-
-function renderUsers(){
-
-  if(currentUser?.role!=='admin')
-    return;
-
-  const el=$('userList');
-
-  el.innerHTML=
-    db.users.map(
-      (u,i)=>`
-
-      <div class="user-row">
-
-        <div class="user-avatar">
-          ${u.username[0].toUpperCase()}
-        </div>
-
-        <div class="user-info">
-
-          <b>${esc(u.username)}</b>
-
-          <div class="user-role">
-            ${
-              u.role==='admin'
-              ?
-              '👑 ADMIN'
-              :
-              '👤 USER'
-            }
-          </div>
-
-        </div>
-
-        ${
-          u.username!=='admin'
-          ?
-          `
-          <button
-            class="red mini"
-            onclick="deleteUser(${i})"
-          >
-            🗑
-          </button>
-          `
-          :
-          ''
-        }
-
-      </div>
-      `
-    ).join('');
-
-}
-
-
-function deleteUser(i){
-
-  if(
-    db.users[i].username==='admin'
-  ){
-
-    return toast(
-      '⚠️ Không thể xóa Admin gốc'
-    );
-
-  }
-
-  if(
-    !confirm(
-      'Xóa tài khoản này?'
-    )
-  )return;
-
-  db.users.splice(i,1);
-
-  saveDB();
-
-  renderUsers();
-
-  toast(
-    '🗑 Đã xóa tài khoản'
-  );
-
-}
-
-
-/* =========================
-   THEME
-========================= */
-
-function loadThemeInputs(){
-
-  const t=db.theme;
-
-  $('themePrimary').value=t.primary;
-  $('themeSecondary').value=t.secondary;
-  $('themeAccent').value=t.accent;
-
-  $('themeRadius').value=t.radius;
-  $('themeGlow').value=t.glow;
-  $('themeOverlay').value=t.overlay;
-  $('themeGlass').value=t.glass;
-
-  $('themeAnimation').value=
-    t.animation;
-
-  $('themeBgUrl').value=
-    t.bg||'';
-
-}
-
-
-function themePreview(){
-
-  const root=
-    document.documentElement;
-
-  root.style.setProperty(
-    '--primary',
-    $('themePrimary').value
-  );
-
-  root.style.setProperty(
-    '--primary2',
-    $('themeSecondary').value
-  );
-
-  root.style.setProperty(
-    '--accent',
-    $('themeAccent').value
-  );
-
-  root.style.setProperty(
-    '--radius',
-    $('themeRadius').value+'px'
-  );
-
-  root.style.setProperty(
-    '--glow',
-    Number(
-      $('themeGlow').value
-    )/100
-  );
-
-  root.style.setProperty(
-    '--overlay',
-    Number(
-      $('themeOverlay').value
-    )/100
-  );
-
-
-  root.style.setProperty(
-    '--card',
-    `rgba(16,19,38,${
-      Number(
-        $('themeGlass').value
-      )/100
-    })`
-  );
-
-
-  $('radiusValue').textContent=
-    $('themeRadius').value+'px';
-
-  $('glowValue').textContent=
-    $('themeGlow').value+'%';
-
-  $('overlayValue').textContent=
-    $('themeOverlay').value+'%';
-
-  $('glassValue').textContent=
-    $('themeGlass').value+'%';
-
-
-  document.body.classList.toggle(
-    'no-animation',
-    $('themeAnimation').value==='off'
-  );
-
-
-  const bg=
-    $('themeBgUrl').value.trim();
-
-  if(bg){
-
-    root.style.setProperty(
-      '--custom-bg',
-      `url("${bg}")`
-    );
-
-  }else{
-
-    root.style.setProperty(
-      '--custom-bg',
-      'linear-gradient(120deg,#17192f,#080a16)'
-    );
-
-  }
-
-}
-
-
-function saveTheme(){
-
-  if(currentUser?.role!=='admin'){
-
-    return toast(
-      '❌ Chỉ Admin được chỉnh giao diện'
-    );
-
-  }
-
-  db.theme={
-
-    primary:
-      $('themePrimary').value,
-
-    secondary:
-      $('themeSecondary').value,
-
-    accent:
-      $('themeAccent').value,
-
-    radius:
-      Number(
-        $('themeRadius').value
-      ),
-
-    glow:
-      Number(
-        $('themeGlow').value
-      ),
-
-    overlay:
-      Number(
-        $('themeOverlay').value
-      ),
-
-    glass:
-      Number(
-        $('themeGlass').value
-      ),
-
-    animation:
-      $('themeAnimation').value,
-
-    bg:
-      $('themeBgUrl').value.trim()
-
-  };
-
-
-  saveDB();
-
-  toast(
-    '🎨 Đã lưu giao diện'
-  );
-
-}
-
-
-function resetTheme(){
-
-  db.theme={
-    primary:'#8d63ff',
-    secondary:'#ff00e6',
-    accent:'#00eaff',
-    radius:21,
-    glow:100,
-    overlay:72,
-    glass:82,
-    animation:'on',
-    bg:''
-  };
-
-  saveDB();
-
-  loadThemeInputs();
-
-  applyTheme();
-
-  toast(
-    '↩️ Đã reset giao diện'
-  );
-
-}
-
-
-function applyTheme(){
-
-  loadThemeInputs();
-
-  themePreview();
-
-}
-
-
-function chooseBg(){
-
-  const input=
-    document.createElement('input');
-
-  input.type='file';
-  input.accept='image/*';
-
-  input.onchange=()=>{
-
-    const file=
-      input.files?.[0];
-
-    if(!file)return;
-
-    if(
-      file.size>
-      5*1024*1024
-    ){
-
-      return toast(
-        '⚠️ Ảnh nền tối đa 5MB'
-      );
-
-    }
-
-    const reader=
-      new FileReader();
-
-    reader.onload=()=>{
-
-      /*
-       Lưu data URL trực tiếp.
-       Nếu ảnh rất lớn nên dùng URL thay thế.
-      */
-
-      $('themeBgUrl').value=
-        reader.result;
-
-      themePreview();
-
-      toast(
-        '🖼️ Đã chọn ảnh nền'
-      );
-
-    };
-
-    reader.readAsDataURL(file);
-
-  };
-
-  input.click();
-
-}
-
-
-/* =========================
-   WEBHOOK
-========================= */
-
-function updateStats(){
-
-  $('statCustomers').textContent=
-    db.customers.length;
-
-  $('statDone').textContent=
-    db.dones.length;
-
-  $('statSent').textContent=
-    db.sent;
-
-  $('statFail').textContent=
-    db.fail;
-
-  $('statSelected').textContent=
-    db.customers.filter(
-      x=>x.selected
-    ).length;
-
-}
-
-
-$('botName')
-.addEventListener(
-  'input',
-  ()=>{
-    db.botName=
-      $('botName').value;
-
-    saveDB();
-
-    updatePreview();
-  }
-);
-
-
-$('webhook')
-.addEventListener(
-  'input',
-  ()=>{
-    db.webhook=
-      $('webhook').value.trim();
-
-    saveDB();
-  }
-);
-
-
-function toggleWebhook(){
-
-  $('webhook').type=
-    $('webhook').type==='password'
-    ?
-    'text'
-    :
-    'password';
-
-}
-
-
-async function testWebhook(){
-
-  if(!can('webhook'))
-    return;
-
-  const url=
-    $('webhook')
-    .value
-    .trim();
-
-  if(!url)
-    return toast(
-      '⚠️ Chưa nhập Webhook'
-    );
-
-
-  try{
-
-    const res=
-      await fetch(
-        url,
-        {
-          method:'POST',
-
-          headers:{
-            'Content-Type':
-              'application/json'
-          },
-
-          body:
-            JSON.stringify({
-
-              username:
-                db.botName||
-                'Done Bot',
-
-              content:
-                '🧪 Webhook Test thành công!',
-
-              embeds:[
-                {
-                  title:
-                    '⚡ DONE ORDER TEST',
-
-                  description:
-                    'Webhook đang hoạt động.',
-
-                  color:
-                    0x8d63ff
-                }
-              ]
-
-            })
-        }
-      );
-
-
-    if(!res.ok)
-      throw new Error(
-        'HTTP '+res.status
-      );
-
-
-    toast(
-      '✅ Webhook hoạt động!'
-    );
-
-  }catch(e){
-
-    console.error(e);
-
-    toast(
-      '❌ Không gửi được Webhook'
-    );
-
-  }
-
-}
-
-
-/* =========================
+/* =========================================================
    CUSTOMERS
-========================= */
+========================================================= */
 
-function addCustomer(){
+function saveCustomer(){
+  if(!can("customer"))return;
 
-  if(!can('customer'))
-    return;
+  const w=workspace();
+  const name=$("customerName").value.trim();
+  const discord=$("customerDiscord").value.trim();
+  const edit=$("customerEditId").value;
 
-  const name=
-    $('customerName')
-    .value
-    .trim();
+  if(!name)return toast("Nhập tên khách","bad");
+  if(!discord)return toast("Nhập Discord ID","bad");
 
-  const id=
-    $('customerId')
-    .value
-    .trim();
-
-  if(!name||!id)
-    return toast(
-      '⚠️ Nhập đủ tên và Discord ID'
-    );
-
-  if(!/^\d{15,25}$/.test(id))
-    return toast(
-      '⚠️ Discord ID không hợp lệ'
-    );
-
-
-  const old=
-    db.customers.find(
-      x=>x.id===id
-    );
-
-  if(old){
-
-    old.name=name;
-
-    toast(
-      '✅ Đã cập nhật khách'
-    );
-
+  if(edit){
+    const c=w.customers.find(x=>x.id===edit);
+    if(c){
+      c.name=name;
+      c.discord=discord;
+    }
   }else{
-
-    db.customers.push({
+    w.customers.push({
+      id:"c_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
       name,
-      id,
-      selected:false
+      discord,
+      createdAt:Date.now()
     });
-
-    toast(
-      '✅ Đã thêm khách'
-    );
-
   }
 
   saveDB();
-
-  renderCustomers();
-
   clearCustomerForm();
+  renderCustomers();
+  updateStats();
 
+  logAction(edit?"Sửa khách":"Thêm khách",name,true);
+  toast("Đã lưu khách","good");
 }
 
+function editCustomer(id){
+  const c=workspace().customers.find(x=>x.id===id);
+  if(!c)return;
+
+  $("customerEditId").value=id;
+  $("customerName").value=c.name;
+  $("customerDiscord").value=c.discord;
+}
+
+function deleteCustomer(id){
+  if(!confirm("Xóa khách này?"))return;
+
+  const w=workspace();
+  const c=w.customers.find(x=>x.id===id);
+
+  w.customers=w.customers.filter(x=>x.id!==id);
+  selectedCustomers.delete(id);
+
+  saveDB();
+  renderCustomers();
+  updateStats();
+
+  logAction("Xóa khách",c?.name||id,true);
+  toast("Đã xóa","good");
+}
 
 function clearCustomerForm(){
-
-  $('customerName').value='';
-  $('customerId').value='';
-
+  $("customerEditId").value="";
+  $("customerName").value="";
+  $("customerDiscord").value="";
 }
 
+function toggleCustomer(id){
+  if(selectedCustomers.has(id))
+    selectedCustomers.delete(id);
+  else
+    selectedCustomers.add(id);
+
+  renderCustomers();
+  updateStats();
+}
+
+function toggleAllCustomers(){
+  const list=workspace().customers;
+
+  const all=list.every(c=>selectedCustomers.has(c.id));
+
+  if(all){
+    list.forEach(c=>selectedCustomers.delete(c.id));
+  }else{
+    list.forEach(c=>selectedCustomers.add(c.id));
+  }
+
+  renderCustomers();
+  updateStats();
+}
 
 function renderCustomers(){
+  const box=$("customerList");
+  if(!box)return;
 
-  const q=
-    $('customerSearch')
-    .value
-    .toLowerCase();
-
-  const list=
-    db.customers.filter(
-      x=>
-        (
-          x.name+
-          x.id
-        )
-        .toLowerCase()
-        .includes(q)
-    );
-
-
-  $('customerList').innerHTML=
-    list.length
-
-    ?
-
-    list.map(
-      x=>{
-
-        const idx=
-          db.customers.indexOf(x);
-
-        return `
-        <div class="customer">
-
-          <input
-            type="checkbox"
-            ${x.selected?'checked':''}
-            onchange="toggleCustomer(${idx},this.checked)"
-          >
-
-          <div class="customer-info">
-
-            <div class="customer-name">
-              ${esc(x.name)}
-            </div>
-
-            <div class="customer-id">
-              ${esc(x.id)}
-            </div>
-
-          </div>
-
-          <button
-            class="secondary mini"
-            onclick="editCustomer(${idx})"
-          >
-            ✏️
-          </button>
-
-          <button
-            class="red mini"
-            onclick="deleteCustomer(${idx})"
-          >
-            🗑
-          </button>
-
-        </div>
-        `;
-
-      }
-    ).join('')
-
-    :
-
-    '<div class="empty">Chưa có khách</div>';
-
-
-  updateStats();
-  updatePreview();
-
-}
-
-
-function toggleCustomer(i,v){
-
-  db.customers[i].selected=v;
-
-  saveDB();
-
-  renderCustomers();
-
-}
-
-
-function editCustomer(i){
-
-  $('customerName').value=
-    db.customers[i].name;
-
-  $('customerId').value=
-    db.customers[i].id;
-
-  window.scrollTo({
-    top:document.querySelector(
-      '#customerPanel'
-    ).offsetTop,
-    behavior:'smooth'
-  });
-
-}
-
-
-function deleteCustomer(i){
-
-  if(
-    !confirm(
-      'Xóa khách này?'
-    )
-  )return;
-
-  db.customers.splice(i,1);
-
-  saveDB();
-
-  renderCustomers();
-
-}
-
-
-function selectAllCustomers(){
-
-  db.customers.forEach(
-    x=>x.selected=true
+  const q=($("customerSearch")?.value||"").toLowerCase();
+  const list=workspace().customers.filter(c=>
+    c.name.toLowerCase().includes(q) ||
+    c.discord.toLowerCase().includes(q)
   );
 
-  saveDB();
-
-  renderCustomers();
-
-}
-
-
-function clearCustomers(){
-
-  db.customers.forEach(
-    x=>x.selected=false
-  );
-
-  saveDB();
-
-  renderCustomers();
-
-}
-
-
-/* =========================
-   DONE
-========================= */
-
-[
-  'doneName',
-  'doneTitle',
-  'doneMessage',
-  'doneColor',
-  'pingMode'
-].forEach(
-  id=>
-    $(id).addEventListener(
-      'input',
-      updatePreview
-    )
-);
-
-
-function updatePreview(){
-
-  $('pvBot').innerHTML=
-    esc(
-      db.botName||
-      'Done Bot'
-    )
-    +
-    ' <span class="tag">BOT</span>';
-
-  $('pvTitle').textContent=
-    $('doneTitle').value||
-    'Đơn hàng đã hoàn tất';
-
-  $('pvDesc').textContent=
-    $('doneMessage').value||
-    'Nội dung DONE sẽ hiện ở đây...';
-
-  $('pvEmbed')
-    .style
-    .borderLeftColor=
-    $('doneColor').value;
-
-
-  const selected=
-    db.customers.filter(
-      x=>x.selected
-    );
-
-
-  $('pvPing').textContent=
-    $('pingMode').value==='yes'
-    &&
-    selected.length
-    ?
-    selected
-      .map(
-        x=>'@'+x.name
-      )
-      .join(' ')
-    :
-    '';
-
-
-  if(photoData){
-
-    $('pvImg').src=
-      photoData;
-
-    $('pvImg')
-      .style
-      .display='block';
-
-  }else{
-
-    $('pvImg')
-      .style
-      .display='none';
-
+  if(!list.length){
+    box.innerHTML=`<div class="muted">Chưa có khách.</div>`;
+    return;
   }
 
+  box.innerHTML=list.map(c=>{
+    const selected=selectedCustomers.has(c.id);
+
+    return `
+      <div class="item ${selected?"selected":""}">
+        <div class="itemHead">
+          <div>
+            <div class="itemName">${esc(c.name)}</div>
+            <div class="muted">${esc(c.discord)}</div>
+          </div>
+          <input type="checkbox" ${selected?"checked":""}
+            onchange="toggleCustomer('${c.id}')">
+        </div>
+        <div class="actions">
+          <button class="small" onclick="editCustomer('${c.id}')">Sửa</button>
+          <button class="small danger" onclick="deleteCustomer('${c.id}')">Xóa</button>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
+function exportCustomers(){
+  downloadJSON(
+    workspace().customers,
+    "customers.json"
+  );
+}
 
-function previewPhoto(input){
-
-  const file=
-    input.files?.[0];
-
+function importCustomers(e){
+  const file=e.target.files[0];
   if(!file)return;
 
-  if(
-    file.size>
-    7*1024*1024
-  ){
-
-    return toast(
-      '⚠️ Ảnh tối đa 7MB'
-    );
-
-  }
-
-  const reader=
-    new FileReader();
+  const reader=new FileReader();
 
   reader.onload=()=>{
+    try{
+      const arr=JSON.parse(reader.result);
 
-    photoData=
-      reader.result;
+      if(!Array.isArray(arr))
+        throw new Error();
 
-    $('photoImg').src=
-      photoData;
+      const w=workspace();
 
-    $('photoPreview')
-      .style
-      .display='block';
+      arr.forEach(c=>{
+        if(!c.name || !c.discord)return;
 
-    updatePreview();
+        w.customers.push({
+          id:"c_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),
+          name:String(c.name),
+          discord:String(c.discord),
+          createdAt:Date.now()
+        });
+      });
 
+      saveDB();
+      renderCustomers();
+      updateStats();
+
+      toast("Import thành công","good");
+    }catch{
+      toast("File JSON không hợp lệ","bad");
+    }
+
+    e.target.value="";
   };
 
-  reader.readAsDataURL(file);
-
+  reader.readAsText(file);
 }
 
-
-function removePhoto(){
-
-  photoData=null;
-
-  $('photoInput').value='';
-
-  $('photoPreview')
-    .style
-    .display='none';
-
-  updatePreview();
-
-}
-
+/* =========================================================
+   DONE
+========================================================= */
 
 function saveDone(){
+  if(!can("done"))return;
 
-  if(!can('done'))
-    return;
+  const w=workspace();
 
-  const d={
+  const name=$("doneName").value.trim();
+  const message=$("doneMessage").value;
+  const edit=$("doneEditId").value;
 
-    name:
-      $('doneName')
-      .value
-      .trim()
-      ||
-      'DONE',
+  if(!name)return toast("Nhập tên DONE","bad");
 
-    title:
-      $('doneTitle')
-      .value
-      .trim()
-      ||
-      'Đơn hàng đã hoàn tất',
-
-    message:
-      $('doneMessage').value,
-
-    color:
-      $('doneColor').value,
-
-    ping:
-      $('pingMode').value
-
+  const data={
+    name,
+    message,
+    bot:$("doneBot").value.trim()||"Done Bot",
+    color:$("doneColor").value,
+    footer:$("doneFooter").value,
+    image:$("doneImage").value.trim(),
+    timestamp:$("doneTimestamp").checked
   };
 
+  if(edit){
+    const d=w.dones.find(x=>x.id===edit);
+    if(d)Object.assign(d,data);
 
-  if(editIndex>=0){
-
-    db.dones[editIndex]=d;
-
-    editIndex=-1;
-
-    toast(
-      '✅ Đã cập nhật DONE'
-    );
-
+    logAction("Sửa DONE",name,true);
   }else{
+    w.dones.push({
+      id:"d_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+      ...data,
+      createdAt:Date.now()
+    });
 
-    db.dones.push(d);
-
-    toast(
-      '✅ Đã thêm DONE'
-    );
-
+    logAction("Tạo DONE",name,true);
   }
-
 
   saveDB();
-
-  renderDones();
-
   clearDoneForm();
+  renderDones();
+  updateStats();
 
+  toast("Đã lưu DONE","good");
 }
 
+function editDone(id){
+  const d=workspace().dones.find(x=>x.id===id);
+  if(!d)return;
 
-function clearDoneForm(){
+  $("doneEditId").value=id;
+  $("doneName").value=d.name;
+  $("doneMessage").value=d.message;
+  $("doneBot").value=d.bot;
+  $("doneColor").value=d.color;
+  $("doneFooter").value=d.footer||"";
+  $("doneImage").value=d.image||"";
+  $("doneTimestamp").checked=d.timestamp!==false;
 
-  editIndex=-1;
+  updateDonePreview();
 
-  $('doneName').value='';
-  $('doneTitle').value='';
-  $('doneMessage').value='';
-  $('doneColor').value=
-    '#8d63ff';
-  $('pingMode').value='yes';
-
-  removePhoto();
-
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
+function deleteDone(id){
+  if(!confirm("Xóa DONE này?"))return;
 
-function renderDones(){
+  const w=workspace();
+  const d=w.dones.find(x=>x.id===id);
 
-  const el=
-    $('doneList');
+  w.dones=w.dones.filter(x=>x.id!==id);
 
-  if(!db.dones.length){
+  saveDB();
+  renderDones();
+  updateStats();
 
-    el.innerHTML=
-      '<div class="empty">Chưa có DONE. Tạo mẫu ở phía trên.</div>';
-
-    return;
-
-  }
-
-
-  el.innerHTML=
-    db.dones.map(
-      (d,i)=>`
-
-      <div class="done">
-
-        <div class="done-head">
-
-          <div>
-
-            <div class="done-name">
-              📦 ${esc(d.name)}
-            </div>
-
-            <div
-              style="
-                color:#858ba6;
-                font-size:12px
-              "
-            >
-              ${esc(d.title)}
-            </div>
-
-          </div>
-
-          <span class="badge">
-            ${
-              d.ping==='yes'
-              ?
-              '🔔 PING'
-              :
-              '🔕 NO PING'
-            }
-          </span>
-
-        </div>
-
-        <div
-          style="
-            color:#aeb3ca;
-            font-size:12px;
-            margin-top:9px;
-            white-space:pre-wrap
-          "
-        >
-          ${esc(d.message).slice(0,220)}
-        </div>
-
-        <div class="actions">
-
-          <button
-            onclick="useDone(${i})"
-          >
-            ✏️ Sửa
-          </button>
-
-          <button
-            class="green"
-            onclick="sendDone(${i})"
-          >
-            🚀 Gửi
-          </button>
-
-          <button
-            class="secondary"
-            onclick="duplicateDone(${i})"
-          >
-            📋 Nhân bản
-          </button>
-
-          <button
-            class="red"
-            onclick="deleteDone(${i})"
-          >
-            🗑
-          </button>
-
-        </div>
-
-      </div>
-
-      `
-    ).join('');
-
+  logAction("Xóa DONE",d?.name||id,true);
+  toast("Đã xóa","good");
 }
 
+function duplicateDone(id){
+  const w=workspace();
+  const d=w.dones.find(x=>x.id===id);
+  if(!d)return;
 
-function useDone(i){
-
-  const d=
-    db.dones[i];
-
-  editIndex=i;
-
-  $('doneName').value=d.name;
-  $('doneTitle').value=d.title;
-  $('doneMessage').value=d.message;
-  $('doneColor').value=d.color;
-  $('pingMode').value=d.ping;
-
-  updatePreview();
-
-  window.scrollTo({
-    top:
-      $('donePanel').offsetTop,
-    behavior:'smooth'
+  w.dones.push({
+    ...JSON.parse(JSON.stringify(d)),
+    id:"d_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+    name:d.name+" Copy"
   });
 
+  saveDB();
+  renderDones();
+  updateStats();
+
+  toast("Đã nhân bản DONE","good");
 }
 
+function duplicateCurrentDone(){
+  const id=$("doneEditId").value;
 
-function duplicateDone(i){
+  if(id)return duplicateDone(id);
 
-  db.dones.splice(
-    i+1,
-    0,
-    {
-      ...db.dones[i],
-      name:
-        db.dones[i].name+
-        ' Copy'
-    }
-  );
+  if(!$("doneName").value.trim())
+    return toast("Chưa có DONE để nhân bản","bad");
+
+  const w=workspace();
+
+  w.dones.push({
+    id:"d_"+Date.now(),
+    name:$("doneName").value+" Copy",
+    message:$("doneMessage").value,
+    bot:$("doneBot").value,
+    color:$("doneColor").value,
+    footer:$("doneFooter").value,
+    image:$("doneImage").value,
+    timestamp:$("doneTimestamp").checked
+  });
 
   saveDB();
-
   renderDones();
-
-  toast(
-    '📋 Đã nhân bản'
-  );
-
+  toast("Đã nhân bản","good");
 }
 
+function clearDoneForm(){
+  $("doneEditId").value="";
+  $("doneName").value="";
+  $("doneMessage").value="";
+  $("doneBot").value="Done Bot";
+  $("doneColor").value="#5865f2";
+  $("doneFooter").value="DONE ORDER VIP";
+  $("doneImage").value="";
+  $("doneTimestamp").checked=true;
+  updateDonePreview();
+}
 
-function deleteDone(i){
+function renderDones(){
+  const box=$("doneList");
+  const w=workspace();
 
-  if(
-    !confirm(
-      'Xóa DONE này?'
-    )
-  )return;
+  $("quickDone").innerHTML=w.dones.length
+    ? w.dones.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join("")
+    : `<option value="">Chưa có DONE</option>`;
 
-  db.dones.splice(i,1);
+  if(!w.dones.length){
+    box.innerHTML=`<div class="muted">Chưa có DONE.</div>`;
+    return;
+  }
+
+  box.innerHTML=w.dones.map((d,i)=>`
+    <div class="item"
+      draggable="true"
+      data-done-id="${d.id}"
+      ondragstart="dragStartDone(event,'${d.id}')"
+      ondragover="event.preventDefault()"
+      ondrop="dropDone(event,'${d.id}')">
+
+      <div class="itemHead">
+        <div>
+          <div class="itemName">☷ ${esc(d.name)}</div>
+          <div class="muted">${esc(d.message).slice(0,100)}</div>
+        </div>
+        <span class="tag">${i+1}</span>
+      </div>
+
+      <div class="actions">
+        <button class="small" onclick="editDone('${d.id}')">Sửa</button>
+        <button class="small" onclick="duplicateDone('${d.id}')">Nhân bản</button>
+        <button class="small danger" onclick="deleteDone('${d.id}')">Xóa</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function dragStartDone(e,id){
+  dragDoneId=id;
+  e.dataTransfer.effectAllowed="move";
+}
+
+function dropDone(e,targetId){
+  if(!dragDoneId || dragDoneId===targetId)return;
+
+  const w=workspace();
+  const from=w.dones.findIndex(x=>x.id===dragDoneId);
+  const to=w.dones.findIndex(x=>x.id===targetId);
+
+  if(from<0||to<0)return;
+
+  const [item]=w.dones.splice(from,1);
+  w.dones.splice(to,0,item);
 
   saveDB();
-
   renderDones();
 
+  toast("Đã đổi thứ tự DONE","good");
 }
 
+function updateDonePreview(){
+  const bot=$("doneBot").value||"Done Bot";
+  const title=$("doneName").value||"Tên DONE";
+  const msg=$("doneMessage").value||"Nội dung DONE...";
+  const color=$("doneColor").value||"#5865f2";
+  const footer=$("doneFooter").value||"";
+  const image=$("doneImage").value.trim();
 
-/* =========================
-   SEND
-========================= */
-
-function sleep(ms){
-
-  return new Promise(
-    r=>setTimeout(r,ms)
-  );
-
+  $("donePreview").innerHTML=`
+    <div class="embed" style="--embed:${color}">
+      <div class="embedBot">🤖 ${esc(bot)}</div>
+      <div class="embedTitle">${esc(title)}</div>
+      <div class="embedMsg">${esc(msg)}</div>
+      ${image?`<img src="${escAttr(image)}" onerror="this.style.display='none'">`:""}
+      <div class="embedFooter">
+        ${esc(footer)}
+        ${$("doneTimestamp").checked?" • "+new Date().toLocaleString("vi-VN"):""}
+      </div>
+    </div>
+  `;
 }
 
+/* =========================================================
+   SEND DONE
+========================================================= */
 
-async function sendCurrent(){
+async function sendSelectedDone(){
+  if(!can("send"))return;
 
-  if(!can('send'))
-    return toast(
-      '❌ Tài khoản không có quyền gửi DONE'
-    );
+  const w=workspace();
 
-  const d={
+  if(!w.webhook)
+    return toast("Chưa cấu hình webhook","bad");
 
-    title:
-      $('doneTitle').value||
-      'Đơn hàng đã hoàn tất',
+  const done=w.dones.find(x=>x.id===$("quickDone").value);
 
-    message:
-      $('doneMessage').value,
+  if(!done)return toast("Chưa có DONE","bad");
 
-    color:
-      $('doneColor').value,
+  const customers=w.customers.filter(c=>selectedCustomers.has(c.id));
 
-    ping:
-      $('pingMode').value
+  if(!customers.length)
+    return toast("Chưa chọn khách","bad");
 
-  };
+  const delay=Math.max(.5,Number($("sendDelay").value)||1);
 
-  await sendPayload(d);
+  let success=0;
+  let fail=0;
 
-}
+  $("sendStatus").textContent="Đang gửi...";
+  $("sendProgress").style.width="0%";
 
+  for(let i=0;i<customers.length;i++){
+    const c=customers[i];
 
-async function sendDone(i){
+    $("sendStatus").textContent=
+      `Đang gửi ${i+1}/${customers.length}: ${c.name}`;
 
-  if(!can('send'))
-    return toast(
-      '❌ Tài khoản không có quyền gửi DONE'
-    );
+    const payload=buildDonePayload(done,c);
 
-  await sendPayload(
-    db.dones[i]
-  );
+    const result=await sendWebhook(w.webhook,payload);
 
-}
+    if(result.ok){
+      success++;
+      w.sent++;
 
+      logAction(
+        "Gửi DONE",
+        `${done.name} → ${c.name}`,
+        true
+      );
+    }else{
+      fail++;
+      w.fail++;
 
-async function sendPayload(d){
-
-  if(!db.webhook){
-
-    return toast(
-      '⚠️ Chưa nhập Webhook'
-    );
-
-  }
-
-  const selected=
-    db.customers.filter(
-      x=>x.selected
-    );
-
-  if(!selected.length){
-
-    return toast(
-      '⚠️ Chưa chọn khách'
-    );
-
-  }
-
-
-  if(
-    !confirm(
-      `Gửi DONE cho ${selected.length} khách?`
-    )
-  )return;
-
-
-  const bar=
-    $('progress');
-
-  const fill=
-    $('progressBar');
-
-  bar.style.display='block';
-
-  fill.style.width='0%';
-
-
-  let ok=0;
-  let bad=0;
-
-
-  for(
-    let i=0;
-    i<selected.length;
-    i++
-  ){
-
-    const c=
-      selected[i];
-
-    try{
-
-      const embed={
-
-        title:d.title,
-
-        description:
-          `👤 **Khách:** ${c.name}\n`+
-          `🆔 ${c.id}\n\n`+
-          `${d.message||''}`,
-
-        color:
-          parseInt(
-            d.color
-              .replace('#',''),
-            16
-          ),
-
-        footer:{
-          text:
-            'Done Order • VIP Dashboard'
-        },
-
-        timestamp:
-          new Date().toISOString()
-
-      };
-
-
-      if(photoData){
-
-        embed.image={
-          url:
-            'attachment://done.jpg'
-        };
-
-      }
-
-
-      const body={
-
-        username:
-          db.botName||
-          'Done Bot',
-
-        content:
-          d.ping==='yes'
-          ?
-          `<@${c.id}>`
-          :
-          undefined,
-
-        embeds:[
-          embed
-        ]
-
-      };
-
-
-      if(photoData){
-
-        const blob=
-          await(
-            await fetch(photoData)
-          ).blob();
-
-        const fd=
-          new FormData();
-
-        fd.append(
-          'payload_json',
-          JSON.stringify(body)
-        );
-
-        fd.append(
-          'files[0]',
-          blob,
-          'done.jpg'
-        );
-
-
-        const res=
-          await fetch(
-            db.webhook,
-            {
-              method:'POST',
-              body:fd
-            }
-          );
-
-
-        if(!res.ok)
-          throw new Error(
-            'HTTP '+res.status
-          );
-
-
-      }else{
-
-        const res=
-          await fetch(
-            db.webhook,
-            {
-              method:'POST',
-
-              headers:{
-                'Content-Type':
-                  'application/json'
-              },
-
-              body:
-                JSON.stringify(body)
-            }
-          );
-
-
-        if(!res.ok)
-          throw new Error(
-            'HTTP '+res.status
-          );
-
-      }
-
-
-      ok++;
-      db.sent++;
-
-
-    }catch(e){
-
-      console.error(e);
-
-      bad++;
-      db.fail++;
-
+      logAction(
+        "Gửi DONE",
+        `${done.name} → ${c.name}: ${result.error||"Failed"}`,
+        false
+      );
     }
 
-
-    fill.style.width=
-      Math.round(
-        (i+1)/
-        selected.length*
-        100
-      )+
-      '%';
-
-
-    saveDB();
+    $("sendProgress").style.width=
+      ((i+1)/customers.length*100)+"%";
 
     updateStats();
 
-
-    if(
-      i<
-      selected.length-1
-    ){
-
-      await sleep(900);
-
-    }
-
+    if(i<customers.length-1)
+      await sleep(delay*1000);
   }
 
+  saveDB();
 
-  setTimeout(
-    ()=>{
-      bar.style.display='none'
+  $("sendStatus").textContent=
+    `Hoàn tất: ${success} thành công • ${fail} lỗi`;
+
+  toast(
+    `Gửi xong ${success}/${customers.length}`,
+    fail?"bad":"good"
+  );
+}
+
+function buildDonePayload(done,customer){
+  let content=`<@${customer.discord}>`;
+
+  return {
+    content,
+    username:done.bot||"Done Bot",
+    allowed_mentions:{
+      parse:["users"]
     },
-    900
-  );
-
-
-  toast(
-    bad
-    ?
-    `⚠️ ${ok}/${selected.length} khách gửi thành công`
-    :
-    `✅ ${ok}/${selected.length} khách đã gửi thành công`
-  );
-
+    embeds:[{
+      title:done.name,
+      description:done.message,
+      color:hexToInt(done.color),
+      footer:done.footer?{text:done.footer}:undefined,
+      timestamp:done.timestamp?new Date().toISOString():undefined,
+      image:done.image?{url:done.image}:undefined
+    }]
+  };
 }
 
+/* =========================================================
+   WEBHOOK
+========================================================= */
 
-/* =========================
-   BACKUP
-========================= */
+function saveWebhook(){
+  if(!can("webhook"))return;
 
-function downloadJSON(
-  filename,
-  data
-){
+  workspace().webhook=$("webhookUrl").value.trim();
+  saveDB();
 
-  const blob=
-    new Blob(
-      [
-        JSON.stringify(
-          data,
-          null,
-          2
-        )
-      ],
-      {
-        type:
-          'application/json'
+  updateWebhookStatus();
+  logAction("Đổi webhook","Webhook riêng",true);
+  toast("Đã lưu webhook","good");
+}
+
+function toggleWebhookVisibility(){
+  const x=$("webhookUrl");
+  x.type=x.type==="password"?"text":"password";
+}
+
+async function testWebhook(){
+  if(!can("webhook"))return;
+
+  const url=workspace().webhook;
+
+  if(!url)return toast("Chưa có webhook","bad");
+
+  const result=await sendWebhook(url,{
+    content:"✅ Webhook Test • DONE ORDER VIP",
+    username:"DONE ORDER VIP",
+    allowed_mentions:{parse:[]}
+  });
+
+  if(result.ok){
+    logAction("Test webhook","Thành công",true);
+    toast("Webhook hoạt động","good");
+  }else{
+    logAction("Test webhook",result.error||"Failed",false);
+    toast("Webhook lỗi: "+(result.error||"Unknown"),"bad");
+  }
+}
+
+async function sendWebhook(url,payload,fileData=null){
+  try{
+    let response;
+
+    if(fileData){
+      const form=new FormData();
+
+      payload.embeds=payload.embeds||[];
+
+      if(payload.embeds[0]){
+        payload.embeds[0].image={url:"attachment://done.jpg"};
       }
-    );
 
+      form.append(
+        "payload_json",
+        JSON.stringify(payload)
+      );
 
-  const url=
-    URL.createObjectURL(blob);
+      const blob=await dataURLToBlob(fileData);
+      form.append("files[0]",blob,"done.jpg");
 
-  const a=
-    document.createElement('a');
+      response=await fetch(url,{
+        method:"POST",
+        body:form
+      });
+    }else{
+      response=await fetch(url,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      });
+    }
 
-  a.href=url;
-  a.download=filename;
+    if(response.ok || response.status===204)
+      return {ok:true};
 
-  a.click();
-
-  URL.revokeObjectURL(url);
-
-}
-
-
-function exportCustomers(){
-
-  downloadJSON(
-    'customers.json',
-    db.customers
-  );
-
-  toast(
-    '💾 Đã backup khách'
-  );
-
-}
-
-
-function importCustomers(){
-
-  const input=
-    document.createElement('input');
-
-  input.type='file';
-  input.accept='.json';
-
-  input.onchange=
-    async()=>{
+    if(response.status===429){
+      let retry=1;
 
       try{
+        const data=await response.json();
+        retry=Number(data.retry_after)||1;
+      }catch{}
 
-        const data=
-          JSON.parse(
-            await input.files[0].text()
-          );
+      await sleep(Math.max(retry*1000,1000));
 
-        if(!Array.isArray(data))
-          throw 0;
+      return {
+        ok:false,
+        error:"Rate Limited"
+      };
+    }
 
-        db.customers=data;
+    let text="HTTP "+response.status;
 
-        saveDB();
+    try{
+      const data=await response.json();
+      if(data.message)text=data.message;
+    }catch{}
 
-        renderCustomers();
+    return {ok:false,error:text};
 
-        toast(
-          '📥 Import thành công'
-        );
-
-      }catch{
-
-        toast(
-          '❌ File không hợp lệ'
-        );
-
-      }
-
+  }catch(e){
+    return {
+      ok:false,
+      error:"Không gửi được. Có thể trình duyệt chặn CORS hoặc webhook không hợp lệ."
     };
-
-  input.click();
-
+  }
 }
 
+/* =========================================================
+   WEBHOOK BULK TEST
+========================================================= */
 
-function exportAll(){
+async function startWebhookTest(){
+  if(!can("webhook"))return;
 
-  downloadJSON(
-    'done-order-vip.json',
-    db
+  if(testRunning)
+    return toast("Đang chạy rồi","bad");
+
+  const url=workspace().webhook;
+
+  if(!url)
+    return toast("Chưa cấu hình webhook","bad");
+
+  let count=Math.floor(Number($("spamCount").value)||1);
+  let delay=Math.max(.5,Number($("spamDelay").value)||1);
+
+  count=Math.min(count,50);
+
+  const message=$("spamMessage").value||"Webhook test";
+
+  const parse=[];
+
+  if($("allowEveryone").checked)parse.push("everyone");
+  if($("allowHere").checked)parse.push("everyone");
+
+  testRunning=true;
+  testStop=false;
+
+  let ok=0;
+  let fail=0;
+
+  $("spamProgress").style.width="0%";
+
+  for(let i=0;i<count;i++){
+    if(testStop)break;
+
+    $("spamStatus").textContent=
+      `Đang gửi ${i+1}/${count}`;
+
+    const result=await sendWebhook(url,{
+      content:message,
+      username:"Webhook Test",
+      allowed_mentions:{parse}
+    });
+
+    if(result.ok)ok++;
+    else fail++;
+
+    $("spamProgress").style.width=
+      ((i+1)/count*100)+"%";
+
+    if(result.error==="Rate Limited"){
+      $("spamStatus").textContent=
+        "Discord rate-limit → đã dừng để tránh gửi dồn";
+      break;
+    }
+
+    if(i<count-1)
+      await sleep(delay*1000);
+  }
+
+  testRunning=false;
+
+  if(testStop){
+    $("spamStatus").textContent=
+      `Đã dừng • ${ok} thành công • ${fail} lỗi`;
+  }else{
+    $("spamStatus").textContent=
+      `Hoàn tất • ${ok} thành công • ${fail} lỗi`;
+  }
+
+  logAction(
+    "Webhook Bulk Test",
+    `${ok} thành công / ${fail} lỗi`,
+    fail===0
   );
 
-  toast(
-    '💾 Đã backup toàn bộ'
-  );
-
+  toast("Webhook test hoàn tất",fail?"bad":"good");
 }
 
+function stopWebhookTest(){
+  if(!testRunning)return;
 
-function importAll(){
-
-  const input=
-    document.createElement('input');
-
-  input.type='file';
-  input.accept='.json';
-
-  input.onchange=
-    async()=>{
-
-      try{
-
-        const data=
-          JSON.parse(
-            await input.files[0].text()
-          );
-
-        if(
-          !data.users||
-          !data.customers||
-          !data.dones
-        )
-          throw 0;
-
-        db=data;
-
-        saveDB();
-
-        location.reload();
-
-      }catch{
-
-        toast(
-          '❌ Backup không hợp lệ'
-        );
-
-      }
-
-    };
-
-  input.click();
-
+  testStop=true;
+  $("spamStatus").textContent="Đang dừng...";
 }
 
+/* =========================================================
+   PHOTO
+========================================================= */
 
-function resetAll(){
+function previewPhoto(e){
+  const file=e.target.files[0];
 
-  if(
-    currentUser?.role!=='admin'
-  )
+  if(!file){
+    photoData="";
+    $("photoPreview").innerHTML="";
     return;
+  }
 
-  if(
-    !confirm(
-      '⚠️ Xóa toàn bộ dữ liệu?'
-    )
-  )return;
+  const reader=new FileReader();
 
-  localStorage.removeItem(KEY);
+  reader.onload=()=>{
+    photoData=reader.result;
+
+    $("photoPreview").innerHTML=
+      `<img src="${photoData}" style="max-width:100%;max-height:250px;border-radius:12px">`;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function loadThemeInputs(){
+  const t=workspace().theme;
+
+  $("themeP").value=t.p;
+  $("themeS").value=t.s;
+  $("themeA").value=t.a;
+  $("themeBg").value=t.bg||"";
+  $("themeOverlay").value=t.overlay;
+  $("themeGlass").value=t.glass;
+  $("themeGlow").value=t.glow;
+  $("themeRadius").value=t.radius;
+  $("themeSpeed").value=t.speed;
+  $("fxRgb").checked=t.rgb!==false;
+  $("fxParticles").checked=t.particles!==false;
+  $("fxCursor").checked=t.cursor!==false;
+  $("fxRipple").checked=t.ripple!==false;
+  $("fx3d").checked=t.fx3d!==false;
+  $("particleDensity").value=t.particleDensity||45;
+  $("particleSpeed").value=t.particleSpeed||3;
+}
+
+function saveTheme(){
+  if(!can("theme"))return;
+
+  const t=workspace().theme;
+
+  t.p=$("themeP").value;
+  t.s=$("themeS").value;
+  t.a=$("themeA").value;
+  t.bg=themePhotoData||$("themeBg").value.trim();
+  t.overlay=Number($("themeOverlay").value);
+  t.glass=Number($("themeGlass").value);
+  t.glow=Number($("themeGlow").value);
+  t.radius=Number($("themeRadius").value);
+  t.speed=Number($("themeSpeed").value);
+  t.rgb=$("fxRgb").checked;
+  t.particles=$("fxParticles").checked;
+  t.cursor=$("fxCursor").checked;
+  t.ripple=$("fxRipple").checked;
+  t.fx3d=$("fx3d").checked;
+  t.particleDensity=Number($("particleDensity").value);
+  t.particleSpeed=Number($("particleSpeed").value);
+
+  saveDB();
+  applyTheme(t);
+
+  toast("Đã lưu theme","good");
+}
+
+function resetTheme(){
+  workspace().theme={...defaultTheme};
+  themePhotoData="";
+  saveDB();
+  loadThemeInputs();
+  applyTheme(workspace().theme);
+
+  toast("Đã reset theme","good");
+}
+
+function themeImage(e){
+  const file=e.target.files[0];
+  if(!file)return;
+
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+    themePhotoData=reader.result;
+    $("themeBg").value="";
+    $("bg").style.backgroundImage=`url("${themePhotoData}")`;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function applyTheme(t){
+  const root=document.documentElement;
+
+  root.style.setProperty("--p",t.p);
+  root.style.setProperty("--s",t.s);
+  root.style.setProperty("--a",t.a);
+  root.style.setProperty("--radius",t.radius+"px");
+  root.style.setProperty("--glow",t.glow+"px");
+  root.style.setProperty("--overlay",(Number(t.overlay)/100).toFixed(2));
+  root.style.setProperty(
+    "--glass",
+    `rgba(15,15,30,${Math.max(.05,Number(t.glass)/100)})`
+  );
+  root.style.setProperty("--speed",Math.max(1,21-t.speed)+"s");
+
+  if(t.bg){
+    $("bg").style.backgroundImage=`url("${t.bg}")`;
+  }else{
+    $("bg").style.backgroundImage="";
+  }
+
+  $("rgb").style.display=t.rgb===false?"none":"block";
+  $("cursorGlow").style.display=t.cursor===false?"none":"block";
+
+  particleConfig=t;
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function saveProfile(){
+  const avatar=$("profileAvatar").value.trim();
+
+  currentUser.avatar=avatar;
+
+  const user=db.users.find(u=>u.id===currentUser.id);
+
+  if(user)user.avatar=avatar;
+
+  saveDB();
+  initApp();
+
+  toast("Đã lưu profile","good");
+}
+
+function changePassword(){
+  const old=$("oldPassword").value;
+  const n=$("newPassword").value;
+  const n2=$("newPassword2").value;
+
+  if(old!==currentUser.password)
+    return toast("Mật khẩu hiện tại sai","bad");
+
+  if(n.length<4)
+    return toast("Mật khẩu mới quá ngắn","bad");
+
+  if(n!==n2)
+    return toast("Mật khẩu nhập lại không khớp","bad");
+
+  const user=db.users.find(u=>u.id===currentUser.id);
+
+  if(user)user.password=n;
+  currentUser.password=n;
+
+  saveDB();
+
+  $("oldPassword").value="";
+  $("newPassword").value="";
+  $("newPassword2").value="";
+
+  toast("Đổi mật khẩu thành công","good");
+}
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+function renderAdmin(){
+  if(currentUser?.role!=="admin")return;
+
+  const box=$("adminUsers");
+
+  box.innerHTML=db.users.map(u=>`
+    <div class="item mt">
+      <div class="itemHead">
+        <div>
+          <div class="itemName">
+            ${esc(u.username)}
+            <span class="tag">${u.role.toUpperCase()}</span>
+            <span class="tag ${u.active===false?"fail":"success"}">
+              ${u.active===false?"LOCKED":"ACTIVE"}
+            </span>
+          </div>
+          <div class="muted">${u.id}</div>
+        </div>
+      </div>
+
+      <div class="grid two mt">
+        <div>
+          <label>Đổi mật khẩu</label>
+          <input id="adminPass_${u.id}" type="password" placeholder="Mật khẩu mới">
+        </div>
+
+        <div>
+          <label>Role</label>
+          <select id="adminRole_${u.id}">
+            <option value="user" ${u.role==="user"?"selected":""}>User</option>
+            <option value="admin" ${u.role==="admin"?"selected":""}>Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid three mt">
+        ${permissionCheck(u,"send","Gửi DONE")}
+        ${permissionCheck(u,"customer","Khách hàng")}
+        ${permissionCheck(u,"done","Quản lý DONE")}
+        ${permissionCheck(u,"theme","Theme")}
+        ${permissionCheck(u,"webhook","Webhook")}
+        ${permissionCheck(u,"backup","Backup")}
+      </div>
+
+      <div class="actions">
+        <button class="primary small" onclick="saveAdminUser('${u.id}')">Lưu</button>
+        ${u.id!=="admin-root"
+          ?`<button class="small" onclick="toggleUser('${u.id}')">
+              ${u.active===false?"Mở khóa":"Khóa"}
+            </button>
+            <button class="small danger" onclick="deleteUser('${u.id}')">Xóa</button>`
+          :""}
+      </div>
+    </div>
+  `).join("");
+}
+
+function permissionCheck(u,key,label){
+  return `
+    <label class="check">
+      <input id="perm_${u.id}_${key}" type="checkbox"
+        ${u.permissions?.[key]!==false?"checked":""}>
+      ${label}
+    </label>
+  `;
+}
+
+function saveAdminUser(id){
+  const u=db.users.find(x=>x.id===id);
+  if(!u)return;
+
+  const newPass=$("adminPass_"+id).value;
+  const role=$("adminRole_"+id).value;
+
+  if(newPass)u.password=newPass;
+
+  u.role=role;
+
+  if(!u.permissions)u.permissions={};
+
+  ["send","customer","done","theme","webhook","backup"].forEach(k=>{
+    u.permissions[k]=$("perm_"+id+"_"+k).checked;
+  });
+
+  saveDB();
+  renderAdmin();
+
+  if(currentUser.id===id){
+    currentUser=u;
+    initApp();
+  }
+
+  toast("Đã cập nhật tài khoản","good");
+}
+
+function toggleUser(id){
+  const u=db.users.find(x=>x.id===id);
+  if(!u)return;
+
+  u.active=u.active===false;
+
+  saveDB();
+  renderAdmin();
+
+  toast(u.active?"Đã mở khóa":"Đã khóa","good");
+}
+
+function deleteUser(id){
+  const u=db.users.find(x=>x.id===id);
+
+  if(!u || id==="admin-root")return;
+
+  if(!confirm(`Xóa tài khoản ${u.username}?`))return;
+
+  db.users=db.users.filter(x=>x.id!==id);
+  delete db.workspaces[id];
+
+  saveDB();
+  renderAdmin();
+
+  toast("Đã xóa tài khoản","good");
+}
+
+/* =========================================================
+   BACKUP
+========================================================= */
+
+function backupAll(){
+  if(!can("backup"))return;
+
+  downloadJSON(db,"done-vip-backup.json");
+  logAction("Backup","Toàn bộ database",true);
+}
+
+function restoreAll(e){
+  if(!can("backup"))return;
+
+  const file=e.target.files[0];
+  if(!file)return;
+
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+
+      if(!data.users || !data.workspaces)
+        throw new Error();
+
+      db=data;
+      saveDB();
+
+      const restored=db.users.find(u=>u.id===currentUser.id);
+
+      if(restored){
+        currentUser=restored;
+        initApp();
+      }
+
+      toast("Restore thành công","good");
+    }catch{
+      toast("Backup không hợp lệ","bad");
+    }
+
+    e.target.value="";
+  };
+
+  reader.readAsText(file);
+}
+
+function resetEverything(){
+  if(currentUser?.role!=="admin")
+    return toast("Chỉ Admin","bad");
+
+  if(!confirm("XÓA TOÀN BỘ dữ liệu?"))return;
+  if(!confirm("Chắc chắn lần cuối?"))return;
+
+  db=makeDB();
+  saveDB();
+
+  currentUser=null;
 
   location.reload();
-
 }
 
+/* =========================================================
+   HISTORY
+========================================================= */
 
-/* =========================
-   HELPERS
-========================= */
+function logAction(action,target,status){
+  db.history.unshift({
+    id:"h_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+    userId:currentUser?.id||"",
+    username:currentUser?.username||"",
+    action,
+    target,
+    status,
+    time:Date.now()
+  });
 
-function esc(s){
+  db.history=db.history.slice(0,1000);
 
-  return String(s??'')
-    .replace(
-      /[&<>"']/g,
-      c=>({
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        '"':'&quot;',
-        "'":'&#039;'
-      }[c])
-    );
-
+  saveDB();
 }
 
+function renderHistory(){
+  const box=$("historyList");
+  if(!box)return;
+
+  const q=($("historySearch")?.value||"").toLowerCase();
+
+  const list=db.history.filter(h=>{
+    if(h.userId!==currentUser.id && currentUser.role!=="admin")
+      return false;
+
+    const text=(h.username+" "+h.action+" "+h.target).toLowerCase();
+
+    return text.includes(q);
+  });
+
+  if(!list.length){
+    box.innerHTML=`<div class="muted">Chưa có lịch sử.</div>`;
+    return;
+  }
+
+  box.innerHTML=list.map(h=>`
+    <div class="item">
+      <div class="itemHead">
+        <div>
+          <div class="itemName">
+            ${esc(h.action)}
+            <span class="tag ${h.status?"success":"fail"}">
+              ${h.status?"SUCCESS":"FAIL"}
+            </span>
+          </div>
+          <div class="muted">${esc(h.target)}</div>
+        </div>
+        <div class="muted">
+          ${new Date(h.time).toLocaleString("vi-VN")}
+        </div>
+      </div>
+      <div class="muted mt">👤 ${esc(h.username)}</div>
+    </div>
+  `).join("");
+}
+
+function clearHistory(){
+  if(currentUser.role==="admin"){
+    if(!confirm("Xóa toàn bộ lịch sử?"))return;
+    db.history=[];
+  }else{
+    db.history=db.history.filter(h=>h.userId!==currentUser.id);
+  }
+
+  saveDB();
+  renderHistory();
+  toast("Đã xóa lịch sử","good");
+}
+
+function exportHistory(){
+  const list=db.history.filter(h=>
+    h.userId===currentUser.id || currentUser.role==="admin"
+  );
+
+  downloadJSON(list,"history.json");
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+  const w=workspace();
+
+  $("stCustomers").textContent=w.customers.length;
+  $("stDone").textContent=w.dones.length;
+  $("stSent").textContent=w.sent;
+  $("stFail").textContent=w.fail;
+  $("stSelected").textContent=selectedCustomers.size;
+}
+
+function updateWebhookStatus(){
+  const active=!!workspace().webhook;
+
+  $("webhookStatus").textContent=
+    active?"Webhook OK":"Chưa cấu hình";
+
+  $("webhookStatus").className=
+    "tag "+(active?"success":"fail");
+
+  $("dashWebhook").textContent=
+    active?"ON":"OFF";
+
+  $("dashWebhook").className=
+    "tag "+(active?"success":"fail");
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
 
 function renderAll(){
-
-  $('webhook').value=
-    db.webhook||'';
-
-  $('botName').value=
-    db.botName||'Done Bot';
+  if(!currentUser)return;
 
   renderCustomers();
   renderDones();
+  renderHistory();
   updateStats();
-  updatePreview();
+  updateWebhookStatus();
+  renderAdmin();
 
-  if(
-    currentUser?.role==='admin'
-  ){
+  const w=workspace();
 
-    renderUsers();
+  $("webhookUrl").value=w.webhook||"";
 
-  }
+  $("profileUsername").value=currentUser.username;
+  $("profileAvatar").value=currentUser.avatar||"";
 
+  updateDonePreview();
 }
 
+/* =========================================================
+   EFFECTS
+========================================================= */
 
-/* =========================
-   START
-========================= */
+let particleConfig=defaultTheme;
 
-applyTheme();
+const canvas=$("particles");
+const ctx=canvas.getContext("2d");
+
+let particles=[];
+
+function resizeCanvas(){
+  canvas.width=innerWidth*devicePixelRatio;
+  canvas.height=innerHeight*devicePixelRatio;
+  canvas.style.width=innerWidth+"px";
+  canvas.style.height=innerHeight+"px";
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+
+function createParticles(){
+  particles=[];
+
+  const count=Number(particleConfig.particleDensity)||45;
+
+  for(let i=0;i<count;i++){
+    particles.push({
+      x:Math.random()*innerWidth,
+      y:Math.random()*innerHeight,
+      r:Math.random()*2+0.5,
+      vx:(Math.random()-.5)*Number(particleConfig.particleSpeed||3)*.25,
+      vy:(Math.random()-.5)*Number(particleConfig.particleSpeed||3)*.25,
+      hue:Math.random()*360
+    });
+  }
+}
+
+function animateParticles(){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+
+  if(particleConfig.particles===false){
+    requestAnimationFrame(animateParticles);
+    return;
+  }
+
+  for(const p of particles){
+    p.x+=p.vx;
+    p.y+=p.vy;
+
+    if(p.x<0)p.x=innerWidth;
+    if(p.x>innerWidth)p.x=0;
+    if(p.y<0)p.y=innerHeight;
+    if(p.y>innerHeight)p.y=0;
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`hsla(${p.hue},100%,70%,.35)`;
+    ctx.fill();
+  }
+
+  requestAnimationFrame(animateParticles);
+}
+
+resizeCanvas();
+createParticles();
+animateParticles();
+
+addEventListener("resize",()=>{
+  resizeCanvas();
+  createParticles();
+});
+
+$("themeP").addEventListener("input",e=>{
+  document.documentElement.style.setProperty("--p",e.target.value);
+});
+
+$("themeS").addEventListener("input",e=>{
+  document.documentElement.style.setProperty("--s",e.target.value);
+});
+
+$("themeA").addEventListener("input",e=>{
+  document.documentElement.style.setProperty("--a",e.target.value);
+});
+
+/* Cursor */
+document.addEventListener("mousemove",e=>{
+  const g=$("cursorGlow");
+
+  if(g.style.display!=="none"){
+    g.style.left=e.clientX+"px";
+    g.style.top=e.clientY+"px";
+  }
+
+  if(particleConfig.fx3d!==false){
+    const card=e.target.closest(".card");
+
+    if(card){
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+
+      card.style.transform=
+        `perspective(900px) rotateX(${-y*3}deg) rotateY(${x*3}deg) translateZ(3px)`;
+    }
+  }
+});
+
+document.addEventListener("mouseleave",()=>{
+  document.querySelectorAll(".card").forEach(c=>c.style.transform="");
+},true);
+
+document.addEventListener("mouseout",e=>{
+  const card=e.target.closest(".card");
+  if(card && !card.contains(e.relatedTarget))
+    card.style.transform="";
+});
+
+/* Ripple */
+document.addEventListener("click",e=>{
+  if(particleConfig.ripple===false)return;
+
+  const r=document.createElement("div");
+  r.className="ripple";
+  r.style.left=e.clientX+"px";
+  r.style.top=e.clientY+"px";
+
+  document.body.appendChild(r);
+
+  setTimeout(()=>r.remove(),700);
+});
+
+/* =========================================================
+   INPUT PREVIEW
+========================================================= */
+
+[
+  "doneBot",
+  "doneName",
+  "doneMessage",
+  "doneColor",
+  "doneFooter",
+  "doneImage",
+  "doneTimestamp"
+].forEach(id=>{
+  $(id)?.addEventListener("input",updateDonePreview);
+  $(id)?.addEventListener("change",updateDonePreview);
+});
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+function can(permission){
+  if(currentUser?.role==="admin")return true;
+
+  if(currentUser?.permissions?.[permission]!==false)
+    return true;
+
+  toast("Tài khoản không có quyền này","bad");
+  return false;
+}
+
+function sleep(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
+function toast(message,type="info"){
+  const box=$("toastBox");
+
+  const el=document.createElement("div");
+  el.className="toast";
+
+  const icon=
+    type==="good"?"✅":
+    type==="bad"?"❌":"ℹ️";
+
+  el.textContent=icon+" "+message;
+
+  box.appendChild(el);
+
+  setTimeout(()=>{
+    el.style.opacity="0";
+    el.style.transform="translateY(10px)";
+
+    setTimeout(()=>el.remove(),250);
+  },2800);
+}
+
+function esc(v){
+  return String(v??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function escAttr(v){
+  return esc(v);
+}
+
+function hexToInt(hex){
+  return parseInt(String(hex).replace("#",""),16)||5793266;
+}
+
+function downloadJSON(data,name){
+  const blob=new Blob(
+    [JSON.stringify(data,null,2)],
+    {type:"application/json"}
+  );
+
+  const url=URL.createObjectURL(blob);
+
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=name;
+  a.click();
+
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function dataURLToBlob(dataURL){
+  const parts=dataURL.split(",");
+  const mime=parts[0].match(/:(.*?);/)[1];
+  const bin=atob(parts[1]);
+
+  const arr=new Uint8Array(bin.length);
+
+  for(let i=0;i<bin.length;i++)
+    arr[i]=bin.charCodeAt(i);
+
+  return new Blob([arr],{type:mime});
+}
+
+/* =========================================================
+   DEFAULT BACKGROUND
+========================================================= */
+
+const DEFAULT_BG =
+"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s";
+
+if(!workspace){
+  $("bg").style.backgroundImage=`url("${DEFAULT_BG}")`;
+}
+
+/* Chạy background mặc định nếu chưa đăng nhập */
+$("bg").style.backgroundImage=`url("${DEFAULT_BG}")`;
+
+/* =========================================================
+   SERVER BUTTON
+========================================================= */
+
+const serverButton=document.createElement("button");
+serverButton.textContent="🌐 THAM GIA SERVER";
+serverButton.className="primary";
+serverButton.style.position="fixed";
+serverButton.style.left="15px";
+serverButton.style.bottom="15px";
+serverButton.style.zIndex="9000";
+serverButton.onclick=()=>{
+  window.open(
+    "https://discord.gg/QfSHWECJ2",
+    "_blank",
+    "noopener"
+  );
+};
+document.body.appendChild(serverButton);
 
 </script>
 
