@@ -171,8 +171,13 @@ async function sendCurrentDone(){
   const embedImage=selectedDoneEmbedImageData||"";
   if(!message)return toast("❌ Nhập nội dung DONE trước");
   const mention=(ping==="yes"&&pingId)?`<@${pingId}>\n`:"";
-  const embeds=[{title,description:message,color:parseInt(color.replace("#",""),16),footer:{text:footer},...(roblox?{fields:[{name:"Name Roblox",value:roblox,inline:true}]}:{}),...(imageUrl?{image:{url:imageUrl}}:{})}];
-  if(embedImage && !imageUrl) embeds[0].image={url:"attachment://done-embed-image"};
+  const orderName=orderImage?dataUrlFilename(orderImage,"done-order-image"):"";
+  const embedName=embedImage?dataUrlFilename(embedImage,"done-embed-image"):"";
+  const mainEmbed={title,description:message,color:parseInt(color.replace("#",""),16),footer:{text:footer},...(roblox?{fields:[{name:"Name Roblox",value:roblox,inline:true}]}:{}),...(imageUrl?{image:{url:imageUrl}}:{})};
+  if(embedImage && !imageUrl) mainEmbed.image={url:`attachment://${embedName}`};
+  else if(!embedImage && orderImage && !imageUrl) mainEmbed.image={url:`attachment://${orderName}`};
+  const embeds=[mainEmbed];
+  if(orderImage && embedImage) embeds.push({image:{url:`attachment://${orderName}`}});
   const payload={username:bot,content:mention+message,allowed_mentions:{parse:ping==="yes"?["users"]:[]},embeds};
   try{
     const headers={};if(apiKey)headers["Authorization"]="Bearer "+apiKey;
@@ -180,10 +185,9 @@ async function sendCurrentDone(){
     let res;
     if(isDiscord&&(orderImage||embedImage)){
       const fd=new FormData();
-      if(embedImage && !imageUrl) payload.embeds[0].image={url:"attachment://done-embed-image"};
       fd.append("payload_json",JSON.stringify(payload));
-      if(orderImage) fd.append("files[0]",dataUrlToBlob(orderImage),"done-order-image");
-      if(embedImage) fd.append(orderImage?"files[1]":"files[0]",dataUrlToBlob(embedImage),"done-embed-image");
+      if(orderImage) fd.append("files[0]",dataUrlToBlob(orderImage),orderName);
+      if(embedImage) fd.append(orderImage?"files[1]":"files[0]",dataUrlToBlob(embedImage),embedName);
       res=await fetch(apiUrl,{method:"POST",headers,body:fd});
     }else{
       headers["Content-Type"]="application/json";
@@ -207,6 +211,7 @@ function pickDoneEmbedImage(e){const file=e.target.files&&e.target.files[0];if(!
 function readImageFile(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
 function compressImageData(dataUrl,maxSize,quality){return Promise.resolve(dataUrl)}
 function dataUrlToBlob(dataUrl){const [meta,b64]=dataUrl.split(",");const mime=(meta.match(/data:(.*?);base64/)||[])[1]||"image/jpeg";const bin=atob(b64);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return new Blob([arr],{type:mime})}
+function dataUrlFilename(dataUrl,base){const meta=(dataUrl.split(",")[0]||"");const mime=(meta.match(/data:(.*?);base64/)||[])[1]||"image/jpeg";const ext={"image/gif":"gif","image/png":"png","image/jpeg":"jpg","image/webp":"webp","image/bmp":"bmp","image/svg+xml":"svg"}[mime]||"bin";return `${base}.${ext}`}
 
 function deleteDone(id){if(!confirm("Xóa DONE này?"))return;data.dones=data.dones.filter(x=>x.id!==id);saveDB();renderDones();updateStats()}
 function duplicateDone(id){const d=data.dones.find(x=>x.id===id);if(!d)return;data.dones.push({...d,id:crypto.randomUUID(),title:d.title+" Copy"});saveDB();renderDones();updateStats()}
