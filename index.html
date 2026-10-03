@@ -145,7 +145,8 @@ function clearCustomerSelection(){data.customers.forEach(c=>c.selected=false);sa
 function exportCustomers(){downloadBlob(new Blob([JSON.stringify(data.customers,null,2)],{type:"application/json"}),"customers.json")}
 function importCustomers(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;data.customers.push(...x.filter(x=>x&&x.name&&/^\d{17,20}$/.test(String(x.discord))));saveDB();renderCustomers();updateStats();toast("✅ Import thành công")}catch{toast("❌ File không hợp lệ")}};r.readAsText(f)}
 function saveDone(){const obj={bot:document.getElementById("doneBot").value.trim()||"DONE BOT",roblox:document.getElementById("doneRoblox").value.trim(),title:document.getElementById("doneTitle").value.trim()||"Đơn hàng đã hoàn tất",message:document.getElementById("doneMessage").value,color:document.getElementById("doneColor").value,footer:document.getElementById("doneFooter").value,image:document.getElementById("doneImage").value,ping:document.getElementById("donePing").value};const id=document.getElementById("editingDoneId").value;if(id){const i=data.dones.findIndex(x=>x.id===id);if(i>=0)data.dones[i]={...data.dones[i],...obj}}else data.dones.push({id:crypto.randomUUID(),...obj,createdAt:new Date().toISOString()});saveDB();clearDoneForm();renderDones();updateStats();toast("✅ Đã lưu DONE")}
-function selectedCustomers(){return data.customers.filter(c=>c.selected)}\nasync function sendCurrentDone(){
+function selectedCustomers(){return data.customers.filter(c=>c.selected)}
+async function sendCurrentDone(){
   const w=workspace();
   if(!w || !w.webhook){
     toast("❌ Chưa cấu hình Webhook");
