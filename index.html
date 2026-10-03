@@ -85,7 +85,7 @@ input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1p
         <h2>✅ DONE Manager</h2><input type="hidden" id="editingDoneId">
         <div class="row"><div><div class="field"><label>Bot Name</label><input id="doneBot" placeholder="DONE BOT"></div><div class="field"><label>Tiêu đề</label><input id="doneTitle" placeholder="Đơn hàng đã hoàn tất"></div><div class="field"><label>Nội dung</label><textarea id="doneMessage" placeholder="Cảm ơn bạn đã mua hàng!"></textarea></div></div>
         <div><div class="field"><label>Màu Embed</label><input id="doneColor" type="color" value="#8b5cf6"></div><div class="field"><label>Footer</label><input id="doneFooter" placeholder="DONE ORDER VIP"></div><div class="field"><label>Ảnh Embed URL</label><input id="doneImage" placeholder="https://..."></div><div class="field"><label>Ping khách khi gửi</label><select id="donePing"><option value="yes">Có</option><option value="no">Không</option></select></div></div></div>
-        <div class="actions"><button class="primary" onclick="saveDone()">💾 Lưu DONE</button><button onclick="clearDoneForm()">Xóa form</button></div>
+        <div class="actions"><button class="primary" onclick="saveDone()">💾 Lưu DONE</button><button class="success" onclick="sendCurrentDone()">🚀 Gửi DONE</button><button onclick="clearDoneForm()">Xóa form</button></div>
         <div class="card"><h3>👀 Preview</h3><div id="donePreview" class="preview"></div></div>
         <div style="margin-top:15px"><h3>Danh sách DONE</h3><div id="doneList"></div></div>
       </section>
@@ -145,6 +145,84 @@ function clearCustomerSelection(){data.customers.forEach(c=>c.selected=false);sa
 function exportCustomers(){downloadBlob(new Blob([JSON.stringify(data.customers,null,2)],{type:"application/json"}),"customers.json")}
 function importCustomers(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;data.customers.push(...x.filter(x=>x&&x.name&&/^\d{17,20}$/.test(String(x.discord))));saveDB();renderCustomers();updateStats();toast("✅ Import thành công")}catch{toast("❌ File không hợp lệ")}};r.readAsText(f)}
 function saveDone(){const obj={bot:document.getElementById("doneBot").value.trim()||"DONE BOT",title:document.getElementById("doneTitle").value.trim()||"Đơn hàng đã hoàn tất",message:document.getElementById("doneMessage").value,color:document.getElementById("doneColor").value,footer:document.getElementById("doneFooter").value,image:document.getElementById("doneImage").value,ping:document.getElementById("donePing").value};const id=document.getElementById("editingDoneId").value;if(id){const i=data.dones.findIndex(x=>x.id===id);if(i>=0)data.dones[i]={...data.dones[i],...obj}}else data.dones.push({id:crypto.randomUUID(),...obj,createdAt:new Date().toISOString()});saveDB();clearDoneForm();renderDones();updateStats();toast("✅ Đã lưu DONE")}
+async function sendCurrentDone(){
+  const w=workspace();
+  if(!w || !w.webhook){
+    toast("❌ Chưa cấu hình Webhook");
+    return;
+  }
+
+  const bot=document.getElementById("doneBot").value.trim() || "DONE BOT";
+  const title=document.getElementById("doneTitle").value.trim() || "Đơn hàng đã hoàn tất";
+  const message=document.getElementById("doneMessage").value.trim();
+  const color=document.getElementById("doneColor").value || "#8b5cf6";
+  const footer=document.getElementById("doneFooter").value.trim() || "DONE ORDER VIP";
+  const image=document.getElementById("doneImage").value.trim();
+  const ping=document.getElementById("donePing").value;
+
+  if(!message){
+    toast("❌ Nhập nội dung DONE trước");
+    return;
+  }
+
+  const selected=selectedCustomers();
+  const mentionText=(ping==="yes" && selected.length)
+    ? selected.map(c=>`<@${c.discord}>`).join(" ") + "\n"
+    : "";
+
+  const payload={
+    username:bot,
+    content:mentionText + message,
+    allowed_mentions:{
+      parse:ping==="yes" ? ["users"] : []
+    },
+    embeds:[{
+      title,
+      description:message,
+      color:parseInt(color.replace("#",""),16),
+      footer:{text:footer},
+      ...(image ? {image:{url:image}} : {})
+    }]
+  };
+
+  try{
+    const res=await fetch(w.webhook,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+
+    if(res.status===429){
+      w.stats.failed++;
+      addHistory("DONE","Discord Rate Limit khi gửi: "+title);
+      updateStats();
+      toast("⚠️ Discord đang Rate Limit");
+      return;
+    }
+
+    if(!res.ok){
+      w.stats.failed++;
+      addHistory("DONE","Gửi thất bại HTTP "+res.status+": "+title);
+      updateStats();
+      toast("❌ Gửi thất bại: HTTP "+res.status);
+      return;
+    }
+
+    w.stats.sent++;
+    addHistory(
+      "DONE",
+      "Đã gửi: "+title+(selected.length ? ` • ${selected.length} khách` : "")
+    );
+    updateStats();
+    toast("✅ Gửi DONE thành công");
+  }catch(e){
+    w.stats.failed++;
+    addHistory("DONE","Không gửi được Webhook: "+title);
+    updateStats();
+    toast("❌ Không gửi được Webhook");
+  }
+}
+
 function clearDoneForm(){["doneBot","doneTitle","doneMessage","doneFooter","doneImage"].forEach(id=>document.getElementById(id).value="");document.getElementById("editingDoneId").value="";document.getElementById("doneColor").value="#8b5cf6";document.getElementById("donePing").value="yes";updatePreview()}
 function editDone(id){const d=data.dones.find(x=>x.id===id);if(!d)return;document.getElementById("editingDoneId").value=d.id;document.getElementById("doneBot").value=d.bot;document.getElementById("doneTitle").value=d.title;document.getElementById("doneMessage").value=d.message;document.getElementById("doneColor").value=d.color;document.getElementById("doneFooter").value=d.footer;document.getElementById("doneImage").value=d.image;document.getElementById("donePing").value=d.ping;updatePreview()}
 function deleteDone(id){if(!confirm("Xóa DONE này?"))return;data.dones=data.dones.filter(x=>x.id!==id);saveDB();renderDones();updateStats()}
