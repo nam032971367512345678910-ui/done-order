@@ -83,7 +83,7 @@ input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1p
 
       <section id="section-done" class="section">
         <h2>✅ DONE Manager</h2><input type="hidden" id="editingDoneId">
-        <div class="row"><div><div class="field"><label>Bot Name</label><input id="doneBot" placeholder="DONE BOT"></div><div class="field"><label>Name Roblox</label><input id="doneRoblox" placeholder="Tên Roblox của khách"></div><div class="field"><label>Tiêu đề</label><input id="doneTitle" placeholder="Đơn hàng đã hoàn tất"></div><div class="field"><label>Nội dung</label><textarea id="doneMessage" placeholder="Cảm ơn bạn đã mua hàng!"></textarea></div></div>
+        <div class="row"><div><div class="field"><label>Bot Name</label><input id="doneBot" placeholder="DONE BOT"></div><div class="field"><label>Tiêu đề</label><input id="doneTitle" placeholder="Đơn hàng đã hoàn tất"></div><div class="field"><label>Nội dung</label><textarea id="doneMessage" placeholder="Cảm ơn bạn đã mua hàng!"></textarea></div></div>
         <div><div class="field"><label>Màu Embed</label><input id="doneColor" type="color" value="#8b5cf6"></div><div class="field"><label>Footer</label><input id="doneFooter" placeholder="DONE ORDER VIP"></div><div class="field"><label>Ảnh Embed URL</label><input id="doneImage" placeholder="https://..."></div><div class="field"><label>Ping khách khi gửi</label><select id="donePing"><option value="yes">Có</option><option value="no">Không</option></select></div></div></div>
         <div class="actions"><button class="primary" onclick="saveDone()">💾 Lưu DONE</button><button class="success" onclick="sendCurrentDone()">🚀 Gửi DONE</button><button onclick="clearDoneForm()">Xóa form</button></div>
         <div class="card"><h3>👀 Preview</h3><div id="donePreview" class="preview"></div></div>
@@ -91,7 +91,7 @@ input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1p
       </section>
 
       <section id="section-webhook" class="section">
-        <h2>🔗 Webhook</h2><div class="field"><label>API Bot / Discord Webhook URL</label><input id="webhookUrl" type="password" placeholder="https://discord.com/api/webhooks/..."></div>
+        <h2>🔗 Webhook</h2><div class="field"><label>Discord Webhook URL</label><input id="webhookUrl" type="password" placeholder="https://discord.com/api/webhooks/..."></div>
         <div class="actions"><button class="primary" onclick="saveWebhook()">💾 Lưu Webhook</button><button onclick="testWebhook()">🧪 Test Webhook</button></div>
         <div class="card"><b>Lưu ý</b><div class="muted">Webhook chỉ được lưu trong trình duyệt này.</div></div>
       </section>
@@ -144,8 +144,7 @@ function selectAllCustomers(){data.customers.forEach(c=>c.selected=true);saveDB(
 function clearCustomerSelection(){data.customers.forEach(c=>c.selected=false);saveDB();renderCustomers();updateStats()}
 function exportCustomers(){downloadBlob(new Blob([JSON.stringify(data.customers,null,2)],{type:"application/json"}),"customers.json")}
 function importCustomers(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;data.customers.push(...x.filter(x=>x&&x.name&&/^\d{17,20}$/.test(String(x.discord))));saveDB();renderCustomers();updateStats();toast("✅ Import thành công")}catch{toast("❌ File không hợp lệ")}};r.readAsText(f)}
-function saveDone(){const obj={bot:document.getElementById("doneBot").value.trim()||"DONE BOT",roblox:document.getElementById("doneRoblox").value.trim(),title:document.getElementById("doneTitle").value.trim()||"Đơn hàng đã hoàn tất",message:document.getElementById("doneMessage").value,color:document.getElementById("doneColor").value,footer:document.getElementById("doneFooter").value,image:document.getElementById("doneImage").value,ping:document.getElementById("donePing").value};const id=document.getElementById("editingDoneId").value;if(id){const i=data.dones.findIndex(x=>x.id===id);if(i>=0)data.dones[i]={...data.dones[i],...obj}}else data.dones.push({id:crypto.randomUUID(),...obj,createdAt:new Date().toISOString()});saveDB();clearDoneForm();renderDones();updateStats();toast("✅ Đã lưu DONE")}
-function selectedCustomers(){return data.customers.filter(c=>c.selected)}
+function saveDone(){const obj={bot:document.getElementById("doneBot").value.trim()||"DONE BOT",title:document.getElementById("doneTitle").value.trim()||"Đơn hàng đã hoàn tất",message:document.getElementById("doneMessage").value,color:document.getElementById("doneColor").value,footer:document.getElementById("doneFooter").value,image:document.getElementById("doneImage").value,ping:document.getElementById("donePing").value};const id=document.getElementById("editingDoneId").value;if(id){const i=data.dones.findIndex(x=>x.id===id);if(i>=0)data.dones[i]={...data.dones[i],...obj}}else data.dones.push({id:crypto.randomUUID(),...obj,createdAt:new Date().toISOString()});saveDB();clearDoneForm();renderDones();updateStats();toast("✅ Đã lưu DONE")}
 async function sendCurrentDone(){
   const w=workspace();
   if(!w || !w.webhook){
@@ -173,13 +172,13 @@ async function sendCurrentDone(){
 
   const payload={
     username:bot,
-    content:mentionText + (document.getElementById("doneRoblox").value.trim() ? `🎮 Roblox: ${document.getElementById("doneRoblox").value.trim()}\n` : "") + message,
+    content:mentionText + message,
     allowed_mentions:{
       parse:ping==="yes" ? ["users"] : []
     },
     embeds:[{
       title,
-      description:(document.getElementById("doneRoblox").value.trim() ? `🎮 Roblox: ${document.getElementById("doneRoblox").value.trim()}\n\n` : "") + message,
+      description:message,
       color:parseInt(color.replace("#",""),16),
       footer:{text:footer},
       ...(image ? {image:{url:image}} : {})
@@ -224,12 +223,12 @@ async function sendCurrentDone(){
   }
 }
 
-function clearDoneForm(){["doneBot","doneRoblox","doneTitle","doneMessage","doneFooter","doneImage"].forEach(id=>document.getElementById(id).value="");document.getElementById("editingDoneId").value="";document.getElementById("doneColor").value="#8b5cf6";document.getElementById("donePing").value="yes";updatePreview()}
-function editDone(id){const d=data.dones.find(x=>x.id===id);if(!d)return;document.getElementById("editingDoneId").value=d.id;document.getElementById("doneBot").value=d.bot;document.getElementById("doneRoblox").value=d.roblox||"";document.getElementById("doneTitle").value=d.title;document.getElementById("doneMessage").value=d.message;document.getElementById("doneColor").value=d.color;document.getElementById("doneFooter").value=d.footer;document.getElementById("doneImage").value=d.image;document.getElementById("donePing").value=d.ping;updatePreview()}
+function clearDoneForm(){["doneBot","doneTitle","doneMessage","doneFooter","doneImage"].forEach(id=>document.getElementById(id).value="");document.getElementById("editingDoneId").value="";document.getElementById("doneColor").value="#8b5cf6";document.getElementById("donePing").value="yes";updatePreview()}
+function editDone(id){const d=data.dones.find(x=>x.id===id);if(!d)return;document.getElementById("editingDoneId").value=d.id;document.getElementById("doneBot").value=d.bot;document.getElementById("doneTitle").value=d.title;document.getElementById("doneMessage").value=d.message;document.getElementById("doneColor").value=d.color;document.getElementById("doneFooter").value=d.footer;document.getElementById("doneImage").value=d.image;document.getElementById("donePing").value=d.ping;updatePreview()}
 function deleteDone(id){if(!confirm("Xóa DONE này?"))return;data.dones=data.dones.filter(x=>x.id!==id);saveDB();renderDones();updateStats()}
 function duplicateDone(id){const d=data.dones.find(x=>x.id===id);if(!d)return;data.dones.push({...d,id:crypto.randomUUID(),title:d.title+" Copy"});saveDB();renderDones();updateStats()}
 function renderDones(){const list=document.getElementById("doneList");if(!data.dones.length)return list.innerHTML='<div class="empty">Chưa có DONE.</div>';list.innerHTML=data.dones.map(d=>`<div class="card"><div class="cardHead"><div><b>${escapeHtml(d.title)}</b><div class="muted">${escapeHtml(d.bot)}</div></div><div class="actions"><button class="small" onclick="editDone('${d.id}')">Sửa</button><button class="small" onclick="duplicateDone('${d.id}')">Copy</button><button class="small danger" onclick="deleteDone('${d.id}')">Xóa</button></div></div><div class="muted" style="margin-top:8px">${escapeHtml(d.message||"")}</div></div>`).join("")}
-function updatePreview(){const bot=document.getElementById("doneBot").value||"DONE BOT",roblox=document.getElementById("doneRoblox").value||"",title=document.getElementById("doneTitle").value||"Đơn hàng đã hoàn tất",msg=document.getElementById("doneMessage").value||"Nội dung DONE",color=document.getElementById("doneColor").value||"#8b5cf6",footer=document.getElementById("doneFooter").value||"DONE ORDER VIP",image=document.getElementById("doneImage").value;document.getElementById("donePreview").innerHTML=`<div style="font-size:12px;color:#aaa;margin-bottom:8px">${escapeHtml(bot)}</div><div class="discordPreview" style="border-left-color:${escapeHtml(color)}"><div class="discordTitle">${escapeHtml(title)}</div><div style="margin-top:8px">${roblox?`🎮 Roblox: ${escapeHtml(roblox)}<br><br>`:""}<span style="white-space:pre-wrap">${escapeHtml(msg)}</span></div>${image?`<img src="${escapeAttribute(image)}" style="max-width:100%;margin-top:12px;border-radius:10px" onerror="this.style.display='none'">`:""}<div class="discordFooter">${escapeHtml(footer)}</div></div>`}
+function updatePreview(){const bot=document.getElementById("doneBot").value||"DONE BOT",title=document.getElementById("doneTitle").value||"Đơn hàng đã hoàn tất",msg=document.getElementById("doneMessage").value||"Nội dung DONE",color=document.getElementById("doneColor").value||"#8b5cf6",footer=document.getElementById("doneFooter").value||"DONE ORDER VIP",image=document.getElementById("doneImage").value;document.getElementById("donePreview").innerHTML=`<div style="font-size:12px;color:#aaa;margin-bottom:8px">${escapeHtml(bot)}</div><div class="discordPreview" style="border-left-color:${escapeHtml(color)}"><div class="discordTitle">${escapeHtml(title)}</div><div style="margin-top:8px;white-space:pre-wrap">${escapeHtml(msg)}</div>${image?`<img src="${escapeAttribute(image)}" style="max-width:100%;margin-top:12px;border-radius:10px" onerror="this.style.display='none'">`:""}<div class="discordFooter">${escapeHtml(footer)}</div></div>`}
 function saveWebhook(){const url=document.getElementById("webhookUrl").value.trim();if(!/^https:\/\/(discord(?:app)?\.com)\/api\/webhooks\//i.test(url))return toast("Webhook Discord không hợp lệ");data.webhook=url;saveDB();toast("✅ Đã lưu Webhook")}
 async function testWebhook(){if(!data.webhook)return toast("Chưa có Webhook");try{const r=await fetch(data.webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:"✅ Webhook Test • DONE ORDER VIP"})});if(r.status===429)return toast("⚠️ Discord đang Rate Limit");if(!r.ok)return toast("❌ Webhook lỗi HTTP "+r.status);toast("✅ Webhook hoạt động")}catch{toast("❌ Không gửi được Webhook")}}
 function makeDiscordMention(id){id=String(id||"").trim();if(!/^\d{17,20}$/.test(id))throw new Error("Discord User ID không hợp lệ.");return `<@${id}>`}
@@ -248,7 +247,7 @@ function updateStats(){document.getElementById("statCustomers").textContent=data
 function downloadBlob(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)}
 function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function escapeAttribute(v){return escapeHtml(v)}
-["doneBot","doneRoblox","doneTitle","doneMessage","doneColor","doneFooter","doneImage","donePing"].forEach(id=>{document.getElementById(id).addEventListener("input",updatePreview);document.getElementById(id).addEventListener("change",updatePreview)})
+["doneBot","doneTitle","doneMessage","doneColor","doneFooter","doneImage","donePing"].forEach(id=>{document.getElementById(id).addEventListener("input",updatePreview);document.getElementById(id).addEventListener("change",updatePreview)})
 function createParticles(){const b=document.getElementById("particles");for(let i=0;i<45;i++){const p=document.createElement("div");p.className="particle";p.style.left=Math.random()*100+"%";p.style.animationDelay=(-Math.random()*8)+"s";p.style.animationDuration=(5+Math.random()*8)+"s";p.style.opacity=.25+Math.random()*.65;b.appendChild(p)}}
 createParticles();
 document.addEventListener("mousemove",e=>{const g=document.getElementById("cursorGlow");g.style.left=e.clientX+"px";g.style.top=e.clientY+"px"});
