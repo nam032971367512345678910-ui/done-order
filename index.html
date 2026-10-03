@@ -146,14 +146,14 @@ function clearCustomerSelection(){data.customers.forEach(c=>c.selected=false);sa
 function exportCustomers(){downloadBlob(new Blob([JSON.stringify(data.customers,null,2)],{type:"application/json"}),"customers.json")}
 function importCustomers(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;data.customers.push(...x.filter(x=>x&&x.name&&/^\d{17,20}$/.test(String(x.discord))));saveDB();renderCustomers();updateStats();toast("✅ Import thành công")}catch{toast("❌ File không hợp lệ")}};r.readAsText(f)}
 function saveDone(){const obj={apiUrl:document.getElementById("doneApiUrl").value.trim(),apiKey:document.getElementById("doneApiKey").value.trim(),bot:document.getElementById("doneBot").value.trim()||"DONE BOT",roblox:document.getElementById("doneRoblox").value.trim(),title:document.getElementById("doneTitle").value.trim()||"Đơn hàng đã hoàn tất",message:document.getElementById("doneMessage").value,color:document.getElementById("doneColor").value,footer:document.getElementById("doneFooter").value,image:document.getElementById("doneImage").value,ping:document.getElementById("donePing").value};const id=document.getElementById("editingDoneId").value;if(id){const i=data.dones.findIndex(x=>x.id===id);if(i>=0)data.dones[i]={...data.dones[i],...obj}}else data.dones.push({id:crypto.randomUUID(),...obj,createdAt:new Date().toISOString()});saveDB();clearDoneForm();renderDones();updateStats();toast("✅ Đã lưu DONE")}
+function selectedCustomers(){return data.customers.filter(c=>c && c.selected);}
 async function sendCurrentDone(){
   const w=workspace();
-  if(!w || !w.webhook){
-    toast("❌ Chưa cấu hình Webhook");
+  const apiUrl=document.getElementById("doneApiUrl").value.trim();
+  if((!w || !w.webhook) && !apiUrl){
+    toast("❌ Nhập API Bot URL hoặc cấu hình Webhook");
     return;
   }
-
-  const apiUrl=document.getElementById("doneApiUrl").value.trim();
   const apiKey=document.getElementById("doneApiKey").value.trim();
   const bot=document.getElementById("doneBot").value.trim() || "DONE BOT";
   const roblox=document.getElementById("doneRoblox").value.trim();
@@ -190,34 +190,38 @@ async function sendCurrentDone(){
   };
 
   try{
+    let sentCount=0;
     if(apiUrl){
       const headers={"Content-Type":"application/json"};
       if(apiKey)headers["Authorization"]="Bearer "+apiKey;
-      const ar=await fetch(apiUrl,{method:"POST",headers,body:JSON.stringify({botName:bot,robloxName:roblox,title,message,payload})});
+      const isDiscord=/^https:\/\/(?:discord(?:app)?\.com)\/api\/webhooks\//i.test(apiUrl);
+      const apiBody=isDiscord ? payload : {
+        botName:bot,
+        robloxName:roblox,
+        title,
+        message,
+        discordUserIds:selected.map(c=>c.discord),
+        payload
+      };
+      const ar=await fetch(apiUrl,{method:"POST",headers,body:JSON.stringify(apiBody)});
+      if(ar.status===429)throw new Error("API Bot Rate Limit 429");
       if(!ar.ok)throw new Error("API Bot HTTP "+ar.status);
-    }
-    const res=await fetch(w.webhook,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payload)
-    });
-
-    if(res.status===429){
-      w.stats.failed++;
-      addHistory("DONE","Discord Rate Limit khi gửi: "+title);
-      updateStats();
-      toast("⚠️ Discord đang Rate Limit");
-      return;
+      sentCount++;
     }
 
-    if(!res.ok){
-      w.stats.failed++;
-      addHistory("DONE","Gửi thất bại HTTP "+res.status+": "+title);
-      updateStats();
-      toast("❌ Gửi thất bại: HTTP "+res.status);
-      return;
+    if(w && w.webhook){
+      const res=await fetch(w.webhook,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      });
+
+      if(res.status===429)throw new Error("Discord Rate Limit 429");
+      if(!res.ok)throw new Error("Webhook HTTP "+res.status);
+      sentCount++;
     }
 
+    if(!sentCount)throw new Error("Không có kênh gửi"); 
     w.stats.sent++;
     addHistory(
       "DONE",
@@ -227,9 +231,10 @@ async function sendCurrentDone(){
     toast("✅ Gửi DONE thành công");
   }catch(e){
     w.stats.failed++;
-    addHistory("DONE","Không gửi được Webhook: "+title);
+    const err=e&&e.message?e.message:"Lỗi không xác định";
+    addHistory("DONE","Gửi thất bại: "+title+" • "+err);
     updateStats();
-    toast("❌ Không gửi được Webhook");
+    toast("❌ "+err);
   }
 }
 
@@ -254,7 +259,25 @@ function addApiBot(){if(data.apiBots.length>=10)return toast("Tối đa 10 API B
 function toggleApiBot(i,v){data.apiBots[i].enabled=v;saveDB()}
 function removeApiBot(i){data.apiBots.splice(i,1);saveDB();renderApiBots()}
 function clearApiBots(){if(!confirm("Xóa toàn bộ API Bot?"))return;data.apiBots=[];saveDB();renderApiBots()}
-async function sendToApiBots(id,msg){const bots=data.apiBots.filter(b=>b.enabled!==false&&b.url);if(!bots.length)throw new Error("Chưa có API Bot đang bật");let ok=0;for(const b of bots){const headers={"Content-Type":"application/json"};if(b.key)headers["Authorization"]="Bearer "+b.key;const r=await fetch(b.url,{method:"POST",headers,body:JSON.stringify({userId:id,message:msg})});if(!r.ok)throw new Error(`${b.name}: HTTP ${r.status}`);ok++;await sleep(300)}return ok}
+async function sendToApiBots(id,msg){
+  const bots=data.apiBots.filter(b=>b.enabled!==false&&b.url);
+  if(!bots.length)throw new Error("Chưa có API Bot đang bật");
+  let ok=0;
+  for(const b of bots){
+    const headers={"Content-Type":"application/json"};
+    if(b.key)headers["Authorization"]="Bearer "+b.key;
+    const isDiscord=/^https:\/\/(?:discord(?:app)?\.com)\/api\/webhooks\//i.test(b.url);
+    const body=isDiscord
+      ? {content:`<@${id}>${msg?" "+msg:""}`.trim(),allowed_mentions:{parse:["users"]}}
+      : {userId:id,message:msg};
+    const r=await fetch(b.url,{method:"POST",headers,body:JSON.stringify(body)});
+    if(r.status===429)throw new Error(`${b.name}: Rate Limit 429`);
+    if(!r.ok)throw new Error(`${b.name}: HTTP ${r.status}`);
+    ok++;
+    await sleep(300);
+  }
+  return ok;
+}
 function loadThemeForm(){const t=data.theme;document.getElementById("themeAccent").value=t.accent;document.getElementById("themeAccent2").value=t.accent2;document.getElementById("themeGlass").value=t.glass;document.getElementById("themeDark").value=t.dark;document.getElementById("themeRadius").value=t.radius;document.getElementById("themeGlow").value=t.glow;document.getElementById("themeRGB").value=t.rgb;document.getElementById("themeParticles").value=t.particles}
 function saveTheme(){data.theme={accent:document.getElementById("themeAccent").value,accent2:document.getElementById("themeAccent2").value,glass:Number(document.getElementById("themeGlass").value),dark:Number(document.getElementById("themeDark").value),radius:Number(document.getElementById("themeRadius").value),glow:Number(document.getElementById("themeGlow").value),rgb:document.getElementById("themeRGB").value,particles:document.getElementById("themeParticles").value};saveDB();applyTheme();toast("🎨 Đã lưu Theme")}
 function resetTheme(){data.theme={...DEFAULT_THEME};saveDB();loadThemeForm();applyTheme()}
