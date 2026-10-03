@@ -13,48 +13,49 @@
   --glass:.12;
   --radius:22px;
   --glow:22px;
-  --bg-dark:.45;
+  --bg-dark:.45
 }
-html,body{margin:0;min-height:100%;font-family:Inter,Arial,sans-serif;color:#fff}
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,Arial,sans-serif;
+  color:#fff
+}
 body{
   min-height:100vh;
   overflow-x:hidden;
   background:
     linear-gradient(rgba(0,0,0,var(--bg-dark)),rgba(0,0,0,var(--bg-dark))),
     url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s")
-    center/cover fixed no-repeat;
+    center/cover fixed no-repeat
 }
-body.rgb{
-  animation:bgRGB 12s linear infinite;
-}
+body.rgb{animation:bgRGB 12s linear infinite}
 @keyframes bgRGB{
   0%{filter:hue-rotate(0deg)}
-  %{filter:hue-rotate(180deg)}
+  50%{filter:hue-rotate(180deg)}
   100%{filter:hue-rotate(360deg)}
 }
-
 #particles{
   position:fixed;
   inset:0;
   pointer-events:none;
   z-index:0;
-  overflow:hidden;
+  overflow:hidden
 }
 .particle{
   position:absolute;
   width:4px;
   height:4px;
   border-radius:50%;
-  background:white;
-  box-shadow:0 0 14px white;
+  background:#fff;
+  box-shadow:0 0 14px #fff;
   opacity:.65;
-  animation:float 8s linear infinite;
+  animation:float 8s linear infinite
 }
 @keyframes float{
   from{transform:translateY(110vh) translateX(0)}
   to{transform:translateY(-10vh) translateX(100px)}
 }
-
 #cursorGlow{
   position:fixed;
   width:180px;
@@ -64,26 +65,25 @@ body.rgb{
   z-index:9999;
   background:radial-gradient(circle,rgba(139,92,246,.22),transparent 70%);
   transform:translate(-50%,-50%);
-  mix-blend-mode:screen;
+  mix-blend-mode:screen
 }
-
 .app{
   position:relative;
   z-index:2;
   width:min(1450px,96%);
   margin:auto;
-  padding:20px 0 50px;
+  padding:20px 0 50px
 }
-
 .glass{
   background:rgba(15,15,30,var(--glass));
   border:1px solid rgba(255,255,255,.14);
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
   border-radius:var(--radius);
-  box-shadow:0 0 var(--glow) rgba(139,92,246,.16),0 20px 60px rgba(0,0,0,.25);
+  box-shadow:
+    0 0 var(--glow) rgba(139,92,246,.16),
+    0 20px 60px rgba(0,0,0,.25)
 }
-
 .topbar{
   display:flex;
   justify-content:space-between;
@@ -91,31 +91,28 @@ body.rgb{
   gap:15px;
   padding:16px 20px;
   margin-bottom:18px;
-  flex-wrap:wrap;
+  flex-wrap:wrap
 }
 .logo{
   font-size:21px;
   font-weight:900;
   letter-spacing:.5px;
-  text-shadow:0 0 16px var(--accent);
+  text-shadow:0 0 16px var(--accent)
 }
 .userBox{
   display:flex;
   align-items:center;
   gap:10px;
-  flex-wrap:wrap;
+  flex-wrap:wrap
 }
 .badge{
   padding:7px 11px;
   border-radius:999px;
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.13);
-  font-size:12px;
+  font-size:12px
 }
-
-button,input,textarea,select{
-  font:inherit;
-}
+button,input,textarea,select{font:inherit}
 button{
   color:#fff;
   border:1px solid rgba(255,255,255,.15);
@@ -123,21 +120,26 @@ button{
   border-radius:13px;
   padding:10px 14px;
   cursor:pointer;
-  transition:.18s;
+  transition:.18s
 }
 button:hover{
   transform:translateY(-2px) scale(1.015);
-  box-shadow:0 0 18px rgba(139,92,246,.28);
+  box-shadow:0 0 18px rgba(139,92,246,.28)
 }
 button.primary{
   background:linear-gradient(135deg,var(--accent),var(--accent2));
   border:none;
-  font-weight:800;
+  font-weight:800
 }
-button.danger{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}
-button.success{background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.4)}
+button.danger{
+  background:rgba(239,68,68,.18);
+  border-color:rgba(239,68,68,.4)
+}
+button.success{
+  background:rgba(34,197,94,.18);
+  border-color:rgba(34,197,94,.4)
+}
 button.small{padding:7px 10px;font-size:12px}
-
 input,textarea,select{
   width:100%;
   color:#fff;
@@ -145,174 +147,140 @@ input,textarea,select{
   border:1px solid rgba(255,255,255,.13);
   border-radius:13px;
   padding:11px 12px;
-  outline:none;
+  outline:none
 }
 input:focus,textarea:focus,select:focus{
   border-color:var(--accent);
-  box-shadow:0 0 15px rgba(139,92,246,.16);
+  box-shadow:0 0 15px rgba(139,92,246,.16)
 }
 textarea{min-height:100px;resize:vertical}
 select option{background:#151522}
-
-.grid{
-  display:grid;
-  gap:16px;
-}
+.grid{display:grid;gap:16px}
 .stats{
   grid-template-columns:repeat(5,1fr);
-  margin-bottom:18px;
+  margin-bottom:18px
 }
 .stat{
   padding:17px;
-  text-align:center;
+  text-align:center
 }
 .stat b{
   display:block;
   font-size:28px;
-  margin-top:5px;
+  margin-top:5px
 }
 .stat span{
   color:#b9b9ca;
-  font-size:12px;
+  font-size:12px
 }
-
 .layout{
   grid-template-columns:320px 1fr;
-  align-items:start;
+  align-items:start
 }
-.side,.panel{
-  padding:18px;
-}
+.side,.panel{padding:18px}
 .side{
   position:sticky;
-  top:15px;
+  top:15px
 }
 .nav{
   display:grid;
-  gap:8px;
+  gap:8px
 }
-.nav button{
-  text-align:left;
-}
+.nav button{text-align:left}
 .nav button.active{
-  background:linear-gradient(135deg,rgba(139,92,246,.45),rgba(34,211,238,.22));
-  border-color:rgba(255,255,255,.25);
+  background:linear-gradient(
+    135deg,
+    rgba(139,92,246,.45),
+    rgba(34,211,238,.22)
+  );
+  border-color:rgba(255,255,255,.25)
 }
 .section{display:none}
 .section.active{display:block}
-
 .row{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:12px;
+  gap:12px
 }
 .row3{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  gap:12px
 }
 .field{margin-bottom:12px}
 .field label{
   display:block;
   font-size:12px;
   color:#bdbdcc;
-  margin-bottom:6px;
+  margin-bottom:6px
 }
 .actions{
   display:flex;
   gap:8px;
-  flex-wrap:wrap;
+  flex-wrap:wrap
 }
 .card{
   padding:14px;
   border-radius:17px;
   background:rgba(255,255,255,.055);
   border:1px solid rgba(255,255,255,.09);
-  margin-top:10px;
+  margin-top:10px
 }
 .cardHead{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:10px;
+  gap:10px
 }
 .muted{color:#aaaabd;font-size:12px}
 .mono{font-family:monospace}
 .empty{
   padding:30px;
   text-align:center;
-  color:#aaa;
+  color:#aaa
 }
-
 .tableWrap{overflow:auto}
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:650px;
+  min-width:650px
 }
 th,td{
   padding:10px;
   border-bottom:1px solid rgba(255,255,255,.08);
   text-align:left;
-  font-size:13px;
+  font-size:13px
 }
 th{color:#aaa}
-
 .preview{
   border-radius:17px;
   border:1px solid rgba(255,255,255,.12);
   padding:16px;
-  background:rgba(0,0,0,.25);
+  background:rgba(0,0,0,.25)
 }
 .discordPreview{
   border-left:4px solid var(--accent);
   background:#202225;
   padding:14px;
-  border-radius:7px;
+  border-radius:7px
 }
 .discordTitle{
   color:#fff;
   font-weight:800;
-  font-size:17px;
+  font-size:17px
 }
 .discordFooter{
   margin-top:14px;
   font-size:11px;
-  color:#aaa;
+  color:#aaa
 }
-
-.loginScreen{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-.loginBox{
-  width:min(430px,100%);
-  padding:25px;
-}
-.loginBox h1{
-  text-align:center;
-  margin-top:0;
-}
-.loginTabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-bottom:15px;
-}
-.loginTabs button.active{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-}
-
 .toastBox{
   position:fixed;
   right:18px;
   bottom:18px;
   z-index:10000;
   display:grid;
-  gap:8px;
+  gap:8px
 }
 .toast{
   min-width:250px;
@@ -322,22 +290,21 @@ th{color:#aaa}
   background:rgba(15,15,25,.9);
   border:1px solid rgba(255,255,255,.15);
   box-shadow:0 0 25px rgba(0,0,0,.3);
-  animation:toastIn .25s ease;
+  animation:toastIn .25s ease
 }
 @keyframes toastIn{
   from{opacity:0;transform:translateX(30px)}
   to{opacity:1;transform:none}
 }
-
 .ripple{
   position:fixed;
   width:20px;
   height:20px;
-  border:2px solid white;
+  border:2px solid #fff;
   border-radius:50%;
   pointer-events:none;
   z-index:10000;
-  animation:ripple .55s ease-out forwards;
+  animation:ripple .55s ease-out forwards
 }
 @keyframes ripple{
   to{
@@ -345,47 +312,23 @@ th{color:#aaa}
     height:170px;
     margin-left:-75px;
     margin-top:-75px;
-    opacity:0;
+    opacity:0
   }
 }
-
 .progress{
   height:10px;
   border-radius:999px;
   background:rgba(255,255,255,.08);
   overflow:hidden;
-  margin:10px 0;
+  margin:10px 0
 }
 .progressBar{
   height:100%;
   width:0%;
   background:linear-gradient(90deg,var(--accent),var(--accent2));
-  transition:.2s;
+  transition:.2s
 }
-
 .hidden{display:none!important}
-
-.permissionGrid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-}
-.permission{
-  padding:9px;
-  background:rgba(255,255,255,.05);
-  border-radius:10px;
-}
-
-.log{
-  max-height:280px;
-  overflow:auto;
-  background:rgba(0,0,0,.2);
-  padding:10px;
-  border-radius:13px;
-  font-family:monospace;
-  font-size:12px;
-}
-.log div{padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 
 @media(max-width:1000px){
   .stats{grid-template-columns:repeat(3,1fr)}
@@ -398,7 +341,6 @@ th{color:#aaa}
   .row,.row3{grid-template-columns:1fr}
   .topbar{padding:13px}
   .side,.panel{padding:13px}
-  .permissionGrid{grid-template-columns:1fr}
   .stat b{font-size:23px}
 }
 </style>
@@ -409,90 +351,35 @@ th{color:#aaa}
 <div id="particles"></div>
 <div id="cursorGlow"></div>
 
-<!-- LOGIN -->
-<div id="loginScreen" class="loginScreen">
-  <div class="glass loginBox">
-    <h1>⚡ DONE ORDER VIP</h1>
-    <div class="muted" style="text-align:center;margin-bottom:15px">
-      Dashboard quản lý webhook Discord
-    </div>
-
-    <div class="loginTabs">
-      <button id="loginTab" class="active" onclick="showLoginMode('login')">Đăng nhập</button>
-      <button id="registerTab" onclick="showLoginMode('register')">Đăng ký</button>
-    </div>
-
-    <div id="loginForm">
-      <div class="field">
-        <label>Tài khoản</label>
-        <input id="loginUser" placeholder="Username">
-      </div>
-
-      <div class="field">
-        <label>Mật khẩu</label>
-        <input id="loginPass" type="password" placeholder="Password">
-      </div>
-
-      <button class="primary" style="width:100%" onclick="login()">ĐĂNG NHẬP</button>
-
-      <div class="muted" style="margin-top:12px;text-align:center">
-        Demo Admin: admin / admin123
-      </div>
-    </div>
-
-    <div id="registerForm" class="hidden">
-      <div class="field">
-        <label>Tài khoản mới</label>
-        <input id="regUser" placeholder="Username">
-      </div>
-
-      <div class="field">
-        <label>Mật khẩu</label>
-        <input id="regPass" type="password" placeholder="Password">
-      </div>
-
-      <button class="primary" style="width:100%" onclick="registerUser()">
-        TẠO TÀI KHOẢN
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="app" class="app hidden">
+<div id="app" class="app">
 
   <div class="glass topbar">
     <div class="logo">⚡ DONE ORDER • VIP</div>
 
     <div class="userBox">
-      <span id="currentUserBadge" class="badge"></span>
+      <span class="badge">👤 Local User</span>
       <button class="small" onclick="showSection('profile')">👤 Profile</button>
-      <button class="small danger" onclick="logout()">Đăng xuất</button>
+      <button class="small danger" onclick="resetWorkspace()">♻️ Reset</button>
     </div>
   </div>
 
-  <!-- STATS -->
   <div class="grid stats">
     <div class="glass stat">
       <span>KHÁCH HÀNG</span>
       <b id="statCustomers">0</b>
     </div>
-
     <div class="glass stat">
       <span>DONE</span>
       <b id="statDone">0</b>
     </div>
-
     <div class="glass stat">
       <span>ĐÃ GỬI</span>
       <b id="statSent">0</b>
     </div>
-
     <div class="glass stat">
       <span>THẤT BẠI</span>
       <b id="statFailed">0</b>
     </div>
-
     <div class="glass stat">
       <span>ĐANG CHỌN</span>
       <b id="statSelected">0</b>
@@ -501,7 +388,6 @@ th{color:#aaa}
 
   <div class="grid layout">
 
-    <!-- SIDE -->
     <aside class="glass side">
       <div class="nav">
         <button data-section="dashboard" onclick="showSection('dashboard')">📊 Dashboard</button>
@@ -512,23 +398,19 @@ th{color:#aaa}
         <button data-section="history" onclick="showSection('history')">📜 History</button>
         <button data-section="theme" onclick="showSection('theme')">🎨 Theme</button>
         <button data-section="profile" onclick="showSection('profile')">👤 Profile</button>
-        <button id="adminNav" data-section="admin" onclick="showSection('admin')">🛡️ Admin</button>
       </div>
 
       <hr style="border-color:rgba(255,255,255,.08);margin:18px 0">
 
-      <a
-        href="https://discord.gg/QfSHWECJ2"
-        target="_blank"
-        style="display:block;text-decoration:none"
-      >
+      <a href="https://discord.gg/QfSHWECJ2"
+         target="_blank"
+         style="display:block;text-decoration:none">
         <button class="primary" style="width:100%">
           💬 THAM GIA SERVER
         </button>
       </a>
     </aside>
 
-    <!-- CONTENT -->
     <main class="glass panel">
 
       <!-- DASHBOARD -->
@@ -536,11 +418,9 @@ th{color:#aaa}
         <h2>📊 Dashboard</h2>
 
         <div class="card">
-          <div class="cardHead">
-            <div>
-              <b>Workspace hiện tại</b>
-              <div class="muted">Dữ liệu được lưu riêng theo tài khoản trên trình duyệt.</div>
-            </div>
+          <b>Workspace hiện tại</b>
+          <div class="muted">
+            Mở file là sử dụng trực tiếp, dữ liệu lưu trên trình duyệt.
           </div>
         </div>
 
@@ -560,20 +440,18 @@ th{color:#aaa}
         <h2>👥 Customers</h2>
 
         <div class="row">
-          <div>
-            <div class="field">
-              <label>Tên khách hàng</label>
-              <input id="customerName" placeholder="Nguyễn Văn A">
-            </div>
+          <div class="field">
+            <label>Tên khách hàng</label>
+            <input id="customerName" placeholder="Nguyễn Văn A">
           </div>
 
-          <div>
-            <div class="field">
-              <label>Discord User ID</label>
-              <input id="customerDiscord" placeholder="123456789012345678">
-            </div>
+          <div class="field">
+            <label>Discord User ID</label>
+            <input id="customerDiscord" placeholder="123456789012345678">
           </div>
         </div>
+
+        <input type="hidden" id="editingCustomerId">
 
         <div class="actions">
           <button class="primary" onclick="saveCustomer()">💾 Lưu khách</button>
@@ -581,11 +459,9 @@ th{color:#aaa}
         </div>
 
         <div style="margin-top:16px">
-          <input
-            id="customerSearch"
-            placeholder="🔎 Tìm theo tên hoặc Discord ID..."
-            oninput="renderCustomers()"
-          >
+          <input id="customerSearch"
+                 placeholder="🔎 Tìm theo tên hoặc Discord ID..."
+                 oninput="renderCustomers()">
         </div>
 
         <div class="actions" style="margin-top:10px">
@@ -593,7 +469,11 @@ th{color:#aaa}
           <button onclick="clearCustomerSelection()">Bỏ chọn</button>
           <button onclick="exportCustomers()">📤 Export</button>
           <button onclick="document.getElementById('customerImport').click()">📥 Import</button>
-          <input id="customerImport" type="file" accept=".json" class="hidden" onchange="importCustomers(event)">
+          <input id="customerImport"
+                 type="file"
+                 accept=".json"
+                 class="hidden"
+                 onchange="importCustomers(event)">
         </div>
 
         <div id="customerList"></div>
@@ -619,7 +499,8 @@ th{color:#aaa}
 
             <div class="field">
               <label>Nội dung</label>
-              <textarea id="doneMessage" placeholder="Cảm ơn bạn đã mua hàng!"></textarea>
+              <textarea id="doneMessage"
+                        placeholder="Cảm ơn bạn đã mua hàng!"></textarea>
             </div>
           </div>
 
@@ -670,20 +551,15 @@ th{color:#aaa}
         <h2>🔗 Webhook</h2>
 
         <div class="field">
-          <label>Discord Webhook URL riêng của tài khoản này</label>
-          <input id="webhookUrl" type="password" placeholder="https://discord.com/api/webhooks/...">
+          <label>Discord Webhook URL</label>
+          <input id="webhookUrl"
+                 type="password"
+                 placeholder="https://discord.com/api/webhooks/...">
         </div>
 
         <div class="actions">
           <button class="primary" onclick="saveWebhook()">💾 Lưu Webhook</button>
           <button onclick="testWebhook()">🧪 Test Webhook</button>
-        </div>
-
-        <div class="card">
-          <b>Lưu ý</b>
-          <div class="muted">
-            Webhook được lưu riêng trong workspace của tài khoản hiện tại.
-          </div>
         </div>
       </section>
 
@@ -693,7 +569,7 @@ th{color:#aaa}
 
         <div class="card">
           <b>Ping bằng Discord User ID</b>
-          <div class="muted" style="margin-top:5px">
+          <div class="muted">
             Nhập ID số, không nhập @username.
           </div>
         </div>
@@ -705,22 +581,26 @@ th{color:#aaa}
 
         <div class="field">
           <label>Nội dung</label>
-          <textarea id="testMessage" placeholder="Test ping từ DONE ORDER VIP"></textarea>
+          <textarea id="testMessage"
+                    placeholder="Test ping từ DONE ORDER VIP"></textarea>
         </div>
 
         <div class="row">
-          <div>
-            <div class="field">
-              <label>Số lượt test — tối đa 1000</label>
-              <input id="testCount" type="number" min="1" max="1000" value="1">
-            </div>
+          <div class="field">
+            <label>Số lượt test — tối đa 100000000</label>
+            <input id="testCount"
+                   type="number"
+                   min="1"
+                   max="100000000"
+                   value="1">
           </div>
 
-          <div>
-            <div class="field">
-              <label>Delay giữa mỗi lượt (ms)</label>
-              <input id="testDelay" type="number" min="50" value="1500">
-            </div>
+          <div class="field">
+            <label>Delay giữa mỗi lượt (ms)</label>
+            <input id="testDelay"
+                   type="number"
+                   min="50"
+                   value="1500">
           </div>
         </div>
 
@@ -734,11 +614,6 @@ th{color:#aaa}
         </div>
 
         <div id="testStatus" class="muted">Chưa chạy.</div>
-
-        <div class="card">
-          <h3>📜 Test Log</h3>
-          <div id="testLog" class="log"></div>
-        </div>
       </section>
 
       <!-- HISTORY -->
@@ -770,24 +645,38 @@ th{color:#aaa}
 
             <div class="field">
               <label>Glass Transparency</label>
-              <input id="themeGlass" type="range" min=".04" max=".30" step=".01">
+              <input id="themeGlass"
+                     type="range"
+                     min=".04"
+                     max=".30"
+                     step=".01">
             </div>
 
             <div class="field">
               <label>Background Darkness</label>
-              <input id="themeDark" type="range" min=".1" max=".8" step=".01">
+              <input id="themeDark"
+                     type="range"
+                     min=".1"
+                     max=".8"
+                     step=".01">
             </div>
           </div>
 
           <div>
             <div class="field">
               <label>Border Radius</label>
-              <input id="themeRadius" type="range" min="5" max="40">
+              <input id="themeRadius"
+                     type="range"
+                     min="5"
+                     max="40">
             </div>
 
             <div class="field">
               <label>Neon Glow</label>
-              <input id="themeGlow" type="range" min="0" max="50">
+              <input id="themeGlow"
+                     type="range"
+                     min="0"
+                     max="50">
             </div>
 
             <div class="field">
@@ -805,4 +694,116 @@ th{color:#aaa}
                 <option value="off">Tắt</option>
               </select>
             </div>
-          </
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" onclick="saveTheme()">💾 Lưu Theme</button>
+          <button onclick="resetTheme()">♻️ Reset Theme</button>
+        </div>
+      </section>
+
+      <!-- PROFILE -->
+      <section id="section-profile" class="section">
+        <h2>👤 Profile</h2>
+
+        <div class="card">
+          <b>Local Workspace</b>
+          <div class="muted">
+            Không cần đăng nhập. Mọi dữ liệu nằm trên trình duyệt hiện tại.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>💾 Dữ liệu</h3>
+          <div class="actions">
+            <button onclick="backupAll()">📦 Backup toàn bộ</button>
+            <button onclick="document.getElementById('restoreFile').click()">📥 Restore</button>
+            <input id="restoreFile"
+                   type="file"
+                   accept=".json"
+                   class="hidden"
+                   onchange="restoreAll(event)">
+            <button class="danger" onclick="resetWorkspace()">🗑️ Reset toàn bộ</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="toastBox" class="toastBox"></div>
+
+<script>
+const KEY="done_order_vip_local_v2";
+
+let db={
+  customers:[],
+  dones:[],
+  webhook:"",
+  history:[],
+  stats:{sent:0,failed:0},
+  theme:{
+    accent:"#8b5cf6",
+    accent2:"#22d3ee",
+    glass:".12",
+    dark:".45",
+    radius:"22",
+    glow:"22",
+    rgb:"on",
+    particles:"on"
+  }
+};
+
+let pingRunning=false;
+
+function $(id){
+  return document.getElementById(id);
+}
+
+function uid(){
+  return Date.now().toString(36)+Math.random().toString(36).slice(2);
+}
+
+function saveDB(){
+  localStorage.setItem(KEY,JSON.stringify(db));
+  updateStats();
+}
+
+function loadDB(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){
+      const x=JSON.parse(raw);
+      db=Object.assign(db,x);
+      db.customers ||= [];
+      db.dones ||= [];
+      db.history ||= [];
+      db.stats ||= {sent:0,failed:0};
+      db.theme ||= {};
+    }
+  }catch(e){
+    console.error(e);
+  }
+}
+
+function toast(msg){
+  const box=$("toastBox");
+  const el=document.createElement("div");
+  el.className="toast";
+  el.textContent=msg;
+  box.appendChild(el);
+  setTimeout(()=>el.remove(),3000);
+}
+
+function showSection(name){
+  document.querySelectorAll(".section").forEach(x=>{
+    x.classList.remove("active");
+  });
+
+  const target=$("section-"+name);
+  if(target)target.classList.add("active");
+
+  document.querySelector
+w
