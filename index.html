@@ -1,809 +1,253 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DONE ORDER • VIP Dashboard</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Done Order • VIP Dashboard</title>
 <style>
-*{box-sizing:border-box}
-:root{
-  --accent:#8b5cf6;
-  --accent2:#22d3ee;
-  --glass:.12;
-  --radius:22px;
-  --glow:22px;
-  --bg-dark:.45
-}
-html,body{
-  margin:0;
-  min-height:100%;
-  font-family:Inter,Arial,sans-serif;
-  color:#fff
-}
-body{
-  min-height:100vh;
-  overflow-x:hidden;
-  background:
-    linear-gradient(rgba(0,0,0,var(--bg-dark)),rgba(0,0,0,var(--bg-dark))),
-    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s")
-    center/cover fixed no-repeat
-}
-body.rgb{animation:bgRGB 12s linear infinite}
-@keyframes bgRGB{
-  0%{filter:hue-rotate(0deg)}
-  50%{filter:hue-rotate(180deg)}
-  100%{filter:hue-rotate(360deg)}
-}
-#particles{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:0;
-  overflow:hidden
-}
-.particle{
-  position:absolute;
-  width:4px;
-  height:4px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 0 14px #fff;
-  opacity:.65;
-  animation:float 8s linear infinite
-}
-@keyframes float{
-  from{transform:translateY(110vh) translateX(0)}
-  to{transform:translateY(-10vh) translateX(100px)}
-}
-#cursorGlow{
-  position:fixed;
-  width:180px;
-  height:180px;
-  border-radius:50%;
-  pointer-events:none;
-  z-index:9999;
-  background:radial-gradient(circle,rgba(139,92,246,.22),transparent 70%);
-  transform:translate(-50%,-50%);
-  mix-blend-mode:screen
-}
-.app{
-  position:relative;
-  z-index:2;
-  width:min(1450px,96%);
-  margin:auto;
-  padding:20px 0 50px
-}
-.glass{
-  background:rgba(15,15,30,var(--glass));
-  border:1px solid rgba(255,255,255,.14);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border-radius:var(--radius);
-  box-shadow:
-    0 0 var(--glow) rgba(139,92,246,.16),
-    0 20px 60px rgba(0,0,0,.25)
-}
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  padding:16px 20px;
-  margin-bottom:18px;
-  flex-wrap:wrap
-}
-.logo{
-  font-size:21px;
-  font-weight:900;
-  letter-spacing:.5px;
-  text-shadow:0 0 16px var(--accent)
-}
-.userBox{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap
-}
-.badge{
-  padding:7px 11px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.13);
-  font-size:12px
-}
-button,input,textarea,select{font:inherit}
-button{
-  color:#fff;
-  border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.08);
-  border-radius:13px;
-  padding:10px 14px;
-  cursor:pointer;
-  transition:.18s
-}
-button:hover{
-  transform:translateY(-2px) scale(1.015);
-  box-shadow:0 0 18px rgba(139,92,246,.28)
-}
-button.primary{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border:none;
-  font-weight:800
-}
-button.danger{
-  background:rgba(239,68,68,.18);
-  border-color:rgba(239,68,68,.4)
-}
-button.success{
-  background:rgba(34,197,94,.18);
-  border-color:rgba(34,197,94,.4)
-}
-button.small{padding:7px 10px;font-size:12px}
-input,textarea,select{
-  width:100%;
-  color:#fff;
-  background:rgba(0,0,0,.25);
-  border:1px solid rgba(255,255,255,.13);
-  border-radius:13px;
-  padding:11px 12px;
-  outline:none
-}
-input:focus,textarea:focus,select:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 15px rgba(139,92,246,.16)
-}
-textarea{min-height:100px;resize:vertical}
-select option{background:#151522}
-.grid{display:grid;gap:16px}
-.stats{
-  grid-template-columns:repeat(5,1fr);
-  margin-bottom:18px
-}
-.stat{
-  padding:17px;
-  text-align:center
-}
-.stat b{
-  display:block;
-  font-size:28px;
-  margin-top:5px
-}
-.stat span{
-  color:#b9b9ca;
-  font-size:12px
-}
-.layout{
-  grid-template-columns:320px 1fr;
-  align-items:start
-}
-.side,.panel{padding:18px}
-.side{
-  position:sticky;
-  top:15px
-}
-.nav{
-  display:grid;
-  gap:8px
-}
-.nav button{text-align:left}
-.nav button.active{
-  background:linear-gradient(
-    135deg,
-    rgba(139,92,246,.45),
-    rgba(34,211,238,.22)
-  );
-  border-color:rgba(255,255,255,.25)
-}
-.section{display:none}
-.section.active{display:block}
-.row{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px
-}
-.row3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px
-}
-.field{margin-bottom:12px}
-.field label{
-  display:block;
-  font-size:12px;
-  color:#bdbdcc;
-  margin-bottom:6px
-}
-.actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap
-}
-.card{
-  padding:14px;
-  border-radius:17px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.09);
-  margin-top:10px
-}
-.cardHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px
-}
-.muted{color:#aaaabd;font-size:12px}
-.mono{font-family:monospace}
-.empty{
-  padding:30px;
-  text-align:center;
-  color:#aaa
-}
-.tableWrap{overflow:auto}
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:650px
-}
-th,td{
-  padding:10px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  text-align:left;
-  font-size:13px
-}
-th{color:#aaa}
-.preview{
-  border-radius:17px;
-  border:1px solid rgba(255,255,255,.12);
-  padding:16px;
-  background:rgba(0,0,0,.25)
-}
-.discordPreview{
-  border-left:4px solid var(--accent);
-  background:#202225;
-  padding:14px;
-  border-radius:7px
-}
-.discordTitle{
-  color:#fff;
-  font-weight:800;
-  font-size:17px
-}
-.discordFooter{
-  margin-top:14px;
-  font-size:11px;
-  color:#aaa
-}
-.toastBox{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:10000;
-  display:grid;
-  gap:8px
-}
-.toast{
-  min-width:250px;
-  max-width:350px;
-  padding:12px 14px;
-  border-radius:14px;
-  background:rgba(15,15,25,.9);
-  border:1px solid rgba(255,255,255,.15);
-  box-shadow:0 0 25px rgba(0,0,0,.3);
-  animation:toastIn .25s ease
-}
-@keyframes toastIn{
-  from{opacity:0;transform:translateX(30px)}
-  to{opacity:1;transform:none}
-}
-.ripple{
-  position:fixed;
-  width:20px;
-  height:20px;
-  border:2px solid #fff;
-  border-radius:50%;
-  pointer-events:none;
-  z-index:10000;
-  animation:ripple .55s ease-out forwards
-}
-@keyframes ripple{
-  to{
-    width:170px;
-    height:170px;
-    margin-left:-75px;
-    margin-top:-75px;
-    opacity:0
-  }
-}
-.progress{
-  height:10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-  overflow:hidden;
-  margin:10px 0
-}
-.progressBar{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  transition:.2s
-}
-.hidden{display:none!important}
-
-@media(max-width:1000px){
-  .stats{grid-template-columns:repeat(3,1fr)}
-  .layout{grid-template-columns:1fr}
-  .side{position:static}
-}
-@media(max-width:650px){
-  .app{width:94%;padding-top:10px}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .row,.row3{grid-template-columns:1fr}
-  .topbar{padding:13px}
-  .side,.panel{padding:13px}
-  .stat b{font-size:23px}
-}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#fff}
+body{background:#060711;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:-25%;z-index:-3;background:conic-gradient(#ff00e6,#6c5cff,#00eaff,#20f0a0,#ffed00,#ff00e6);filter:blur(120px);opacity:.22;animation:spin 18s linear infinite}
+body:after{content:"";position:fixed;inset:0;z-index:-2;background:
+radial-gradient(circle at 15% 20%,#ff00e62b,transparent 25%),
+radial-gradient(circle at 85% 70%,#00eaff22,transparent 28%),
+linear-gradient(120deg,#070812e8,#070812cc),url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s") center/cover fixed}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes hue{to{filter:hue-rotate(360deg)}}@keyframes grad{to{background-position:300%}}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes shine{to{left:140%}}@keyframes pulse{50%{box-shadow:0 0 38px #8d63ff40}}
+.wrap{width:min(1450px,94%);margin:auto;padding:25px 0 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;font-size:26px;background:linear-gradient(135deg,#ff00e6,#6c5cff,#00eaff);box-shadow:0 0 32px #6c5cff77;animation:hue 5s linear infinite}
+h1{font-size:clamp(25px,4vw,42px);margin:0;font-weight:950;letter-spacing:-1.5px;background:linear-gradient(90deg,#fff,#ff6cf1,#7b74ff,#58ecff,#fff);background-size:300%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:grad 5s linear infinite}
+.sub{font-size:13px;color:#aeb3cd;margin-top:3px}.server{color:#fff;text-decoration:none;font-weight:900;padding:12px 16px;border-radius:14px;background:linear-gradient(100deg,#5865f2,#9b5cff,#ff35d5,#5865f2);background-size:300%;animation:grad 4s linear infinite;box-shadow:0 12px 35px #5865f255;transition:.2s;white-space:nowrap}.server:hover{transform:translateY(-3px) scale(1.03)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}.stat,.panel,.done,.preview{position:relative;overflow:hidden;border:1px solid #ffffff16;border-radius:21px;background:linear-gradient(145deg,#17192fdd,#080a16d9);backdrop-filter:blur(18px);box-shadow:0 18px 60px #0005}.stat{padding:15px}.stat:hover{animation:pulse 1.2s}.stat small{color:#9fa5c2;font-weight:800}.stat strong{display:block;font-size:26px;margin-top:5px}
+.layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);gap:16px}.panel{padding:18px;margin-bottom:16px}.panel h2{font-size:17px;margin:0 0 14px}.panel h2 span{color:#9b8cff}
+label{display:block;color:#b8bdd5;font-size:12px;font-weight:850;margin:11px 0 6px}
+input,textarea,select{width:100%;padding:11px 12px;border-radius:12px;border:1px solid #ffffff14;background:#050711b8;color:#fff;outline:none;font:inherit}textarea{min-height:88px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:#8d7aff;box-shadow:0 0 0 3px #8d7aff18}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:11px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+button{border:0;color:#fff;cursor:pointer;font-weight:850;border-radius:11px;padding:10px 13px;background:linear-gradient(100deg,#6c5cff,#ff00e6,#00cfff,#6c5cff);background-size:300%;animation:grad 5s linear infinite;transition:.2s}button:hover{transform:translateY(-2px);box-shadow:0 10px 26px #6c5cff40}button:active{transform:scale(.96)}button.secondary{background:#ffffff0d;animation:none;border:1px solid #ffffff13}button.green{background:linear-gradient(100deg,#00a879,#20f0a0,#00d9ff)}button.red{background:linear-gradient(100deg,#a91649,#ff4d7d,#ff8b6b)}
+.customer-list{max-height:290px;overflow:auto;display:grid;gap:7px;margin-top:10px}.customer{display:flex;align-items:center;gap:10px;padding:10px;border-radius:13px;background:#ffffff08;border:1px solid #ffffff0b}.customer:hover{background:#ffffff10}.customer input{width:auto}.customer-info{flex:1}.customer-name{font-weight:850}.customer-id{font-size:11px;color:#8e94b0}.mini{padding:6px 8px;font-size:11px}
+.done-list{display:grid;gap:11px}.done{padding:15px;animation:pop .3s ease}.done:after{content:"";position:absolute;top:-50%;left:-100%;width:55%;height:200%;background:linear-gradient(90deg,transparent,#ffffff12,transparent);transform:rotate(18deg);animation:shine 5s ease-in-out infinite}
+.done-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.done-name{font-size:16px;font-weight:900}.badge{font-size:10px;padding:5px 8px;border-radius:999px;background:#8d7aff1c;color:#bcb4ff;border:1px solid #8d7aff35}
+.preview{padding:16px;position:sticky;top:15px}.discord{border-left:4px solid #5865f2;background:#11131d;border-radius:10px;padding:13px}.discord-head{display:flex;gap:9px;align-items:center}.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#5865f2,#ff5edb);font-weight:900}.bot{font-weight:850}.tag{font-size:10px;background:#5865f2;color:#fff;padding:3px 5px;border-radius:4px}.time{font-size:10px;color:#777b8e}.embed{margin-top:10px;border-left:4px solid #8d7aff;background:#191b27;padding:11px;border-radius:7px}.embed-title{font-weight:900}.embed-desc{white-space:pre-wrap;color:#c5c8d7;font-size:13px;margin-top:5px}.embed img{width:100%;max-height:260px;object-fit:cover;border-radius:7px;margin-top:9px}.preview-ping{color:#9c9fff;font-size:12px;margin-bottom:6px}
+.photo-preview{display:none;margin-top:9px;position:relative}.photo-preview img{width:100%;max-height:230px;object-fit:cover;border-radius:13px;border:1px solid #ffffff15}.remove-photo{position:absolute;right:7px;top:7px;padding:6px 8px}
+.toast{position:fixed;right:18px;bottom:18px;z-index:20;min-width:240px;padding:13px 15px;border-radius:14px;background:#121528ee;border:1px solid #ffffff18;box-shadow:0 18px 50px #0008;transform:translateY(25px);opacity:0;pointer-events:none;transition:.25s}.toast.show{transform:none;opacity:1}
+.progress{height:7px;background:#ffffff0c;border-radius:99px;overflow:hidden;margin-top:10px;display:none}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff00e6,#7d6cff,#00eaff);transition:.25s}
+.empty{text-align:center;color:#777d98;padding:20px;border:1px dashed #ffffff15;border-radius:15px}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(3,1fr)}.layout{grid-template-columns:1fr}.preview{position:relative;top:auto}}
+@media(max-width:650px){.wrap{width:92%;padding-top:15px}header{align-items:flex-start}.server{font-size:11px;padding:10px}.stats{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}.stat strong{font-size:22px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
-
 <body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">⚡</div><div><h1>DONE ORDER</h1><div class="sub">Premium Discord Order Dashboard</div></div></div>
+  <a class="server" href="https://discord.gg/QfSHWECJ2" target="_blank" rel="noopener">💜 THAM GIA SERVER</a>
+</header>
 
-<div id="particles"></div>
-<div id="cursorGlow"></div>
+<section class="stats">
+  <div class="stat"><small>👥 Khách</small><strong id="statCustomers">0</strong></div>
+  <div class="stat"><small>📦 DONE</small><strong id="statDone">0</strong></div>
+  <div class="stat"><small>📨 Đã gửi</small><strong id="statSent">0</strong></div>
+  <div class="stat"><small>❌ Lỗi</small><strong id="statFail">0</strong></div>
+  <div class="stat"><small>🔔 Đang chọn</small><strong id="statSelected">0</strong></div>
+</section>
 
-<div id="app" class="app">
-
-  <div class="glass topbar">
-    <div class="logo">⚡ DONE ORDER • VIP</div>
-
-    <div class="userBox">
-      <span class="badge">👤 Local User</span>
-      <button class="small" onclick="showSection('profile')">👤 Profile</button>
-      <button class="small danger" onclick="resetWorkspace()">♻️ Reset</button>
-    </div>
-  </div>
-
-  <div class="grid stats">
-    <div class="glass stat">
-      <span>KHÁCH HÀNG</span>
-      <b id="statCustomers">0</b>
-    </div>
-    <div class="glass stat">
-      <span>DONE</span>
-      <b id="statDone">0</b>
-    </div>
-    <div class="glass stat">
-      <span>ĐÃ GỬI</span>
-      <b id="statSent">0</b>
-    </div>
-    <div class="glass stat">
-      <span>THẤT BẠI</span>
-      <b id="statFailed">0</b>
-    </div>
-    <div class="glass stat">
-      <span>ĐANG CHỌN</span>
-      <b id="statSelected">0</b>
-    </div>
-  </div>
-
-  <div class="grid layout">
-
-    <aside class="glass side">
-      <div class="nav">
-        <button data-section="dashboard" onclick="showSection('dashboard')">📊 Dashboard</button>
-        <button data-section="customers" onclick="showSection('customers')">👥 Customers</button>
-        <button data-section="done" onclick="showSection('done')">✅ DONE</button>
-        <button data-section="webhook" onclick="showSection('webhook')">🔗 Webhook</button>
-        <button data-section="test" onclick="showSection('test')">🧪 Ping Test</button>
-        <button data-section="history" onclick="showSection('history')">📜 History</button>
-        <button data-section="theme" onclick="showSection('theme')">🎨 Theme</button>
-        <button data-section="profile" onclick="showSection('profile')">👤 Profile</button>
-      </div>
-
-      <hr style="border-color:rgba(255,255,255,.08);margin:18px 0">
-
-      <a href="https://discord.gg/QfSHWECJ2"
-         target="_blank"
-         style="display:block;text-decoration:none">
-        <button class="primary" style="width:100%">
-          💬 THAM GIA SERVER
-        </button>
-      </a>
-    </aside>
-
-    <main class="glass panel">
-
-      <!-- DASHBOARD -->
-      <section id="section-dashboard" class="section active">
-        <h2>📊 Dashboard</h2>
-
-        <div class="card">
-          <b>Workspace hiện tại</b>
-          <div class="muted">
-            Mở file là sử dụng trực tiếp, dữ liệu lưu trên trình duyệt.
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>⚡ Quick Actions</h3>
-          <div class="actions">
-            <button onclick="showSection('customers')">➕ Thêm khách</button>
-            <button onclick="showSection('done')">➕ Tạo DONE</button>
-            <button onclick="showSection('webhook')">🔗 Cài Webhook</button>
-            <button onclick="showSection('test')">🧪 Ping Test</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- CUSTOMERS -->
-      <section id="section-customers" class="section">
-        <h2>👥 Customers</h2>
-
-        <div class="row">
-          <div class="field">
-            <label>Tên khách hàng</label>
-            <input id="customerName" placeholder="Nguyễn Văn A">
-          </div>
-
-          <div class="field">
-            <label>Discord User ID</label>
-            <input id="customerDiscord" placeholder="123456789012345678">
-          </div>
-        </div>
-
-        <input type="hidden" id="editingCustomerId">
-
-        <div class="actions">
-          <button class="primary" onclick="saveCustomer()">💾 Lưu khách</button>
-          <button onclick="clearCustomerForm()">Xóa form</button>
-        </div>
-
-        <div style="margin-top:16px">
-          <input id="customerSearch"
-                 placeholder="🔎 Tìm theo tên hoặc Discord ID..."
-                 oninput="renderCustomers()">
-        </div>
-
-        <div class="actions" style="margin-top:10px">
-          <button onclick="selectAllCustomers()">☑️ Chọn tất cả</button>
-          <button onclick="clearCustomerSelection()">Bỏ chọn</button>
-          <button onclick="exportCustomers()">📤 Export</button>
-          <button onclick="document.getElementById('customerImport').click()">📥 Import</button>
-          <input id="customerImport"
-                 type="file"
-                 accept=".json"
-                 class="hidden"
-                 onchange="importCustomers(event)">
-        </div>
-
-        <div id="customerList"></div>
-      </section>
-
-      <!-- DONE -->
-      <section id="section-done" class="section">
-        <h2>✅ DONE Manager</h2>
-
-        <input type="hidden" id="editingDoneId">
-
-        <div class="row">
-          <div>
-            <div class="field">
-              <label>Bot Name</label>
-              <input id="doneBot" placeholder="DONE BOT">
-            </div>
-
-            <div class="field">
-              <label>Tiêu đề</label>
-              <input id="doneTitle" placeholder="Đơn hàng đã hoàn tất">
-            </div>
-
-            <div class="field">
-              <label>Nội dung</label>
-              <textarea id="doneMessage"
-                        placeholder="Cảm ơn bạn đã mua hàng!"></textarea>
-            </div>
-          </div>
-
-          <div>
-            <div class="field">
-              <label>Màu Embed</label>
-              <input id="doneColor" type="color" value="#8b5cf6">
-            </div>
-
-            <div class="field">
-              <label>Footer</label>
-              <input id="doneFooter" placeholder="DONE ORDER VIP">
-            </div>
-
-            <div class="field">
-              <label>Ảnh Embed URL</label>
-              <input id="doneImage" placeholder="https://...">
-            </div>
-
-            <div class="field">
-              <label>Ping khách khi gửi</label>
-              <select id="donePing">
-                <option value="yes">Có</option>
-                <option value="no">Không</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="primary" onclick="saveDone()">💾 Lưu DONE</button>
-          <button onclick="clearDoneForm()">Xóa form</button>
-        </div>
-
-        <div class="card">
-          <h3>👀 Preview</h3>
-          <div id="donePreview" class="preview"></div>
-        </div>
-
-        <div style="margin-top:15px">
-          <h3>Danh sách DONE</h3>
-          <div id="doneList"></div>
-        </div>
-      </section>
-
-      <!-- WEBHOOK -->
-      <section id="section-webhook" class="section">
-        <h2>🔗 Webhook</h2>
-
-        <div class="field">
-          <label>Discord Webhook URL</label>
-          <input id="webhookUrl"
-                 type="password"
-                 placeholder="https://discord.com/api/webhooks/...">
-        </div>
-
-        <div class="actions">
-          <button class="primary" onclick="saveWebhook()">💾 Lưu Webhook</button>
-          <button onclick="testWebhook()">🧪 Test Webhook</button>
-        </div>
-      </section>
-
-      <!-- PING TEST -->
-      <section id="section-test" class="section">
-        <h2>🧪 Ping Member Test</h2>
-
-        <div class="card">
-          <b>Ping bằng Discord User ID</b>
-          <div class="muted">
-            Nhập ID số, không nhập @username.
-          </div>
-        </div>
-
-        <div class="field" style="margin-top:12px">
-          <label>Discord User ID</label>
-          <input id="testUserId" placeholder="430822481436082196">
-        </div>
-
-        <div class="field">
-          <label>Nội dung</label>
-          <textarea id="testMessage"
-                    placeholder="Test ping từ DONE ORDER VIP"></textarea>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label>Số lượt test — tối đa 100000000</label>
-            <input id="testCount"
-                   type="number"
-                   min="1"
-                   max="100000000"
-                   value="1">
-          </div>
-
-          <div class="field">
-            <label>Delay giữa mỗi lượt (ms)</label>
-            <input id="testDelay"
-                   type="number"
-                   min="50"
-                   value="1500">
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="primary" onclick="startPingTest()">🚀 Bắt đầu Test</button>
-          <button class="danger" onclick="stopPingTest()">⛔ Dừng</button>
-        </div>
-
-        <div class="progress">
-          <div id="testProgress" class="progressBar"></div>
-        </div>
-
-        <div id="testStatus" class="muted">Chưa chạy.</div>
-      </section>
-
-      <!-- HISTORY -->
-      <section id="section-history" class="section">
-        <h2>📜 History</h2>
-
-        <div class="actions">
-          <button class="danger" onclick="clearHistory()">Xóa lịch sử</button>
-        </div>
-
-        <div id="historyList"></div>
-      </section>
-
-      <!-- THEME -->
-      <section id="section-theme" class="section">
-        <h2>🎨 Theme Editor</h2>
-
-        <div class="row">
-          <div>
-            <div class="field">
-              <label>Màu chính</label>
-              <input id="themeAccent" type="color">
-            </div>
-
-            <div class="field">
-              <label>Màu phụ</label>
-              <input id="themeAccent2" type="color">
-            </div>
-
-            <div class="field">
-              <label>Glass Transparency</label>
-              <input id="themeGlass"
-                     type="range"
-                     min=".04"
-                     max=".30"
-                     step=".01">
-            </div>
-
-            <div class="field">
-              <label>Background Darkness</label>
-              <input id="themeDark"
-                     type="range"
-                     min=".1"
-                     max=".8"
-                     step=".01">
-            </div>
-          </div>
-
-          <div>
-            <div class="field">
-              <label>Border Radius</label>
-              <input id="themeRadius"
-                     type="range"
-                     min="5"
-                     max="40">
-            </div>
-
-            <div class="field">
-              <label>Neon Glow</label>
-              <input id="themeGlow"
-                     type="range"
-                     min="0"
-                     max="50">
-            </div>
-
-            <div class="field">
-              <label>RGB</label>
-              <select id="themeRGB">
-                <option value="on">Bật</option>
-                <option value="off">Tắt</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label>Particles</label>
-              <select id="themeParticles">
-                <option value="on">Bật</option>
-                <option value="off">Tắt</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="primary" onclick="saveTheme()">💾 Lưu Theme</button>
-          <button onclick="resetTheme()">♻️ Reset Theme</button>
-        </div>
-      </section>
-
-      <!-- PROFILE -->
-      <section id="section-profile" class="section">
-        <h2>👤 Profile</h2>
-
-        <div class="card">
-          <b>Local Workspace</b>
-          <div class="muted">
-            Không cần đăng nhập. Mọi dữ liệu nằm trên trình duyệt hiện tại.
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>💾 Dữ liệu</h3>
-          <div class="actions">
-            <button onclick="backupAll()">📦 Backup toàn bộ</button>
-            <button onclick="document.getElementById('restoreFile').click()">📥 Restore</button>
-            <input id="restoreFile"
-                   type="file"
-                   accept=".json"
-                   class="hidden"
-                   onchange="restoreAll(event)">
-            <button class="danger" onclick="resetWorkspace()">🗑️ Reset toàn bộ</button>
-          </div>
-        </div>
-      </section>
-
-    </main>
-  </div>
+<div class="layout">
+<main>
+<section class="panel">
+<h2>⚙️ <span>Cấu hình Webhook</span></h2>
+<label>Discord Webhook URL</label>
+<input id="webhook" type="password" placeholder="https://discord.com/api/webhooks/...">
+<label>Discord Bot Name</label><input id="botName" value="Done Bot">
+<div class="actions">
+<button onclick="testWebhook()">🧪 Test Webhook</button>
+<button class="secondary" onclick="toggleWebhook()">👁 Hiện/ẩn</button>
 </div>
+</section>
 
-<div id="toastBox" class="toastBox"></div>
+<section class="panel">
+<h2>👥 <span>Khách hàng</span></h2>
+<div class="row">
+<div><label>Tên khách</label><input id="customerName" placeholder="VD: Nguyễn Văn A"></div>
+<div><label>Discord User ID</label><input id="customerId" placeholder="123456789012345678"></div>
+</div>
+<div class="actions">
+<button onclick="addCustomer()">➕ Thêm khách</button>
+<button class="secondary" onclick="clearCustomerForm()">↺ Xóa ô nhập</button>
+</div>
+<label>🔎 Tìm khách</label><input id="customerSearch" oninput="renderCustomers()" placeholder="Tìm theo tên hoặc ID...">
+<div class="customer-list" id="customerList"></div>
+<div class="actions">
+<button class="secondary" onclick="selectAllCustomers()">☑ Chọn tất cả</button>
+<button class="secondary" onclick="clearCustomers()">☐ Bỏ chọn</button>
+<button class="secondary" onclick="exportCustomers()">💾 Backup khách</button>
+<button class="secondary" onclick="importCustomers()">📥 Import khách</button>
+</div>
+</section>
+
+<section class="panel">
+<h2>📦 <span>Tạo / sửa DONE</span></h2>
+<div class="row">
+<div><label>Tên DONE</label><input id="doneName" placeholder="VD: Đơn hoàn tất"></div>
+<div><label>Tiêu đề Embed</label><input id="doneTitle" placeholder="Đơn hàng đã hoàn tất"></div>
+</div>
+<label>Nội dung</label><textarea id="doneMessage" placeholder="Nhập nội dung gửi cho khách..."></textarea>
+<div class="row">
+<div><label>Màu Embed</label><input id="doneColor" type="color" value="#8d63ff" style="height:43px;padding:4px"></div>
+<div><label>Ping</label><select id="pingMode"><option value="yes">🔔 Ping khách</option><option value="no">🔕 Không ping</option></select></div>
+</div>
+<label>📸 Ảnh Done</label>
+<input id="photoInput" type="file" accept="image/*" capture="environment" onchange="previewPhoto(this)">
+<div class="photo-preview" id="photoPreview"><img id="photoImg"><button class="red remove-photo" onclick="removePhoto()">✕</button></div>
+<div class="actions">
+<button onclick="saveDone()">💾 Lưu DONE</button>
+<button class="secondary" onclick="clearDoneForm()">↺ Làm mới</button>
+</div>
+</section>
+
+<section class="panel">
+<h2>🚀 <span>DANH SÁCH DONE</span></h2>
+<div id="doneList" class="done-list"></div>
+</section>
+
+<section class="panel">
+<h2>🛠️ <span>Dữ liệu</span></h2>
+<div class="actions">
+<button class="secondary" onclick="exportAll()">💾 Backup tất cả</button>
+<button class="secondary" onclick="importAll()">📥 Import tất cả</button>
+<button class="red" onclick="resetAll()">🧹 Reset toàn bộ</button>
+</div>
+</section>
+</main>
+
+<aside>
+<section class="preview">
+<h2>👀 Preview Discord</h2>
+<div class="discord">
+<div class="discord-head"><div class="avatar">D</div><div><div class="bot" id="pvBot">Done Bot <span class="tag">BOT</span></div><div class="time">now</div></div></div>
+<div class="preview-ping" id="pvPing"></div>
+<div class="embed" id="pvEmbed">
+<div class="embed-title" id="pvTitle">Đơn hàng đã hoàn tất</div>
+<div class="embed-desc" id="pvDesc">Nội dung DONE sẽ hiện ở đây...</div>
+<img id="pvImg" style="display:none">
+</div>
+</div>
+<div class="progress" id="progress"><i id="progressBar"></i></div>
+<div class="actions"><button class="green" style="width:100%" onclick="sendCurrent()">🚀 GỬI DONE NGAY</button></div>
+</section>
+</aside>
+</div>
+</div>
+<div class="toast" id="toast"></div>
 
 <script>
-const KEY="done_order_vip_local_v2";
+const KEY='done_vip_dashboard_v1';
+let state=JSON.parse(localStorage.getItem(KEY)||'null')||{webhook:'',botName:'Done Bot',customers:[],dones:[],sent:0,fail:0};
+let editIndex=-1, photoData=null;
 
-let db={
-  customers:[],
-  dones:[],
-  webhook:"",
-  history:[],
-  stats:{sent:0,failed:0},
-  theme:{
-    accent:"#8b5cf6",
-    accent2:"#22d3ee",
-    glass:".12",
-    dark:".45",
-    radius:"22",
-    glow:"22",
-    rgb:"on",
-    particles:"on"
-  }
-};
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateStats()}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function esc(s){return String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]))}
 
-let pingRunning=false;
+$('webhook').value=state.webhook;$('botName').value=state.botName;
+['doneName','doneTitle','doneMessage','doneColor','pingMode'].forEach(id=>$(id).addEventListener('input',updatePreview));
+$('botName').addEventListener('input',()=>{state.botName=$('botName').value;save();updatePreview()});
+$('webhook').addEventListener('input',()=>{state.webhook=$('webhook').value.trim();save()});
 
-function $(id){
-  return document.getElementById(id);
+function updateStats(){ $('statCustomers').textContent=state.customers.length;$('statDone').textContent=state.dones.length;$('statSent').textContent=state.sent;$('statFail').textContent=state.fail;$('statSelected').textContent=state.customers.filter(x=>x.selected).length}
+function updatePreview(){
+ $('pvBot').innerHTML=esc($('botName').value||'Done Bot')+' <span class="tag">BOT</span>';
+ $('pvTitle').textContent=$('doneTitle').value||'Đơn hàng đã hoàn tất';
+ $('pvDesc').textContent=$('doneMessage').value||'Nội dung DONE sẽ hiện ở đây...';
+ $('pvEmbed').style.borderLeftColor=$('doneColor').value;
+ const selected=state.customers.filter(x=>x.selected);
+ $('pvPing').textContent=$('pingMode').value==='yes'&&selected.length?selected.map(x=>'@'+x.name).join(' '):'';
+ if(photoData){$('pvImg').src=photoData;$('pvImg').style.display='block'}else $('pvImg').style.display='none';
+}
+function addCustomer(){
+ const name=$('customerName').value.trim(),id=$('customerId').value.trim();
+ if(!name||!id)return toast('⚠️ Nhập tên và Discord ID');
+ if(!/^\d{15,25}$/.test(id))return toast('⚠️ Discord ID không hợp lệ');
+ const old=state.customers.find(x=>x.id===id);
+ if(old){old.name=name;toast('✅ Đã cập nhật khách')}else{state.customers.push({name,id,selected:false});toast('✅ Đã thêm khách')}
+ save();renderCustomers();clearCustomerForm();
+}
+function clearCustomerForm(){$('customerName').value='';$('customerId').value=''}
+function renderCustomers(){
+ const q=$('customerSearch').value.toLowerCase(),list=state.customers.filter(x=>(x.name+x.id).toLowerCase().includes(q));
+ $('customerList').innerHTML=list.length?list.map((x)=>{
+ const idx=state.customers.indexOf(x);
+ return `<div class="customer"><input type="checkbox" ${x.selected?'checked':''} onchange="toggleCustomer(${idx},this.checked)">
+ <div class="customer-info"><div class="customer-name">${esc(x.name)}</div><div class="customer-id">${esc(x.id)}</div></div>
+ <button class="secondary mini" onclick="editCustomer(${idx})">✏️</button><button class="red mini" onclick="deleteCustomer(${idx})">🗑</button></div>`}).join(''):'<div class="empty">Chưa có khách</div>';
+ updateStats();updatePreview();
+}
+function toggleCustomer(i,v){state.customers[i].selected=v;save();renderCustomers()}
+function editCustomer(i){$('customerName').value=state.customers[i].name;$('customerId').value=state.customers[i].id;scrollTo({top:document.querySelector('.panel').offsetTop,behavior:'smooth'})}
+function deleteCustomer(i){if(!confirm('Xóa khách này?'))return;state.customers.splice(i,1);save();renderCustomers()}
+function selectAllCustomers(){state.customers.forEach(x=>x.selected=true);save();renderCustomers()}
+function clearCustomers(){state.customers.forEach(x=>x.selected=false);save();renderCustomers()}
+
+function previewPhoto(input){const f=input.files?.[0];if(!f)return;if(f.size>7*1024*1024)return toast('⚠️ Ảnh quá lớn, hãy chọn ảnh dưới 7MB');const r=new FileReader();r.onload=()=>{photoData=r.result;$('photoImg').src=photoData;$('photoPreview').style.display='block';updatePreview()};r.readAsDataURL(f)}
+function removePhoto(){photoData=null;$('photoInput').value='';$('photoPreview').style.display='none';updatePreview()}
+
+function saveDone(){
+ const d={name:$('doneName').value.trim()||'DONE',title:$('doneTitle').value.trim()||'Đơn hàng đã hoàn tất',message:$('doneMessage').value,color:$('doneColor').value,ping:$('pingMode').value};
+ if(editIndex>=0){state.dones[editIndex]=d;editIndex=-1;toast('✅ Đã cập nhật DONE')}else{state.dones.push(d);toast('✅ Đã thêm DONE')}
+ save();renderDones();clearDoneForm();
+}
+function clearDoneForm(){editIndex=-1;$('doneName').value='';$('doneTitle').value='';$('doneMessage').value='';$('doneColor').value='#8d63ff';$('pingMode').value='yes';removePhoto();updatePreview()}
+function renderDones(){
+ const el=$('doneList');
+ if(!state.dones.length){el.innerHTML='<div class="empty">Chưa có DONE. Tạo mẫu ở phía trên.</div>';return}
+ el.innerHTML=state.dones.map((d,i)=>`<div class="done">
+ <div class="done-head"><div><div class="done-name">📦 ${esc(d.name)}</div><div style="color:#858ba6;font-size:12px">${esc(d.title)}</div></div><span class="badge">${d.ping==='yes'?'🔔 PING':'🔕 NO PING'}</span></div>
+ <div style="color:#aeb3ca;font-size:12px;margin-top:9px;white-space:pre-wrap">${esc(d.message).slice(0,220)}</div>
+ <div class="actions"><button onclick="useDone(${i})">✏️ Sửa</button><button class="green" onclick="sendDone(${i})">🚀 Gửi</button><button class="secondary" onclick="duplicateDone(${i})">📋 Nhân bản</button><button class="red" onclick="deleteDone(${i})">🗑</button></div></div>`).join('')
+}
+function useDone(i){const d=state.dones[i];editIndex=i;$('doneName').value=d.name;$('doneTitle').value=d.title;$('doneMessage').value=d.message;$('doneColor').value=d.color;$('pingMode').value=d.ping;updatePreview();scrollTo({top:document.querySelector('.panel:nth-of-type(3)').offsetTop,behavior:'smooth'})}
+function duplicateDone(i){state.dones.splice(i+1,0,{...state.dones[i],name:state.dones[i].name+' Copy'});save();renderDones();toast('📋 Đã nhân bản')}
+function deleteDone(i){if(!confirm('Xóa DONE này?'))return;state.dones.splice(i,1);save();renderDones()}
+
+async function sendCurrent(){
+ const d={name:$('doneName').value.trim()||'DONE',title:$('doneTitle').value.trim()||'Đơn hàng đã hoàn tất',message:$('doneMessage').value,color:$('doneColor').value,ping:$('pingMode').value};
+ await sendPayload(d);
+}
+async function sendDone(i){await sendPayload(state.dones[i])}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+async function sendPayload(d){
+ if(!state.webhook)return toast('⚠️ Chưa nhập Webhook');
+ const selected=state.customers.filter(x=>x.selected);
+ if(!selected.length)return toast('⚠️ Chưa chọn khách');
+ if(!confirm(`Gửi DONE cho ${selected.length} khách?`))return;
+ const bar=$('progress'),fill=$('progressBar');bar.style.display='block';fill.style.width='0%';
+ let ok=0,bad=0;
+ for(let i=0;i<selected.length;i++){
+   const c=selected[i];
+   try{
+     const embed={title:d.title,description:`👤 **Khách:** ${c.name}\n🆔 ${c.id}\n\n${d.message||''}`,color:parseInt(d.color.replace('#',''),16),footer:{text:'Done Order • VIP Dashboard'},timestamp:new Date().toISOString()};
+     if(photoData)embed.image={url:photoData};
+     const body={username:state.botName||'Done Bot',content:d.ping==='yes'?`<@${c.id}>`:undefined,embeds:[embed]};
+     if(photoData){
+       const blob=await (await fetch(photoData)).blob(),fd=new FormData();
+       embed.image={url:'attachment://done.jpg'};fd.append('payload_json',JSON.stringify(body));fd.append('files[0]',blob,'done.jpg');
+       const res=await fetch(state.webhook,{method:'POST',body:fd});if(!res.ok)throw new Error('HTTP '+res.status);
+     }else{
+       const res=await fetch(state.webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!res.ok)throw new Error('HTTP '+res.status);
+     }
+     ok++;state.sent++;
+   }catch(e){bad++;state.fail++}
+   fill.style.width=Math.round((i+1)/selected.length*100)+'%';save();
+   if(i<selected.length-1)await sleep(900);
+ }
+ setTimeout(()=>bar.style.display='none',900);
+ toast(bad?`⚠️ ${ok}/${selected.length} khách gửi thành công`:`✅ ${ok}/${selected.length} khách đã gửi thành công`);
+ updateStats();
 }
 
-function uid(){
-  return Date.now().toString(36)+Math.random().toString(36).slice(2);
-}
-
-function saveDB(){
-  localStorage.setItem(KEY,JSON.stringify(db));
-  updateStats();
-}
-
-function loadDB(){
-  try{
-    const raw=localStorage.getItem(KEY);
-    if(raw){
-      const x=JSON.parse(raw);
-      db=Object.assign(db,x);
-      db.customers ||= [];
-      db.dones ||= [];
-      db.history ||= [];
-      db.stats ||= {sent:0,failed:0};
-      db.theme ||= {};
-    }
-  }catch(e){
-    console.error(e);
-  }
-}
-
-function toast(msg){
-  const box=$("toastBox");
-  const el=document.createElement("div");
-  el.className="toast";
-  el.textContent=msg;
-  box.appendChild(el);
-  setTimeout(()=>el.remove(),3000);
-}
-
-function showSection(name){
-  document.querySelectorAll(".section").forEach(x=>{
-    x.classList.remove("active");
-  });
-
-  const target=$("section-"+name);
-  if(target)target.classList.add("active");
-
-  document.querySelector
-w
+async function testWebhook(){
+ if(!state.webhook)return toast('⚠️ Chưa nhập Web
