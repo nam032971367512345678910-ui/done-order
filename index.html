@@ -51,6 +51,7 @@ input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1p
         <button data-section="dashboard" onclick="showSection('dashboard')">📊 Dashboard</button>
         <button data-section="customers" onclick="showSection('customers')">👥 Customers</button>
         <button data-section="done" onclick="showSection('done')">✅ DONE</button>
+        <button data-section="nicho" onclick="showSection('nicho')">⭐ Nicho Bút</button>
         <button data-section="webhook" onclick="showSection('webhook')">🔗 Webhook</button>
         <button data-section="test" onclick="showSection('test')">🧪 Ping members</button>
         <button data-section="history" onclick="showSection('history')">📜 History</button>
@@ -90,6 +91,86 @@ input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1p
         <div style="margin-top:15px"><h3>Danh sách DONE</h3><div id="doneList"></div></div>
       </section>
 
+      <section id="section-nicho" class="section">
+        <h2>⭐ Nicho Bút — Discord Embed</h2>
+        <div class="card">
+          <div class="muted">Tạo bảng giá Nicho Bút và gửi trực tiếp lên Discord bằng Webhook.</div>
+        </div>
+
+        <div class="row">
+          <div>
+            <div class="field">
+              <label>Tiêu đề</label>
+              <input id="nichoTitle" placeholder="Nicho Bút" value="Nicho Bút">
+            </div>
+            <div class="field">
+              <label>Nội dung / Các dòng giá</label>
+              <textarea id="nichoMessage" placeholder="Nhập các dòng giá/gói...">🟣 **Nicho Bút Log [Cần Đăng Nhập]**
+
+• **1 Tháng** - `90.000`
+• **2 Tháng** - `99.000`
+• **1 Năm** - `810.000`
+• **Gia hạn 2 Tháng** - `95.000`
+
+Nếu bạn đã từng mua nicho 2 tháng ở bên mình thì sẽ được gia hạn lại tiếp 2 tháng với giá chỉ 95k
+
+Vui lòng gửi tài khoản mật khẩu và 4-5 mã dự phòng khi mua
+
+🟣 **Nicho Bút Trail [Cần Đăng Nhập]**
+
+• **3 Tháng** - `50.000`
+• **4 Tháng** - `70.000` (không bảo hành tháng 4)
+
+Dành cho tài khoản chưa xài ni cho bao giờ và phải trên 1 tháng
+Vui lòng gửi tài khoản mật khẩu và 4-5 mã dự phòng khi mua
+
+🔵 Hoàn thành trong 48h, nhanh nhất trong ngày
+🔥 Hàng ổn định, bảo hành 1 đổi 1</textarea>
+            </div>
+            <div class="field">
+              <label>Màu Embed</label>
+              <input id="nichoColor" type="color" value="#d946ef">
+            </div>
+          </div>
+
+          <div>
+            <div class="field">
+              <label>Ảnh / Banner URL</label>
+              <input id="nichoBanner" placeholder="https://.../banner.png">
+              <div class="muted">Dán link ảnh trực tiếp (PNG/JPG/GIF/WebP). Có thể để trống.</div>
+            </div>
+            <div class="field">
+              <label>🖼️ Hoặc chọn Banner từ máy</label>
+              <input id="nichoBannerFile" type="file" accept="image/*,.gif" onchange="pickNichoBanner(event)">
+              <div class="muted" id="nichoBannerStatus" style="margin-top:6px">Chưa chọn ảnh</div>
+              <div class="actions" style="margin-top:8px">
+                <button type="button" class="small" onclick="document.getElementById('nichoBannerFile').click()">📷 Chọn ảnh</button>
+                <button type="button" class="small danger" onclick="clearNichoBanner()">Xóa ảnh</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Webhook Discord</label>
+              <input id="nichoWebhook" type="password" placeholder="https://discord.com/api/webhooks/...">
+            </div>
+            <div class="field">
+              <label>Tên Bot hiển thị</label>
+              <input id="nichoBotName" placeholder="Nicho Bút" value="Nicho Bút">
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" onclick="sendNichoEmbed()">🚀 Gửi lên Discord</button>
+          <button onclick="saveNichoSettings()">💾 Lưu cấu hình</button>
+          <button onclick="resetNichoForm()">↩️ Reset</button>
+        </div>
+
+        <div class="card">
+          <h3>👀 Preview</h3>
+          <div id="nichoPreview" class="preview"></div>
+        </div>
+      </section>
+
       <section id="section-webhook" class="section">
         <h2>🔗 Webhook</h2><div class="field"><label>Discord Webhook URL</label><input id="webhookUrl" type="password" placeholder="https://discord.com/api/webhooks/..."></div>
         <div class="actions"><button class="primary" onclick="saveWebhook()">💾 Lưu Webhook</button><button onclick="testWebhook()">🧪 Test Webhook</button></div>
@@ -127,14 +208,17 @@ input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1p
 <script>
 const DB_KEY="DONE_ORDER_VIP_DB_V6";
 const DEFAULT_THEME={accent:"#8b5cf6",accent2:"#22d3ee",glass:.12,dark:.45,radius:22,glow:22,rgb:"on",particles:"on"};
-function defaultWorkspace(){return{webhook:"",apiBots:[],customers:[],dones:[],history:[],stats:{sent:0,failed:0},theme:{...DEFAULT_THEME}}}
-let data=JSON.parse(localStorage.getItem(DB_KEY)||"null")||defaultWorkspace();data.apiBots=Array.isArray(data.apiBots)?data.apiBots:[];
-let editingCustomerIndex=-1,pingRunning=false,pingStopRequested=false;let selectedDoneImageData="";
+function defaultWorkspace(){return{webhook:"",apiBots:[],customers:[],dones:[],history:[],stats:{sent:0,failed:0},theme:{...DEFAULT_THEME},nicho:{title:"Nicho Bút",message:"",color:"#d946ef",banner:"",bannerData:"",botName:"Nicho Bút",webhook:""}}}
+let data=JSON.parse(localStorage.getItem(DB_KEY)||"null")||defaultWorkspace();
+data.apiBots=Array.isArray(data.apiBots)?data.apiBots:[];
+data.nicho=data.nicho&&typeof data.nicho==="object"?data.nicho:{};
+data.nicho={title:"Nicho Bút",message:"",color:"#d946ef",banner:"",bannerData:"",botName:"Nicho Bút",webhook:"",...data.nicho};
+let editingCustomerIndex=-1,pingRunning=false,pingStopRequested=false;let selectedDoneImageData="";let selectedNichoBannerData="";
 function saveDB(){localStorage.setItem(DB_KEY,JSON.stringify(data))}
 function workspace(){return data}
 function toast(message){const box=document.getElementById("toastBox"),el=document.createElement("div");el.className="toast";el.textContent=message;box.appendChild(el);setTimeout(()=>el.remove(),3500)}
 function logTest(message){const log=document.getElementById("testLog"),div=document.createElement("div");div.textContent="["+new Date().toLocaleTimeString()+"] "+message;log.appendChild(div);log.scrollTop=log.scrollHeight}
-function showSection(name){document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));const s=document.getElementById("section-"+name);if(s)s.classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.section===name));if(name==="customers")renderCustomers();if(name==="done")renderDones();if(name==="history")renderHistory()}
+function showSection(name){document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));const s=document.getElementById("section-"+name);if(s)s.classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.section===name));if(name==="customers")renderCustomers();if(name==="done")renderDones();if(name==="history")renderHistory();if(name==="nicho")loadNichoForm()}
 function saveCustomer(){const name=document.getElementById("customerName").value.trim(),discord=document.getElementById("customerDiscord").value.trim();if(!name)return toast("Nhập tên khách hàng");if(!/^\d{17,20}$/.test(discord))return toast("Discord User ID phải là 17–20 chữ số");const obj={name,discord,createdAt:new Date().toISOString()};if(editingCustomerIndex>=0){data.customers[editingCustomerIndex]={...data.customers[editingCustomerIndex],...obj};editingCustomerIndex=-1;toast("✅ Đã cập nhật khách")}else{data.customers.push({...obj,selected:false});toast("✅ Đã thêm khách")}saveDB();clearCustomerForm();renderCustomers();updateStats()}
 function editCustomer(i){const c=data.customers[i];document.getElementById("customerName").value=c.name;document.getElementById("customerDiscord").value=c.discord;editingCustomerIndex=i;showSection("customers")}
 function deleteCustomer(i){if(!confirm("Xóa khách hàng này?"))return;data.customers.splice(i,1);saveDB();renderCustomers();updateStats()}
@@ -222,6 +306,139 @@ function duplicateDone(id){const d=data.dones.find(x=>x.id===id);if(!d)return;da
 function renderDones(){const list=document.getElementById("doneList");if(!data.dones.length)return list.innerHTML='<div class="empty">Chưa có DONE.</div>';list.innerHTML=data.dones.map(d=>`<div class="card"><div class="cardHead"><div><b>${escapeHtml(d.title)}</b><div class="muted">${escapeHtml(d.bot)}</div></div><div class="actions"><button class="small" onclick="editDone('${d.id}')">Sửa</button><button class="small" onclick="duplicateDone('${d.id}')">Copy</button><button class="small danger" onclick="deleteDone('${d.id}')">Xóa</button></div></div><div class="muted" style="margin-top:8px">${escapeHtml(d.message||"")}</div></div>`).join("")}
 function updatePreview(){const bot=document.getElementById("doneBot").value||"DONE BOT",price=document.getElementById("donePrice").value.trim(),title=document.getElementById("doneTitle").value||"Đơn hàng đã hoàn tất",msg=document.getElementById("doneMessage").value||"Nội dung DONE",color=document.getElementById("doneColor").value||"#8b5cf6",footer=document.getElementById("doneFooter").value||"DONE ORDER VIP",roblox=document.getElementById("doneRoblox").value.trim(),image=document.getElementById("doneImage").value.trim(),order=selectedDoneOrderImageData,embed=selectedDoneEmbedImageData||image;document.getElementById("donePreview").innerHTML=`<div style="font-size:12px;color:#aaa;margin-bottom:8px">${escapeHtml(bot)}</div><div class="discordPreview" style="border-left-color:${escapeHtml(color)}"><div class="discordTitle">${escapeHtml(title)}</div>${roblox?`<div class="muted" style="margin-top:6px">🎮 ${escapeHtml(roblox)}</div>`:""}${price?`<div class="muted" style="margin-top:6px">💰 ${Number(price).toLocaleString("vi-VN")}đ</div>`:""}<div style="margin-top:8px;white-space:pre-wrap">${escapeHtml(msg)}</div>${order?`<div class="muted" style="margin-top:10px">🖼️ Ảnh DONE</div><img src="${escapeAttribute(order)}" style="max-width:100%;max-height:220px;object-fit:contain;margin-top:6px;border-radius:10px">`:""}${embed?`<div class="muted" style="margin-top:10px">✨ Ảnh Embed</div><img src="${escapeAttribute(embed)}" style="max-width:100%;max-height:320px;object-fit:contain;margin-top:6px;border-radius:10px">`:""}<div class="discordFooter">${escapeHtml(footer)}</div></div>`}
 
+
+function loadNichoForm(){
+  const n=data.nicho||{};
+  document.getElementById("nichoTitle").value=n.title||"Nicho Bút";
+  document.getElementById("nichoMessage").value=n.message||"";
+  document.getElementById("nichoColor").value=n.color||"#d946ef";
+  document.getElementById("nichoBanner").value=n.banner||"";
+  document.getElementById("nichoWebhook").value=n.webhook||"";
+  document.getElementById("nichoBotName").value=n.botName||"Nicho Bút";
+  setNichoBannerStatus(n.bannerData?"Đã có banner lưu":"Chưa chọn ảnh");
+  updateNichoPreview();
+}
+function saveNichoSettings(){
+  data.nicho={
+    title:document.getElementById("nichoTitle").value.trim()||"Nicho Bút",
+    message:document.getElementById("nichoMessage").value,
+    color:document.getElementById("nichoColor").value||"#d946ef",
+    banner:document.getElementById("nichoBanner").value.trim(),
+    bannerData:selectedNichoBannerData||"",
+    botName:document.getElementById("nichoBotName").value.trim()||"Nicho Bút",
+    webhook:document.getElementById("nichoWebhook").value.trim()
+  };
+  saveDB();
+  toast("✅ Đã lưu cấu hình Nicho Bút");
+}
+function resetNichoForm(){
+  document.getElementById("nichoTitle").value="Nicho Bút";
+  document.getElementById("nichoMessage").value="";
+  document.getElementById("nichoColor").value="#d946ef";
+  document.getElementById("nichoBanner").value="";
+  document.getElementById("nichoWebhook").value="";
+  document.getElementById("nichoBotName").value="Nicho Bút";
+  selectedNichoBannerData="";
+  document.getElementById("nichoBannerFile").value="";
+  setNichoBannerStatus("Chưa chọn ảnh");
+  updateNichoPreview();
+}
+function setNichoBannerStatus(text){
+  const el=document.getElementById("nichoBannerStatus"); if(el)el.textContent=text;
+}
+function clearNichoBanner(){
+  selectedNichoBannerData="";
+  const f=document.getElementById("nichoBannerFile"); if(f)f.value="";
+  setNichoBannerStatus("Chưa chọn ảnh");
+  updateNichoPreview();
+}
+function pickNichoBanner(e){
+  const file=e.target.files&&e.target.files[0]; if(!file)return;
+  if(!file.type.startsWith("image/"))return toast("❌ Chỉ chọn file ảnh");
+  readImageFile(file).then(dataUrl=>{
+    selectedNichoBannerData=dataUrl;
+    setNichoBannerStatus("✅ "+file.name+" • sẵn sàng gửi");
+    updateNichoPreview();
+  }).catch(()=>toast("❌ Không đọc được ảnh"));
+}
+function discordMarkdownHtml(text){
+  return escapeHtml(text||"")
+    .replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+    .replace(/`([^`]+)`/g,'<span style="background:rgba(0,0,0,.28);padding:2px 5px;border-radius:4px">$1</span>')
+    .replace(/\n/g,"<br>");
+}
+function updateNichoPreview(){
+  const title=document.getElementById("nichoTitle")?.value||"Nicho Bút";
+  const msg=document.getElementById("nichoMessage")?.value||"Nội dung / các dòng giá";
+  const color=document.getElementById("nichoColor")?.value||"#d946ef";
+  const bot=document.getElementById("nichoBotName")?.value||"Nicho Bút";
+  const banner=document.getElementById("nichoBanner")?.value.trim()||selectedNichoBannerData||"";
+  document.getElementById("nichoPreview").innerHTML=
+    `<div style="font-size:12px;color:#aaa;margin-bottom:8px">${escapeHtml(bot)}</div>
+     <div class="discordPreview" style="border-left-color:${escapeHtml(color)}">
+       <div class="discordTitle">${escapeHtml(title)}</div>
+       <div style="margin-top:10px;line-height:1.6">${discordMarkdownHtml(msg)}</div>
+       <div class="discordFooter">Nicho Bút • Discord</div>
+       ${banner?`<img src="${escapeAttribute(banner)}" style="display:block;max-width:100%;max-height:300px;object-fit:contain;margin-top:10px;border-radius:10px" onerror="this.style.display='none'">`:""}
+     </div>`;
+}
+async function sendNichoEmbed(){
+  const webhook=document.getElementById("nichoWebhook").value.trim();
+  const title=document.getElementById("nichoTitle").value.trim()||"Nicho Bút";
+  const message=document.getElementById("nichoMessage").value.trim();
+  const color=document.getElementById("nichoColor").value||"#d946ef";
+  const bot=document.getElementById("nichoBotName").value.trim()||"Nicho Bút";
+  const bannerUrl=document.getElementById("nichoBanner").value.trim();
+  const bannerData=selectedNichoBannerData||"";
+  if(!/^https:\/\/(?:discord(?:app)?\.com)\/api\/webhooks\//i.test(webhook))return toast("❌ Webhook Discord không hợp lệ");
+  if(!message)return toast("❌ Nhập nội dung / các dòng giá");
+  const embed={title,description:message,color:parseInt(color.replace("#",""),16)};
+  try{
+    let res;
+    if(bannerData){
+      const filename=dataUrlFilename(bannerData,"nicho-banner");
+
+      // Banner nằm ở CUỐI Embed giống mẫu Discord.
+      embed.image={url:`attachment://${filename}`};
+
+      const fd=new FormData();
+      const payloadJson={
+        username:bot,
+        embeds:[embed],
+        attachments:[{
+          id:"0",
+          filename:filename,
+          description:"Nicho Bút Banner"
+        }]
+      };
+
+      fd.append("payload_json",JSON.stringify(payloadJson));
+      fd.append("files[0]",dataUrlToBlob(bannerData),filename);
+      res=await fetch(webhook,{method:"POST",body:fd});
+    }else{
+      // Nếu dùng URL thì ảnh cũng nằm ở cuối Embed.
+      if(bannerUrl)embed.image={url:bannerUrl};
+      res=await fetch(webhook,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({username:bot,embeds:[embed]})
+      });
+    }
+    if(res.status===429)throw new Error("Discord đang Rate Limit (429)");
+    if(!res.ok)throw new Error("Discord HTTP "+res.status);
+    data.nicho={title,message,color,banner:bannerUrl,bannerData,botName:bot,webhook};
+    data.stats.sent++;
+    addHistory("NICHO BÚT","Đã gửi embed: "+title);
+    saveDB(); updateStats();
+    toast("✅ Đã gửi Nicho Bút lên Discord");
+  }catch(e){
+    data.stats.failed++;
+    addHistory("NICHO BÚT","Gửi thất bại: "+title+" • "+(e.message||"Lỗi"));
+    saveDB(); updateStats();
+    toast("❌ "+(e.message||"Gửi thất bại"));
+  }
+}
+
 function saveWebhook(){const url=document.getElementById("webhookUrl").value.trim();if(!/^https:\/\/(discord(?:app)?\.com)\/api\/webhooks\//i.test(url))return toast("Webhook Discord không hợp lệ");data.webhook=url;saveDB();toast("✅ Đã lưu Webhook")}
 async function testWebhook(){if(!data.webhook)return toast("Chưa có Webhook");try{const r=await fetch(data.webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:"✅ Webhook Test • DONE ORDER VIP"})});if(r.status===429)return toast("⚠️ Discord đang Rate Limit");if(!r.ok)return toast("❌ Webhook lỗi HTTP "+r.status);toast("✅ Webhook hoạt động")}catch{toast("❌ Không gửi được Webhook")}}
 function makeDiscordMention(id){id=String(id||"").trim();if(!/^\d{17,20}$/.test(id))throw new Error("Discord User ID không hợp lệ.");return `<@${id}>`}
@@ -295,11 +512,12 @@ function downloadBlob(blob,name){const u=URL.createObjectURL(blob),a=document.cr
 function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function escapeAttribute(v){return escapeHtml(v)}
 ["doneApiUrl","doneApiKey","doneBot","doneRoblox","doneTitle","doneMessage","doneColor","doneFooter","doneImage"].forEach(id=>{document.getElementById(id).addEventListener("input",updatePreview);document.getElementById(id).addEventListener("change",updatePreview)})
+["nichoTitle","nichoMessage","nichoColor","nichoBanner","nichoBotName"].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener("input",updateNichoPreview);el.addEventListener("change",updateNichoPreview)}})
 function createParticles(){const b=document.getElementById("particles");for(let i=0;i<45;i++){const p=document.createElement("div");p.className="particle";p.style.left=Math.random()*100+"%";p.style.animationDelay=(-Math.random()*8)+"s";p.style.animationDuration=(5+Math.random()*8)+"s";p.style.opacity=.25+Math.random()*.65;b.appendChild(p)}}
 createParticles();
 document.addEventListener("mousemove",e=>{const g=document.getElementById("cursorGlow");g.style.left=e.clientX+"px";g.style.top=e.clientY+"px"});
 document.addEventListener("click",e=>{const r=document.createElement("div");r.className="ripple";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),600)});
-applyTheme();renderCustomers();renderDones();renderHistory();renderApiBots();updateStats();updatePreview();showSection("dashboard");
+applyTheme();renderCustomers();renderDones();renderHistory();renderApiBots();updateStats();updatePreview();loadNichoForm();showSection("dashboard");
 </script>
 </body>
 </html>
