@@ -6,907 +6,296 @@
 <title>DONE ORDER • VIP Dashboard</title>
 <style>
 *{box-sizing:border-box}
-:root{
-  --accent:#8b5cf6;
-  --accent2:#22d3ee;
-  --glass:.12;
-  --radius:22px;
-  --glow:22px;
-  --bg-dark:.45;
-  --bg-url:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s");
-}
+:root{--accent:#8b5cf6;--accent2:#22d3ee;--glass:.15;--bg-dark:.45;--bg-url:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s")}
 html,body{margin:0;min-height:100%;font-family:Inter,Arial,sans-serif;color:#fff}
 body{min-height:100vh;overflow-x:hidden;background:linear-gradient(rgba(0,0,0,var(--bg-dark)),rgba(0,0,0,var(--bg-dark))),var(--bg-url) center/cover fixed no-repeat}
-body.rgb{animation:bgRGB 12s linear infinite}@keyframes bgRGB{0%{filter:hue-rotate(0)}50%{filter:hue-rotate(180deg)}100%{filter:hue-rotate(360deg)}}
-#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}.particle{position:absolute;width:4px;height:4px;border-radius:50%;background:white;box-shadow:0 0 14px white;opacity:.65;animation:float 8s linear infinite}@keyframes float{from{transform:translateY(110vh) translateX(0)}to{transform:translateY(-10vh) translateX(100px)}}
-#cursorGlow{position:fixed;width:180px;height:180px;border-radius:50%;pointer-events:none;z-index:9999;background:radial-gradient(circle,rgba(139,92,246,.22),transparent 70%);transform:translate(-50%,-50%);mix-blend-mode:screen}
-.app{position:relative;z-index:2;width:min(1450px,96%);margin:auto;padding:20px 0 50px}.glass{background:rgba(15,15,30,var(--glass));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:var(--radius);box-shadow:0 0 var(--glow) rgba(139,92,246,.16),0 20px 60px rgba(0,0,0,.25)}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:16px 20px;margin-bottom:18px;flex-wrap:wrap}.logo{font-size:21px;font-weight:900;letter-spacing:.5px;text-shadow:0 0 16px var(--accent)}.userBox{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.badge{padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);font-size:12px}
-button,input,textarea,select{font:inherit}button{color:#fff;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);border-radius:13px;padding:10px 14px;cursor:pointer;transition:.18s}button:hover{transform:translateY(-2px) scale(1.015);box-shadow:0 0 18px rgba(139,92,246,.28)}button.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;font-weight:800}button.danger{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}button.small{padding:7px 10px;font-size:12px}
-input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:11px 12px;outline:none}input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 15px rgba(139,92,246,.16)}textarea{min-height:100px;resize:vertical}select option{background:#151522}
-.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(6,1fr);margin-bottom:18px}.stat{padding:17px;text-align:center}.stat b{display:block;font-size:24px;margin-top:5px;word-break:break-word}.stat span{color:#b9b9ca;font-size:12px}.stat.highlight b{color:#4ade80;text-shadow:0 0 12px rgba(74,222,128,.35)}.layout{grid-template-columns:320px 1fr;align-items:start}.side,.panel{padding:18px}.side{position:sticky;top:15px}.nav{display:grid;gap:8px}.nav button{text-align:left;width:100%}.nav button.active{background:linear-gradient(135deg,rgba(139,92,246,.45),rgba(34,211,238,.22));border-color:rgba(255,255,255,.25)}
-.section{display:none}.section.active{display:block}.row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.field{margin-bottom:12px}.field label{display:block;font-size:12px;color:#bdbdcc;margin-bottom:6px}.actions{display:flex;gap:8px;flex-wrap:wrap}.card{padding:14px;border-radius:17px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);margin-top:10px}.cardHead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.muted{color:#aaaabd;font-size:12px}.mono{font-family:monospace}.empty{padding:30px;text-align:center;color:#aaa}
-.preview{border-radius:17px;border:1px solid rgba(255,255,255,.12);padding:16px;background:rgba(0,0,0,.25)}.discordPreview{border-left:4px solid var(--accent);background:#202225;padding:14px;border-radius:7px}.discordTitle{color:#fff;font-weight:800;font-size:17px}.discordFooter{margin-top:14px;font-size:11px;color:#aaa}
-.progress{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin:10px 0}.progressBar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.2s}.hidden{display:none!important}.log{max-height:280px;overflow:auto;background:rgba(0,0,0,.2);padding:10px;border-radius:13px;font-family:monospace;font-size:12px}.log div{padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.toastBox{position:fixed;right:18px;bottom:18px;z-index:10000;display:grid;gap:8px}.toast{min-width:250px;max-width:350px;padding:12px 14px;border-radius:14px;background:rgba(15,15,25,.9);border:1px solid rgba(255,255,255,.15);box-shadow:0 0 25px rgba(0,0,0,.3);animation:toastIn .25s ease}@keyframes toastIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
-.ripple{position:fixed;width:20px;height:20px;border:2px solid white;border-radius:50%;pointer-events:none;z-index:10000;animation:ripple .55s ease-out forwards}@keyframes ripple{to{width:170px;height:170px;margin-left:-75px;margin-top:-75px;opacity:0}}
-@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.layout{grid-template-columns:1fr}.side{position:static}}@media(max-width:650px){.app{width:94%;padding-top:10px}.stats{grid-template-columns:repeat(2,1fr)}.row,.row3{grid-template-columns:1fr}.topbar{padding:13px}.side,.panel{padding:13px}.stat b{font-size:20px}}
+.app{width:min(1380px,95%);margin:auto;padding:15px 0 50px}
+.glass{background:rgba(15,15,30,var(--glass));border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;margin-bottom:15px;flex-wrap:wrap}
+.logo{font-size:20px;font-weight:900;text-shadow:0 0 14px var(--accent)}
+button,input,textarea,select{font:inherit}
+button{color:#fff;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);border-radius:12px;padding:9px 13px;cursor:pointer}
+button.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;font-weight:800}
+button.danger{background:rgba(239,68,68,.22);border-color:rgba(239,68,68,.5)}
+button.small{padding:6px 10px;font-size:12px}
+input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px;outline:none}
+textarea{min-height:85px;resize:vertical}select option{background:#151522}
+.grid{display:grid;gap:14px}.stats{grid-template-columns:repeat(6,1fr);margin-bottom:15px}
+.stat{padding:14px;text-align:center}.stat b{display:block;font-size:21px;margin-top:4px}.stat span{color:#ccc;font-size:11px}.stat.hl b{color:#4ade80}
+.layout{grid-template-columns:260px 1fr;align-items:start}.side,.panel{padding:16px}
+.nav{display:grid;gap:7px}.nav button{text-align:left;width:100%}.nav button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;font-weight:800}
+.section{display:none}.section.active{display:block}.row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.field{margin-bottom:11px}.field label{display:block;font-size:12px;color:#ddd;margin-bottom:5px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.card{padding:13px;border-radius:15px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);margin-top:10px}
+.cardHead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.muted{color:#aaa;font-size:12px}
+.badge{padding:3px 8px;border-radius:99px;background:rgba(255,255,255,.12);font-size:11px}
+.preview{border-radius:14px;border:1px solid rgba(255,255,255,.15);padding:14px;background:#1e1f22}
+.discordPreview{border-left:4px solid var(--accent);background:#2b2d31;padding:12px;border-radius:6px}
+.discordQuote{border-left:4px solid #4e5058;padding-left:10px;margin:6px 0;font-size:14px;line-height:1.6}
+.codeTag{background:#111214;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px}
+.pingTag{background:rgba(88,101,242,.35);color:#c9cdfb;padding:1px 6px;border-radius:4px;font-weight:600}
+.toastBox{position:fixed;right:15px;bottom:15px;z-index:9999;display:grid;gap:8px}.toast{padding:11px 14px;border-radius:12px;background:#111;border:1px solid #444}
+@media(max-width:900px){.stats{grid-template-columns:repeat(3,1fr)}.layout{grid-template-columns:1fr}}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div id="particles"></div><div id="cursorGlow"></div>
-
-<div id="app" class="app">
+<div class="app">
   <div class="glass topbar">
     <div class="logo">⚡ DONE ORDER • VIP</div>
-    <div class="userBox">
-      <span class="badge">⚡ VIP Workspace</span>
-      <button class="small" onclick="showSection('theme')">🖼️ Đổi Hình Nền</button>
-      <button class="small" onclick="showSection('profile')">👤 Profile</button>
+    <div class="actions">
+      <button type="button" class="small primary" onclick="go('status')">📦 Trạng Thái Đơn</button>
+      <button type="button" class="small" onclick="go('theme')">🖼️ Hình Nền</button>
     </div>
   </div>
 
   <div class="grid stats">
-    <div class="glass stat highlight"><span>ĐƠN ĐÃ DONE</span><b id="statDoneOrders">0</b></div>
-    <div class="glass stat highlight"><span>TIỀN KIẾM ĐƯỢC</span><b id="statRevenue">0đ</b></div>
-    <div class="glass stat"><span>KHÁCH HÀNG</span><b id="statCustomers">0</b></div>
-    <div class="glass stat"><span>MẪU ĐƠN LƯU</span><b id="statDone">0</b></div>
-    <div class="glass stat"><span>TỔNG ĐÃ GỬI</span><b id="statSent">0</b></div>
-    <div class="glass stat"><span>THẤT BẠI</span><b id="statFailed">0</b></div>
+    <div class="glass stat hl"><span>ĐƠN ĐÃ DONE</span><b id="stOrders">0</b></div>
+    <div class="glass stat hl"><span>TIỀN KIẾM ĐƯỢC</span><b id="stRev">0đ</b></div>
+    <div class="glass stat"><span>KHÁCH HÀNG</span><b id="stCust">0</b></div>
+    <div class="glass stat"><span>ĐƠN ĐANG XỬ LÍ</span><b id="stQueueCount">0</b></div>
+    <div class="glass stat"><span>ĐÃ GỬI</span><b id="stSent">0</b></div>
+    <div class="glass stat"><span>THẤT BẠI</span><b id="stFail">0</b></div>
   </div>
 
   <div class="grid layout">
     <aside class="glass side">
       <div class="nav">
-        <button type="button" data-section="dashboard" onclick="showSection('dashboard')">📊 Dashboard</button>
-        <button type="button" data-section="customers" onclick="showSection('customers')">👥 Customers</button>
-        <button type="button" data-section="done" onclick="showSection('done')">✅ DONE Manager</button>
-        <button type="button" data-section="nicho" onclick="showSection('nicho')">⭐ Nicho Bút</button>
-        <button type="button" data-section="webhook" onclick="showSection('webhook')">🔗 Webhook</button>
-        <button type="button" data-section="test" onclick="showSection('test')">🧪 Ping members</button>
-        <button type="button" data-section="history" onclick="showSection('history')">📜 History</button>
-        <button type="button" data-section="theme" onclick="showSection('theme')">🎨 Theme & Hình nền</button>
-        <button type="button" data-section="profile" onclick="showSection('profile')">👤 Profile</button>
+        <button type="button" id="nav-dashboard" class="active" onclick="go('dashboard')">📊 Dashboard</button>
+        <button type="button" id="nav-status" onclick="go('status')">📦 Trạng Thái Đơn</button>
+        <button type="button" id="nav-done" onclick="go('done')">✅ Gửi Bill DONE</button>
+        <button type="button" id="nav-nicho" onclick="go('nicho')">⭐ Nicho Bút</button>
+        <button type="button" id="nav-customers" onclick="go('customers')">👥 Khách Hàng</button>
+        <button type="button" id="nav-webhook" onclick="go('webhook')">🔗 Cài Webhook</button>
+        <button type="button" id="nav-theme" onclick="go('theme')">🎨 Hình Nền & Theme</button>
       </div>
-      <hr style="border-color:rgba(255,255,255,.08);margin:18px 0">
-      <a href="https://discord.gg/QfSHWECJ2" target="_blank" style="display:block;text-decoration:none">
-        <button class="primary" style="width:100%">💬 THAM GIA SERVER</button>
-      </a>
     </aside>
 
     <main class="glass panel">
-      <section id="section-dashboard" class="section active">
-        <h2>📊 Dashboard</h2>
+      <!-- 1. DASHBOARD -->
+      <section id="sec-dashboard" class="section active">
+        <h2>📊 Quản Lý Doanh Thu & Đơn Đã Done</h2>
         <div class="card">
           <div class="cardHead">
-            <div>
-              <b>💰 Thống Kê Đơn Đã Done & Doanh Thu</b>
-              <div class="muted">Tự động cộng số đơn và tiền mỗi khi bạn bấm "🚀 Gửi DONE" thành công.</div>
-            </div>
+            <b>💰 Thống kê tự động lưu (Không mất khi tải lại trang)</b>
             <div class="actions">
-              <button class="small" onclick="manualAdjustStats()">✏️ Sửa số liệu</button>
-              <button class="small danger" onclick="resetRevenueStats()">🔄 Reset doanh thu</button>
+              <button type="button" class="small" onclick="editStats()">✏️ Sửa số đơn/tiền</button>
+              <button type="button" class="small danger" onclick="resetStats()">🔄 Reset về 0</button>
             </div>
           </div>
-          <div class="row" style="margin-top:14px">
-            <div class="card" style="margin-top:0;background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.25)">
-              <div class="muted">📦 Tổng số đơn khách đã Done</div>
-              <div style="font-size:28px;font-weight:900;color:#4ade80;margin-top:4px" id="dashDoneOrders">0 đơn</div>
-            </div>
-            <div class="card" style="margin-top:0;background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.25)">
-              <div class="muted">💵 Tổng số tiền đã kiếm được</div>
-              <div style="font-size:28px;font-weight:900;color:#22d3ee;margin-top:4px" id="dashRevenue">0đ</div>
-            </div>
+          <div class="row" style="margin-top:10px">
+            <div class="card" style="margin:0;background:rgba(74,222,128,.12)"><div class="muted">📦 Số đơn đã Done</div><b style="font-size:25px;color:#4ade80" id="dOrders">0 đơn</b></div>
+            <div class="card" style="margin:0;background:rgba(34,211,238,.12)"><div class="muted">💵 Tổng tiền kiếm được</div><b style="font-size:25px;color:#22d3ee" id="dRev">0đ</b></div>
           </div>
         </div>
-
-        <div class="card"><h3>⚡ Quick Actions</h3><div class="actions">
-          <button onclick="showSection('done')" class="primary">➕ Tạo & Gửi DONE</button>
-          <button onclick="showSection('customers')">➕ Thêm khách</button>
-          <button onclick="showSection('webhook')">🔗 Cài Webhook</button>
-          <button onclick="showSection('theme')">🖼️ Đổi Hình Nền Web</button>
-        </div></div>
-
         <div class="card">
-          <div class="cardHead">
-            <h3>🧾 Danh sách đơn đã gửi gần đây</h3>
-            <span class="muted">Bấm "Hoàn tác" nếu bạn gửi nhầm để trừ lại tiền & số đơn</span>
-          </div>
-          <div id="completedOrderList"></div>
+          <h3>🧾 Lịch sử đơn đã Done gần đây</h3>
+          <div id="orderLog"></div>
         </div>
       </section>
 
-      <section id="section-customers" class="section">
-        <h2>👥 Customers</h2>
-        <div class="row">
-          <div class="field"><label>Tên khách hàng</label><input id="customerName" placeholder="Nguyễn Văn A"></div>
-          <div class="field"><label>Tên Discord (@username) hoặc ID</label><input id="customerDiscord" placeholder="nguyenvana hoặc @nguyenvana"></div>
-        </div>
-        <div class="actions"><button class="primary" onclick="saveCustomer()">💾 Lưu khách</button><button onclick="clearCustomerForm()">Xóa form</button></div>
-        <div style="margin-top:16px"><input id="customerSearch" placeholder="🔎 Tìm theo tên hoặc tài khoản Discord..." oninput="renderCustomers()"></div>
-        <div class="actions" style="margin-top:10px"><button onclick="selectAllCustomers()">☑️ Chọn tất cả</button><button onclick="clearCustomerSelection()">Bỏ chọn</button><button onclick="exportCustomers()">📤 Export</button><button onclick="document.getElementById('customerImport').click()">📥 Import</button><input id="customerImport" type="file" accept=".json" class="hidden" onchange="importCustomers(event)"></div>
-        <div id="customerList"></div>
-      </section>
-
-      <section id="section-done" class="section">
-        <h2>✅ DONE Manager</h2>
-        <div class="card"><div class="muted">Mỗi lần bấm <b>🚀 Gửi DONE</b> thành công, hệ thống sẽ tự động lưu lại +1 đơn và cộng số tiền vào tổng doanh thu.</div></div>
-        <input type="hidden" id="editingDoneId">
-        <div class="row">
+      <!-- 2. TRẠNG THÁI ĐƠN HÀNG (VIBE STORE) -->
+      <section id="sec-status" class="section">
+        <h2>📦 Báo Trạng Thái Đơn Hàng</h2>
+        <div class="card"><div class="muted">Mẹo: Dán <b>ID số Discord</b> của khách (VD: <code>430822481436082196</code>) để Discord ping reo chuông thật, hoặc gõ <code>@tên</code>.</div></div>
+        <div class="row" style="margin-top:10px">
           <div>
-            <div class="field"><label>API Bot URL / Webhook URL</label><input id="doneApiUrl" placeholder="https://discord.com/api/webhooks/..."></div>
-            <div class="field"><label>API Bot Key (tùy chọn)</label><input id="doneApiKey" type="password" placeholder="API key"></div>
-            <div class="field"><label>Bot Name</label><input id="doneBot" placeholder="DONE BOT"></div>
-            <div class="field"><label>Mã Đơn / Order Code (Ví dụ: VB27074)</label><input id="doneOrderCode" placeholder="VB27074"></div>
+            <div class="field"><label>Webhook Discord URL</label><input id="stWh" placeholder="https://discord.com/api/webhooks/..."></div>
+            <div class="field"><label>Tên Bot hiển thị</label><input id="stBot" value="Vibe Store" oninput="prevSt()"></div>
+            <div class="field"><label>Mã Đơn Hàng (VD: VB27074, DG1397)</label><input id="stCode" placeholder="VB27074" oninput="prevSt()"></div>
+            <div class="field"><label>ID Khách Hàng (Ping) hoặc @Tên</label><input id="stUser" placeholder="Nhập ID số hoặc @tên khách" oninput="prevSt()"></div>
+          </div>
+          <div>
+            <div class="field"><label>Nội dung đơn hàng (VD: x1 trail3m, x3 dc)</label><input id="stItem" placeholder="x1 trail3m" oninput="prevSt()"></div>
+            <div class="field"><label>Icon trước nội dung</label><input id="stEmoji" value="🟣" oninput="prevSt()"></div>
             <div class="field">
               <label>Trạng thái đơn hàng</label>
-              <select id="doneStatus">
-                <option value="📦 CHỜ XỬ LÍ">📦 CHỜ XỬ LÍ</option>
+              <select id="stState" onchange="prevSt()">
                 <option value="⚙️ ĐANG XỬ LÍ">⚙️ ĐANG XỬ LÍ</option>
-                <option value="✅ HOÀN THÀNH">✅ HOÀN THÀNH (DONE)</option>
-                <option value="❌ HỦY BỎ">❌ HỦY BỎ</option>
+                <option value="📦 CHỜ XỬ LÍ">📦 CHỜ XỬ LÍ</option>
+                <option value="✅ ĐÃ HOÀN THÀNH">✅ ĐÃ HOÀN THÀNH</option>
+                <option value="❌ ĐÃ HỦY">❌ ĐÃ HỦY</option>
               </select>
             </div>
-            <div class="field"><label>Name Roblox / Sản phẩm</label><input id="doneRoblox" placeholder="Tên Roblox hoặc gói sản phẩm"></div>
-            <div class="field"><label>Tên Discord (@username) hoặc ID để Ping</label><input id="donePingId" placeholder="nguyenvana hoặc @nguyenvana"></div>
-            <div class="field"><label>Ping khách khi gửi</label><select id="donePing"><option value="no">Không</option><option value="yes">Có</option></select></div>
-            <div class="field"><label>Tiêu đề</label><input id="doneTitle" placeholder="Đơn hàng đã hoàn tất"></div>
-            <div class="field"><label>Nội dung đơn hàng (Mô tả chi tiết)</label><textarea id="doneMessage" placeholder="Cảm ơn bạn đã mua hàng!"></textarea></div>
-          </div>
-          <div>
-            <div class="field"><label>💰 Giá tiền (VNĐ)</label><input id="donePrice" type="number" min="0" step="1" inputmode="decimal" placeholder="100000"><div class="muted">Ví dụ: nhập 100000 → sẽ cộng 100.000đ vào doanh thu khi gửi</div></div>
-            <div class="field"><label>Màu Embed</label><input id="doneColor" type="color" value="#8b5cf6"></div>
-            <div class="field"><label>Footer</label><input id="doneFooter" placeholder="DONE ORDER VIP"></div>
-            <div class="field"><label>Ảnh Embed URL (tùy chọn)</label><input id="doneImage" placeholder="https://..."></div>
-            <div class="field"><label>🖼️ Ảnh DONE / Đơn hàng</label><input id="doneOrderImageFile" type="file" accept="image/*" onchange="pickDoneOrderImage(event)"><div class="muted" id="doneOrderImageStatus" style="margin-top:6px">Chưa chọn ảnh</div><div class="actions" style="margin-top:8px"><button type="button" class="small" onclick="document.getElementById('doneOrderImageFile').click()">📷 Chọn ảnh từ máy</button><button type="button" class="small danger" onclick="clearDoneOrderImage()">Xóa ảnh</button></div></div>
-            <div class="field"><label>✨ Ảnh Embed</label><input id="doneEmbedImageFile" type="file" accept="image/*,.gif" onchange="pickDoneEmbedImage(event)"><div class="muted" id="doneEmbedImageStatus" style="margin-top:6px">Chưa chọn ảnh</div><div class="actions" style="margin-top:8px"><button type="button" class="small" onclick="document.getElementById('doneEmbedImageFile').click()">📷 Chọn ảnh/GIF từ máy</button><button type="button" class="small danger" onclick="clearDoneEmbedImage()">Xóa ảnh</button></div></div>
-          </div>
-        </div>
-        <div class="actions"><button class="primary" onclick="saveDone()">💾 Lưu mẫu DONE</button><button class="primary" onclick="sendCurrentDone()">🚀 Gửi DONE (+Lưu Doanh Thu)</button><button onclick="clearDoneForm()">Xóa form</button></div>
-        <div class="card"><h3>👀 Preview</h3><div id="donePreview" class="preview"></div></div>
-        <div style="margin-top:15px"><h3>Danh sách mẫu DONE đã lưu</h3><div id="doneList"></div></div>
-      </section>
-
-      <section id="section-nicho" class="section">
-        <h2>⭐ Nicho Bút — Discord Embed</h2>
-        <div class="card"><div class="muted">Tạo bảng giá Nicho Bút và gửi trực tiếp lên Discord bằng Webhook.</div></div>
-        <div class="row">
-          <div>
-            <div class="field"><label>Tiêu đề</label><input id="nichoTitle" placeholder="Nicho Bút" value="Nicho Bút"></div>
-            <div class="field"><label>Nội dung / Các dòng giá</label><textarea id="nichoMessage" placeholder="Nhập các dòng giá/gói...">🟣 **Nicho Bút Log [Cần Đăng Nhập]**
-
-• **1 Tháng** - `90.000`
-• **2 Tháng** - `99.000`
-• **1 Năm** - `810.000`
-• **Gia hạn 2 Tháng** - `95.000`
-
-Nếu bạn đã từng mua nicho 2 tháng ở bên mình thì sẽ được gia hạn lại tiếp 2 tháng với giá chỉ 95k
-
-Vui lòng gửi tài khoản mật khẩu và 4-5 mã dự phòng khi mua
-
-🟣 **Nicho Bút Trail [Cần Đăng Nhập]**
-
-• **3 Tháng** - `50.000`
-• **4 Tháng** - `70.000` (không bảo hành tháng 4)
-
-Dành cho tài khoản chưa xài ni cho bao giờ và phải trên 1 tháng
-Vui lòng gửi tài khoản mật khẩu và 4-5 mã dự phòng khi mua
-
-🔵 Hoàn thành trong 48h, nhanh nhất trong ngày
-🔥 Hàng ổn định, bảo hành 1 đổi 1</textarea></div>
-            <div class="field"><label>Màu Embed</label><input id="nichoColor" type="color" value="#d946ef"></div>
-          </div>
-          <div>
-            <div class="field"><label>Ảnh / Banner URL</label><input id="nichoBanner" placeholder="https://.../banner.png"><div class="muted">Dán link ảnh trực tiếp (PNG/JPG/GIF/WebP). Có thể để trống.</div></div>
-            <div class="field"><label>🖼️ Hoặc chọn Banner từ máy</label><input id="nichoBannerFile" type="file" accept="image/*,.gif" onchange="pickNichoBanner(event)"><div class="muted" id="nichoBannerStatus" style="margin-top:6px">Chưa chọn ảnh</div><div class="actions" style="margin-top:8px"><button type="button" class="small" onclick="document.getElementById('nichoBannerFile').click()">📷 Chọn ảnh</button><button type="button" class="small danger" onclick="clearNichoBanner()">Xóa ảnh</button></div></div>
-            <div class="field"><label>Webhook Discord</label><input id="nichoWebhook" type="password" placeholder="https://discord.com/api/webhooks/..."></div>
-            <div class="field"><label>Tên Bot hiển thị</label><input id="nichoBotName" placeholder="Nicho Bút" value="Nicho Bút"></div>
+            <div class="field"><label>Nguồn / Kênh (VD: 🌐 ORDER WEB)</label><input id="stSrc" value="🌐 ORDER WEB" oninput="prevSt()"></div>
           </div>
         </div>
         <div class="actions">
-          <button class="primary" onclick="sendNichoEmbed()">🚀 Gửi lên Discord</button>
-          <button onclick="saveNichoSettings()">💾 Lưu cấu hình</button>
-          <button onclick="resetNichoForm()">↩️ Reset</button>
+          <button type="button" class="primary" onclick="sendStNow()">🚀 Gửi Trạng Thái Lên Discord</button>
+          <button type="button" onclick="addStQueue()">➕ Thêm vào danh sách gộp nhiều đơn</button>
         </div>
-        <div class="card"><h3>👀 Preview</h3><div id="nichoPreview" class="preview"></div></div>
-      </section>
-
-      <section id="section-webhook" class="section">
-        <h2>🔗 Webhook</h2><div class="field"><label>Discord Webhook URL</label><input id="webhookUrl" type="password" placeholder="https://discord.com/api/webhooks/..."></div>
-        <div class="actions"><button class="primary" onclick="saveWebhook()">💾 Lưu Webhook</button><button onclick="testWebhook()">🧪 Test Webhook</button></div>
-        <div class="card"><b>Lưu ý</b><div class="muted">Webhook chỉ được lưu trong trình duyệt này.</div></div>
-      </section>
-
-      <section id="section-test" class="section">
-        <h2>🧪 Ping Member Test</h2>
-        <div class="card"><h3>🤖 API Bot riêng cho Ping Member</h3><div class="muted">Danh sách này chỉ dùng cho Ping Member, hoàn toàn tách khỏi API Bot của DONE.</div><div class="row"><div class="field"><label>Tên Bot</label><input id="apiBotName" placeholder="Bot 1"></div><div class="field"><label>API URL / Webhook của Bot Ping</label><input id="apiBotUrl" placeholder="https://..."></div></div><div class="field"><label>API Key (tùy chọn)</label><input id="apiBotKey" type="password" placeholder="API key"></div><div class="actions"><button class="primary" onclick="addApiBot()">➕ Thêm Bot</button><button onclick="clearApiBots()">Xóa danh sách</button></div><div id="apiBotList"></div></div>
-        <div class="card"><b>Ping bằng Tên Discord hoặc ID</b><div class="muted">Nhập tên người dùng (ví dụ: @ten_khach) hoặc ID số đều được.</div></div>
-        <div class="field" style="margin-top:12px"><label>Tên Discord (@username) hoặc ID</label><input id="testUserId" placeholder="nguyenvana hoặc @nguyenvana"></div>
-        <div class="field"><label>Nội dung</label><textarea id="testMessage" placeholder="Test ping từ DONE ORDER VIP"></textarea></div>
-        <div class="row"><div class="field"><label>Số lượt test — tối đa 500</label><input id="testCount" type="number" min="1" max="500" value="1"></div><div class="field"><label>Delay giữa mỗi lượt (ms)</label><input id="testDelay" type="number" min="20" value="1500"></div></div>
-        <div class="actions"><button class="primary" onclick="startPingTest()">🚀 Bắt đầu Test</button><button class="danger" onclick="stopPingTest()">⛔ Dừng</button></div>
-        <div class="progress"><div id="testProgress" class="progressBar"></div></div><div id="testStatus" class="muted">Chưa chạy.</div>
-        <div class="card"><h3>📜 Test Log</h3><div id="testLog" class="log"></div></div>
-      </section>
-
-      <section id="section-history" class="section"><h2>📜 History</h2><div class="actions"><button class="danger" onclick="clearHistory()">Xóa lịch sử</button></div><div id="historyList"></div></section>
-
-      <section id="section-theme" class="section">
-        <h2>🎨 Theme & Hình Nền Web</h2>
-        <div class="card" style="margin-bottom:16px">
-          <h3>🖼️ Hình nền trang web (Background)</h3>
-          <div class="row">
-            <div class="field">
-              <label>Link ảnh nền (URL ảnh hoặc GIF)</label>
-              <input id="themeBgUrl" placeholder="https://.../background.jpg" oninput="previewBgUrl()">
-              <div class="muted" style="margin-top:4px">Dán link ảnh trực tiếp vào đây hoặc chọn ảnh từ máy ở bên cạnh.</div>
-            </div>
-            <div class="field">
-              <label>Hoặc tải ảnh nền từ máy tính / điện thoại</label>
-              <input id="themeBgFile" type="file" accept="image/*,.gif" onchange="pickThemeBgFile(event)">
-              <div class="muted" id="themeBgStatus" style="margin-top:6px">Đang dùng hình nền mặc định</div>
-              <div class="actions" style="margin-top:8px">
-                <button type="button" class="small" onclick="document.getElementById('themeBgFile').click()">📷 Chọn ảnh nền từ máy</button>
-                <button type="button" class="small danger" onclick="clearThemeBg()">Xóa ảnh riêng</button>
-              </div>
-            </div>
+        <div class="card"><h3>👀 Xem trước</h3><div id="stPreview" class="preview"></div></div>
+        <div class="card">
+          <div class="cardHead">
+            <b>📋 Danh sách gộp đơn (Gửi nhiều dòng trong 1 tin nhắn)</b>
+            <button type="button" class="small primary" onclick="sendStQueue()">🚀 Gửi Tất Cả</button>
           </div>
+          <div id="stQueueBox"></div>
         </div>
+      </section>
+
+      <!-- 3. GỬI BILL DONE -->
+      <section id="sec-done" class="section">
+        <h2>✅ Gửi Bill DONE & Cộng Tiền</h2>
         <div class="row">
           <div>
-            <div class="field"><label>Màu chính</label><input id="themeAccent" type="color"></div>
-            <div class="field"><label>Màu phụ</label><input id="themeAccent2" type="color"></div>
-            <div class="field"><label>Glass Transparency (Độ trong suốt khung)</label><input id="themeGlass" type="range" min=".04" max=".30" step=".01"></div>
-            <div class="field"><label>Background Darkness (Độ tối hình nền)</label><input id="themeDark" type="range" min=".05" max=".85" step=".01"></div>
+            <div class="field"><label>Webhook Discord URL</label><input id="dWh" placeholder="https://discord.com/api/webhooks/..."></div>
+            <div class="field"><label>Tên Bot</label><input id="dBot" value="DONE BOT" oninput="prevDone()"></div>
+            <div class="field"><label>ID Khách (để Ping) hoặc @Tên</label><input id="dPing" placeholder="Nhập ID số hoặc @tên khách" oninput="prevDone()"></div>
+            <div class="field"><label>Nội dung đơn hàng / Sản phẩm</label><input id="dItem" placeholder="Treo game 1 day / Tên Roblox" oninput="prevDone()"></div>
+            <div class="field"><label>Lời nhắn</label><textarea id="dMsg" oninput="prevDone()">Cảm ơn bạn đã thuê bên mình</textarea></div>
           </div>
           <div>
-            <div class="field"><label>Border Radius</label><input id="themeRadius" type="range" min="5" max="40"></div>
-            <div class="field"><label>Neon Glow</label><input id="themeGlow" type="range" min="0" max="50"></div>
-            <div class="field"><label>Hiệu ứng đổi màu RGB</label><select id="themeRGB"><option value="off">Tắt (Giữ màu gốc ảnh nền)</option><option value="on">Bật</option></select></div>
-            <div class="field"><label>Hạt bay (Particles)</label><select id="themeParticles"><option value="on">Bật</option><option value="off">Tắt</option></select></div>
+            <div class="field"><label>💰 Giá tiền (VNĐ - Tự cộng vào Tiền Kiếm Được)</label><input id="dPrice" type="number" placeholder="50000" oninput="prevDone()"></div>
+            <div class="field"><label>Tiêu đề Bill</label><input id="dTitle" value="Đơn hàng đã hoàn tất" oninput="prevDone()"></div>
+            <div class="field"><label>Màu khung</label><input id="dColor" type="color" value="#8b5cf6" oninput="prevDone()"></div>
+            <div class="field"><label>🖼️ Chọn ảnh Bill từ máy</label><input id="dFile" type="file" accept="image/*" onchange="pickDoneImg(event)"><div class="muted" id="dFileTxt">Chưa chọn ảnh</div></div>
           </div>
         </div>
-        <div class="actions"><button class="primary" onclick="saveTheme()">💾 Lưu Theme & Hình nền</button><button onclick="resetTheme()">Reset Mặc định</button></div>
+        <div class="actions">
+          <button type="button" class="primary" onclick="sendDone()">🚀 Gửi DONE (+1 Đơn & +Tiền)</button>
+          <button type="button" class="danger" onclick="doneImg='';document.getElementById('dFileTxt').textContent='Đã xóa ảnh';prevDone()">Xóa ảnh</button>
+        </div>
+        <div class="card"><h3>👀 Xem trước</h3><div id="dPreview" class="preview"></div></div>
       </section>
 
-      <section id="section-profile" class="section"><h2>👤 Profile</h2><div class="card"><b>⚡ DONE ORDER VIP</b><div class="muted">VIP Workspace • Không yêu cầu tài khoản</div></div></section>
+      <!-- 4. NICHO BÚT -->
+      <section id="sec-nicho" class="section">
+        <h2>⭐ Bảng Giá Nicho Bút</h2>
+        <div class="field"><label>Webhook Discord</label><input id="niWh" placeholder="https://discord.com/api/webhooks/..."></div>
+        <div class="field"><label>Tiêu đề</label><input id="niTitle" value="Nicho Bút"></div>
+        <div class="field"><label>Nội dung bảng giá</label><textarea id="niMsg" style="min-height:140px">🟣 **Nicho Bút Log [Cần Đăng Nhập]**
+• **1 Tháng** - `90.000`
+• **2 Tháng** - `99.000`
+• **1 Năm** - `810.000`
+
+🟣 **Nicho Bút Trail [Cần Đăng Nhập]**
+• **3 Tháng** - `50.000`
+🔥 Hàng ổn định, bảo hành 1 đổi 1</textarea></div>
+        <button type="button" class="primary" onclick="sendNicho()">🚀 Gửi Bảng Giá</button>
+      </section>
+
+      <!-- 5. KHÁCH HÀNG -->
+      <section id="sec-customers" class="section">
+        <h2>👥 Lưu Khách Hàng</h2>
+        <div class="row">
+          <div class="field"><label>Tên khách</label><input id="cName" placeholder="Nguyễn Văn A"></div>
+          <div class="field"><label>ID Discord / Username</label><input id="cId" placeholder="430822481436082196"></div>
+        </div>
+        <button type="button" class="primary" onclick="addCust()">💾 Lưu Khách</button>
+        <div id="custBox" style="margin-top:12px"></div>
+      </section>
+
+      <!-- 6. WEBHOOK -->
+      <section id="sec-webhook" class="section">
+        <h2>🔗 Cài Đặt Webhook Mặc Định</h2>
+        <div class="field"><label>Dán link Webhook Discord (Tự động điền vào mọi mục)</label><input id="mainWh" placeholder="https://discord.com/api/webhooks/..."></div>
+        <button type="button" class="primary" onclick="saveWh()">💾 Lưu Webhook</button>
+      </section>
+
+      <!-- 7. HÌNH NỀN & THEME -->
+      <section id="sec-theme" class="section">
+        <h2>🎨 Đổi Hình Nền Web (Tự động lưu vĩnh viễn)</h2>
+        <div class="card">
+          <div class="row">
+            <div class="field">
+              <label>📷 Chọn ảnh nền từ điện thoại / máy tính</label>
+              <input type="file" accept="image/*" onchange="pickBg(event)">
+              <div class="muted" id="bgTxt" style="margin-top:6px">Đang dùng hình nền mặc định</div>
+            </div>
+            <div class="field">
+              <label>🔗 Hoặc dán Link ảnh nền (URL)</label>
+              <input id="bgUrl" placeholder="https://..." oninput="setBgUrl(this.value)">
+            </div>
+          </div>
+          <div class="field" style="margin-top:10px">
+            <label>Độ tối hình nền</label>
+            <input id="bgDark" type="range" min="0.05" max="0.85" step="0.05" oninput="setDark(this.value)">
+          </div>
+          <button type="button" class="small danger" onclick="resetBg()">🗑️ Khôi phục hình nền gốc</button>
+        </div>
+      </section>
     </main>
   </div>
 </div>
 <div id="toastBox" class="toastBox"></div>
 
 <script>
-const DB_KEY="DONE_ORDER_VIP_DB_V8";
-const DEFAULT_BG="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s";
-const DEFAULT_THEME={accent:"#8b5cf6",accent2:"#22d3ee",glass:.12,dark:.45,radius:22,glow:22,rgb:"off",particles:"on",bgUrl:"",bgData:""};
+const KEY="VIP_DONE_DB_FINAL";
+const DEF_BG="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s";
+let db=JSON.parse(localStorage.getItem(KEY)||"null")||{wh:"",orders:0,rev:0,sent:0,fail:0,logs:[],queue:[],cust:[],bg:"",dark:0.45};
+let doneImg="";
 
-function defaultWorkspace(){
-  return {webhook:"",apiBots:[],customers:[],dones:[],completedOrders:[],history:[],stats:{sent:0,failed:0,doneOrders:0,revenue:0},theme:{...DEFAULT_THEME},nicho:{title:"Nicho Bút",message:"",color:"#d946ef",banner:"",bannerData:"",botName:"Nicho Bút",webhook:""}};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){db.logs=db.logs.slice(0,20);localStorage.setItem(KEY,JSON.stringify(db))}}
+function msg(t){const b=document.getElementById("toastBox"),d=document.createElement("div");d.className="toast";d.textContent=t;b.appendChild(d);setTimeout(()=>d.remove(),3000)}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function vnd(n){return (Number(n)||0).toLocaleString("vi-VN")+"đ"}
+function tag(u){u=String(u||"").trim();if(!u)return "";if(/^<@!?\d+>$/.test(u))return u;if(/^\d{17,20}$/.test(u))return `<@${u}>`;return u.startsWith("@")?u:`@${u}`}
+
+function go(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("sec-"+id)?.classList.add("active");
+  document.getElementById("nav-"+id)?.classList.add("active");
+  syncUI();
 }
 
-let data=JSON.parse(localStorage.getItem(DB_KEY)||"null")||defaultWorkspace();
-data.apiBots=Array.isArray(data.apiBots)?data.apiBots:[];
-data.completedOrders=Array.isArray(data.completedOrders)?data.completedOrders:[];
-data.stats={sent:0,failed:0,doneOrders:0,revenue:0,...(data.stats||{})};
-data.theme={...DEFAULT_THEME,...(data.theme||{})};
-data.nicho=data.nicho&&typeof data.nicho==="object"?data.nicho:{};
-data.nicho={title:"Nicho Bút",message:"",color:"#d946ef",banner:"",bannerData:"",botName:"Nicho Bút",webhook:"",...data.nicho};
-
-let editingCustomerIndex=-1,pingRunning=false,pingStopRequested=false;
-let selectedDoneOrderImageData="",selectedDoneEmbedImageData="",selectedNichoBannerData="",selectedThemeBgData=data.theme.bgData||"";
-
-function formatMoney(v){return (Number(v)||0).toLocaleString("vi-VN")+"đ"}
-function saveDB(){
-  try {
-    localStorage.setItem(DB_KEY,JSON.stringify(data));
-  } catch(e) {
-    console.warn("Storage full or error:", e);
-  }
-}
-function workspace(){return data}
-function toast(message){const box=document.getElementById("toastBox"),el=document.createElement("div");el.className="toast";el.textContent=message;box.appendChild(el);setTimeout(()=>el.remove(),3500)}
-function logTest(message){const log=document.getElementById("testLog"),div=document.createElement("div");div.textContent="["+new Date().toLocaleTimeString()+"] "+message;log.appendChild(div);log.scrollTop=log.scrollHeight}
-
-function showSection(name){
-  document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
-  const s=document.getElementById("section-"+name);
-  if(s)s.classList.add("active");
-  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.section===name));
-  if(name==="dashboard")renderCompletedOrders();
-  if(name==="customers")renderCustomers();
-  if(name==="done")renderDones();
-  if(name==="history")renderHistory();
-  if(name==="nicho")loadNichoForm();
-  if(name==="theme")loadThemeForm();
-}
-
-function makeDiscordMention(val){
-  val=String(val||"").trim();
-  if(!val)return "";
-  if(/^<@!?\d+>$/.test(val))return val;
-  if(/^\d{17,20}$/.test(val))return `<@${val}>`;
-  return val.startsWith("@")?val:`@${val}`;
-}
-
-function renderCompletedOrders(){
-  const list=document.getElementById("completedOrderList");
-  if(!list)return;
-  if(!data.completedOrders.length){
-    list.innerHTML='<div class="empty">Chưa có đơn hàng nào được gửi.</div>';
-    return;
-  }
-  list.innerHTML=data.completedOrders.map(o=>`
-    <div class="card">
-      <div class="cardHead">
-        <div>
-          <b>${escapeHtml(o.title||"Đơn hàng")}</b>
-          ${o.orderCode?`<span class="badge" style="margin-left:6px;color:#22d3ee">${escapeHtml(o.orderCode)}</span>`:""}
-          ${o.status?`<span class="badge" style="margin-left:6px;background:rgba(139,92,246,.2)">${escapeHtml(o.status)}</span>`:""}
-          <span class="badge" style="margin-left:6px;color:#4ade80;border-color:rgba(74,222,128,.3)">+${formatMoney(o.price)}</span>
-          <div class="muted" style="margin-top:4px">
-            👤 Khách: <b>${escapeHtml(o.customer||"Không tag")}</b>
-            ${o.roblox?` • 🎮 Roblox: <b>${escapeHtml(o.roblox)}</b>`:""}
-            • 🕒 ${new Date(o.time).toLocaleString("vi-VN")}
-          </div>
-        </div>
-        <div class="actions">
-          <button class="small danger" onclick="undoCompletedOrder('${o.id}')">Hoàn tác / Xóa</button>
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
-
-function undoCompletedOrder(id){
-  const idx=data.completedOrders.findIndex(x=>x.id===id);
-  if(idx<0)return;
-  const order=data.completedOrders[idx];
-  if(!confirm(`Hoàn tác đơn "${order.title}" và trừ ${formatMoney(order.price)} khỏi doanh thu?`))return;
-  data.stats.doneOrders=Math.max(0,(Number(data.stats.doneOrders)||0)-1);
-  data.stats.revenue=Math.max(0,(Number(data.stats.revenue)||0)-(Number(order.price)||0));
-  data.completedOrders.splice(idx,1);
-  saveDB();updateStats();renderCompletedOrders();
-  toast("↩️ Đã hoàn tác đơn & cập nhật doanh thu");
-}
-
-function resetRevenueStats(){
-  if(!confirm("Bạn có chắc muốn Reset số đơn đã Done và Tổng tiền kiếm được về 0?"))return;
-  data.stats.doneOrders=0;
-  data.stats.revenue=0;
-  data.completedOrders=[];
-  saveDB();updateStats();renderCompletedOrders();
-  toast("🔄 Đã reset thống kê đơn và doanh thu");
-}
-
-function manualAdjustStats(){
-  const newOrders=prompt("Nhập tổng số đơn đã Done:",data.stats.doneOrders||0);
-  if(newOrders===null)return;
-  const newRev=prompt("Nhập tổng số tiền đã kiếm được (VNĐ):",data.stats.revenue||0);
-  if(newRev===null)return;
-  data.stats.doneOrders=Math.max(0,Math.floor(Number(newOrders)||0));
-  data.stats.revenue=Math.max(0,Math.floor(Number(newRev)||0));
-  saveDB();updateStats();
-  toast("✅ Đã cập nhật số liệu thống kê");
-}
-
-function saveCustomer(){
-  const name=document.getElementById("customerName").value.trim(),discord=document.getElementById("customerDiscord").value.trim();
-  if(!name)return toast("Nhập tên khách hàng");
-  if(!discord)return toast("Nhập tên Discord hoặc ID của khách");
-  const obj={name,discord,createdAt:new Date().toISOString()};
-  if(editingCustomerIndex>=0){data.customers[editingCustomerIndex]={...data.customers[editingCustomerIndex],...obj};editingCustomerIndex=-1;toast("✅ Đã cập nhật khách")}
-  else{data.customers.push({...obj,selected:false});toast("✅ Đã thêm khách")}
-  saveDB();clearCustomerForm();renderCustomers();updateStats();
-}
-function editCustomer(i){const c=data.customers[i];document.getElementById("customerName").value=c.name;document.getElementById("customerDiscord").value=c.discord;editingCustomerIndex=i;showSection("customers")}
-function deleteCustomer(i){if(!confirm("Xóa khách hàng này?"))return;data.customers.splice(i,1);saveDB();renderCustomers();updateStats()}
-function clearCustomerForm(){document.getElementById("customerName").value="";document.getElementById("customerDiscord").value="";editingCustomerIndex=-1}
-function renderCustomers(){const list=document.getElementById("customerList"),q=(document.getElementById("customerSearch").value||"").toLowerCase(),arr=data.customers.map((c,i)=>({...c,_index:i})).filter(c=>c.name.toLowerCase().includes(q)||String(c.discord).toLowerCase().includes(q));if(!arr.length)return list.innerHTML='<div class="empty">Chưa có khách hàng.</div>';list.innerHTML=arr.map(c=>`<div class="card"><div class="cardHead"><div><label><input type="checkbox" ${c.selected?"checked":""} onchange="toggleCustomer(${c._index},this.checked)"> <b>${escapeHtml(c.name)}</b></label><div class="muted mono">${escapeHtml(c.discord)}</div></div><div class="actions"><button class="small" onclick="editCustomer(${c._index})">Sửa</button><button class="small danger" onclick="deleteCustomer(${c._index})">Xóa</button></div></div></div>`).join("")}
-function toggleCustomer(i,v){data.customers[i].selected=v;saveDB();updateStats()}
-function selectAllCustomers(){data.customers.forEach(c=>c.selected=true);saveDB();renderCustomers();updateStats()}
-function clearCustomerSelection(){data.customers.forEach(c=>c.selected=false);saveDB();renderCustomers();updateStats()}
-function exportCustomers(){downloadBlob(new Blob([JSON.stringify(data.customers,null,2)],{type:"application/json"}),"customers.json")}
-function importCustomers(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;data.customers.push(...x.filter(x=>x&&x.name&&x.discord));saveDB();renderCustomers();updateStats();toast("✅ Import thành công")}catch{toast("❌ File không hợp lệ")}};r.readAsText(f)}
-
-function saveDone(){
-  const existingId=document.getElementById("editingDoneId").value;
-  const existing=existingId?data.dones.find(x=>x.id===existingId):null;
-  const obj={
-    apiUrl:document.getElementById("doneApiUrl").value.trim(),
-    apiKey:document.getElementById("doneApiKey").value.trim(),
-    bot:document.getElementById("doneBot").value.trim()||"DONE BOT",
-    orderCode:document.getElementById("doneOrderCode").value.trim(),
-    status:document.getElementById("doneStatus").value,
-    price:document.getElementById("donePrice").value.trim(),
-    roblox:document.getElementById("doneRoblox").value.trim(),
-    pingId:document.getElementById("donePingId").value.trim(),
-    ping:document.getElementById("donePing").value,
-    title:document.getElementById("doneTitle").value.trim()||"Đơn hàng đã hoàn tất",
-    message:document.getElementById("doneMessage").value,
-    color:document.getElementById("doneColor").value,
-    footer:document.getElementById("doneFooter").value,
-    image:document.getElementById("doneImage").value.trim(),
-    imageData:selectedDoneOrderImageData||existing?.imageData||"",
-    embedImageData:selectedDoneEmbedImageData||existing?.embedImageData||""
+function getStData(){
+  return {
+    code:document.getElementById("stCode").value.trim()||"VB27074",
+    user:document.getElementById("stUser").value.trim()||"khach",
+    emoji:document.getElementById("stEmoji").value.trim(),
+    item:document.getElementById("stItem").value.trim()||"x1 đơn hàng",
+    state:document.getElementById("stState").value,
+    src:document.getElementById("stSrc").value.trim()
   };
-  if(existingId){const i=data.dones.findIndex(x=>x.id===existingId);if(i>=0)data.dones[i]={...data.dones[i],...obj}}else data.dones.push({id:crypto.randomUUID(),...obj,createdAt:new Date().toISOString()});
-  saveDB();clearDoneForm();renderDones();updateStats();toast("✅ Đã lưu mẫu DONE");
+}
+function fmtStLine(o){
+  return `> \`${o.code}\` ${tag(o.user)} ${o.emoji} **${o.item}** \`${o.state}\`${o.src?` | \`${o.src}\``:""}`;
+}
+function prevSt(){
+  const o=getStData(),bot=document.getElementById("stBot").value||"Vibe Store";
+  document.getElementById("stPreview").innerHTML=`<div><b>${esc(bot)}</b> <span class="badge" style="background:#5865f2">✓ APP</span></div><div class="discordQuote"><span class="codeTag">${esc(o.code)}</span> <span class="pingTag">${esc(tag(o.user))}</span> ${esc(o.emoji)} <b>${esc(o.item)}</b> <span class="codeTag">${esc(o.state)}</span> ${o.src?`| <span class="codeTag">${esc(o.src)}</span>`:""}</div>`;
+}
+async function sendStNow(){
+  const wh=document.getElementById("stWh").value.trim()||db.wh;
+  if(!wh)return msg("❌ Chưa nhập link Webhook Discord!");
+  db.wh=wh;const o=getStData(),bot=document.getElementById("stBot").value||"Vibe Store";
+  try{
+    const r=await fetch(wh,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:bot,content:fmtStLine(o),allowed_mentions:{parse:["users","roles","everyone"]}})});
+    if(!r.ok)throw new Error(r.status);
+    db.sent++;save();syncUI();msg("✅ Đã gửi trạng thái đơn lên Discord!");
+  }catch(e){db.fail++;save();syncUI();msg("❌ Lỗi gửi: "+e.message)}
+}
+function addStQueue(){db.queue.push(getStData());save();syncUI();msg("➕ Đã thêm vào hàng đợi")}
+async function sendStQueue(){
+  if(!db.queue.length)return msg("❌ Hàng đợi trống!");
+  const wh=document.getElementById("stWh").value.trim()||db.wh;
+  if(!wh)return msg("❌ Chưa nhập Webhook!");
+  db.wh=wh;const bot=document.getElementById("stBot").value||"Vibe Store";
+  const content=db.queue.map(fmtStLine).join("\n");
+  const r=await fetch(wh,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:bot,content,allowed_mentions:{parse:["users","roles","everyone"]}})});
+  if(r.ok){db.sent++;db.queue=[];save();syncUI();msg("🚀 Đã gửi tất cả đơn!")}else msg("❌ Lỗi gửi!");
 }
 
-async function sendCurrentDone(){
-  const apiUrl=document.getElementById("doneApiUrl").value.trim();
-  if(!apiUrl)return toast("❌ Nhập API Bot URL / Webhook của DONE");
-  const apiKey=document.getElementById("doneApiKey").value.trim();
-  const bot=document.getElementById("doneBot").value.trim()||"DONE BOT";
-  const orderCode=document.getElementById("doneOrderCode").value.trim();
-  const status=document.getElementById("doneStatus").value;
-  const roblox=document.getElementById("doneRoblox").value.trim();
-  const price=document.getElementById("donePrice").value.trim();
-  const numericPrice=Math.max(0,Number(price)||0);
-  const pingId=document.getElementById("donePingId").value.trim();
-  const ping=document.getElementById("donePing").value;
-  const title=document.getElementById("doneTitle").value.trim()||"Đơn hàng đã hoàn tất";
-  const message=document.getElementById("doneMessage").value.trim();
-  const color=document.getElementById("doneColor").value||"#8b5cf6";
-  const footer=document.getElementById("doneFooter").value.trim()||"DONE ORDER VIP";
-  const imageUrl=document.getElementById("doneImage").value.trim();
-  const orderImage=selectedDoneOrderImageData||"";
-  const embedImage=selectedDoneEmbedImageData||"";
-  if(!message)return toast("❌ Nhập nội dung đơn hàng trước");
+function pickDoneImg(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=()=>{doneImg=r.result;document.getElementById("dFileTxt").textContent="✅ "+f.name;prevDone()};r.readAsDataURL(f);
+}
+function prevDone(){
+  const title=document.getElementById("dTitle").value,item=document.getElementById("dItem").value,m=document.getElementById("dMsg").value,p=document.getElementById("dPrice").value,ping=document.getElementById("dPing").value,col=document.getElementById("dColor").value;
+  document.getElementById("dPreview").innerHTML=`${ping?`<div style="margin-bottom:6px"><span class="pingTag">${esc(tag(ping))}</span></div>`:""}<div class="discordPreview" style="border-left-color:${col}"><b>${esc(title)}</b><div style="margin:6px 0">${esc(m)}</div>${item?`<div class="muted">📦 Đơn: ${esc(item)}</div>`:""}${p?`<div style="color:#4ade80;font-weight:700;margin-top:4px">💰 ${vnd(p)}</div>`:""}${doneImg?`<img src="${doneImg}" style="max-width:100%;max-height:200px;margin-top:8px;border-radius:8px">`:""}</div>`;
+}
+function toBlob(u){const [m,b]=u.split(","),mime=(m.match(/data:(.*?);base64/)||[])[1]||"image/png",bin=atob(b),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return new Blob([a],{type:mime})}
 
-  const mention=(ping==="yes"&&pingId)?`${makeDiscordMention(pingId)} `:"";
-  const orderName=orderImage?dataUrlFilename(orderImage,"done-order-image"):"";
-  const embedName=embedImage?dataUrlFilename(embedImage,"done-embed-image"):"";
-
-  let formattedHeader = "";
-  if(orderCode) formattedHeader += `\`${orderCode}\` `;
-  if(pingId) formattedHeader += `${mention}`;
-  if(roblox) formattedHeader += `🌸 \`${roblox}\` `;
-  if(status) formattedHeader += `⚙️ **${status}**`;
-
-  const finalContent = (formattedHeader ? formattedHeader : "") + "\n" + message;
-
+async function sendDone(){
+  const wh=document.getElementById("dWh").value.trim()||db.wh;
+  if(!wh)return msg("❌ Chưa nhập link Webhook Discord!");
+  db.wh=wh;
+  const bot=document.getElementById("dBot").value||"DONE BOT",ping=document.getElementById("dPing").value.trim(),item=document.getElementById("dItem").value.trim(),title=document.getElementById("dTitle").value,m=document.getElementById("dMsg").value,price=Math.max(0,Number(document.getElementById("dPrice").value)||0),col=document.getElementById("dColor").value;
   const fields=[];
-  if(price) fields.push({name:"💰 Giá tiền",value:numericPrice.toLocaleString("vi-VN")+"đ",inline:true});
-  if(status) fields.push({name:"📌 Trạng thái",value:status,inline:true});
-
-  const mainEmbed={
-    title,
-    description: message,
-    color: parseInt(color.replace("#",""),16),
-    footer:{text:footer},
-    ...(fields.length?{fields}:{}),
-    ...(imageUrl?{image:{url:imageUrl}}:{})
-  };
-
-  if(embedImage && !imageUrl) mainEmbed.image={url:`attachment://${embedName}`};
-  else if(!embedImage && orderImage && !imageUrl) mainEmbed.image={url:`attachment://${orderName}`};
-
-  const embeds=[mainEmbed];
-  if(orderImage && embedImage) embeds.push({image:{url:`attachment://${orderName}`}});
-
-  const payload={
-    username: bot,
-    content: finalContent,
-    allowed_mentions:{parse:["users","roles","everyone"]},
-    embeds
-  };
-
-  try{
-    const headers={};if(apiKey)headers["Authorization"]="Bearer "+apiKey;
-    const isDiscord=/^https:\/\/(?:discord(?:app)?\.com)\/api\/webhooks\//i.test(apiUrl);
-    let res;
-    if(isDiscord&&(orderImage||embedImage)){
-      const fd=new FormData();
-      fd.append("payload_json",JSON.stringify(payload));
-      if(orderImage) fd.append("files[0]",dataUrlToBlob(orderImage),orderName);
-      if(embedImage) fd.append(orderImage?"files[1]":"files[0]",dataUrlToBlob(embedImage),embedName);
-      res=await fetch(apiUrl,{method:"POST",headers,body:fd});
-    }else{
-      headers["Content-Type"]="application/json";
-      const body=isDiscord?payload:{botName:bot,orderCode,status,robloxName:roblox,price:price||null,discordUserId:pingId,ping:ping==="yes",title,message,payload};
-      res=await fetch(apiUrl,{method:"POST",headers,body:JSON.stringify(body)});
-    }
-    if(res.status===429)throw new Error("API Bot Rate Limit 429");
-    if(!res.ok)throw new Error("API Bot HTTP "+res.status);
-
-    data.stats.sent++;
-    data.stats.doneOrders=(Number(data.stats.doneOrders)||0)+1;
-    data.stats.revenue=(Number(data.stats.revenue)||0)+numericPrice;
-    data.completedOrders.unshift({
-      id:crypto.randomUUID(),
-      time:new Date().toISOString(),
-      title,
-      orderCode,
-      status,
-      customer:pingId||"Không tag",
-      roblox,
-      price:numericPrice
-    });
-    data.completedOrders=data.completedOrders.slice(0,500);
-
-    addHistory("DONE",`Đã gửi: ${title} (${orderCode\vert{}\vert{}"N/A"}) • +${formatMoney(numericPrice)}`);
-    saveDB();updateStats();renderCompletedOrders();
-    toast(`✅ Done đơn! (+${formatMoney(numericPrice)})`);
-  }catch(e){
-    data.stats.failed++;
-    addHistory("DONE","Gửi thất bại: "+title+" • "+(e.message||"Lỗi"));
-    saveDB();updateStats();
-    toast("❌ "+(e.message||"Gửi thất bại"));
-  }
-}
-
-function clearDoneForm(){
-  ["doneApiUrl","doneApiKey","doneBot","doneOrderCode","donePrice","doneRoblox","donePingId","doneTitle","doneMessage","doneFooter","doneImage"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=""});
-  ["doneOrderImageFile","doneEmbedImageFile"].forEach(id=>{const f=document.getElementById(id);if(f)f.value=""});
-  document.getElementById("editingDoneId").value="";
-  document.getElementById("doneColor").value="#8b5cf6";
-  document.getElementById("donePing").value="yes";
-  document.getElementById("doneStatus").value="📦 CHỜ XỬ LÍ";
-  selectedDoneOrderImageData="";selectedDoneEmbedImageData="";
-  setDoneOrderImageStatus("Chưa chọn ảnh");setDoneEmbedImageStatus("Chưa chọn ảnh");
-  updatePreview();
-}
-
-function editDone(id){
-  const d=data.dones.find(x=>x.id===id);
-  if(!d)return;
-  document.getElementById("editingDoneId").value=d.id;
-  document.getElementById("doneApiUrl").value=d.apiUrl||"";
-  document.getElementById("doneApiKey").value=d.apiKey||"";
-  document.getElementById("doneBot").value=d.bot||"";
-  document.getElementById("doneOrderCode").value=d.orderCode||"";
-  document.getElementById("doneStatus").value=d.status||"📦 CHỜ XỬ LÍ";
-  document.getElementById("donePrice").value=d.price||"";
-  document.getElementById("doneRoblox").value=d.roblox||"";
-  document.getElementById("donePingId").value=d.pingId||"";
-  document.getElementById("donePing").value=d.ping||"yes";
-  document.getElementById("doneTitle").value=d.title||"";
-  document.getElementById("doneMessage").value=d.message||"";
-  document.getElementById("doneColor").value=d.color||"#8b5cf6";
-  document.getElementById("doneFooter").value=d.footer||"";
-  document.getElementById("doneImage").value=d.image||"";
-  selectedDoneOrderImageData=d.imageData||"";
-  selectedDoneEmbedImageData=d.embedImageData||"";
-  setDoneOrderImageStatus(selectedDoneOrderImageData?"Đã có ảnh DONE lưu":"Chưa chọn ảnh");
-  setDoneEmbedImageStatus(selectedDoneEmbedImageData?"Đã có ảnh Embed lưu":"Chưa chọn ảnh");
-  updatePreview();
-}
-
-function setDoneOrderImageStatus(text){const el=document.getElementById("doneOrderImageStatus");if(el)el.textContent=text}
-function setDoneEmbedImageStatus(text){const el=document.getElementById("doneEmbedImageStatus");if(el)el.textContent=text}
-function clearDoneOrderImage(){selectedDoneOrderImageData="";const f=document.getElementById("doneOrderImageFile");if(f)f.value="";setDoneOrderImageStatus("Chưa chọn ảnh");updatePreview()}
-function clearDoneEmbedImage(){selectedDoneEmbedImageData="";const f=document.getElementById("doneEmbedImageFile");if(f)f.value="";setDoneEmbedImageStatus("Chưa chọn ảnh");updatePreview()}
-function pickDoneOrderImage(e){const file=e.target.files&&e.target.files[0];if(!file)return;if(!file.type.startsWith("image/"))return toast("❌ Chỉ chọn file ảnh");readImageFile(file).then(dataUrl=>{selectedDoneOrderImageData=dataUrl;setDoneOrderImageStatus("✅ "+file.name+" • sẵn sàng gửi");updatePreview()}).catch(()=>toast("❌ Không đọc được ảnh"))}
-function pickDoneEmbedImage(e){const file=e.target.files&&e.target.files[0];if(!file)return;if(!file.type.startsWith("image/"))return toast("❌ Chỉ chọn file ảnh/GIF");readImageFile(file).then(dataUrl=>{selectedDoneEmbedImageData=dataUrl;setDoneEmbedImageStatus("✅ "+file.name+(file.type==="image/gif"?" • GIF giữ nguyên":" • sẵn sàng gửi"));updatePreview()}).catch(()=>toast("❌ Không đọc được ảnh"))}
-function readImageFile(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
-function dataUrlToBlob(dataUrl){const [meta,b64]=dataUrl.split(",");const mime=(meta.match(/data:(.*?);base64/)||[])[1]||"image/jpeg";const bin=atob(b64);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return new Blob([arr],{type:mime})}
-function dataUrlFilename(dataUrl,base){const meta=(dataUrl.split(",")[0]||"");const mime=(meta.match(/data:(.*?);base64/)||[])[1]||"image/jpeg";const ext={"image/gif":"gif","image/png":"png","image/jpeg":"jpg","image/webp":"webp","image/bmp":"bmp","image/svg+xml":"svg"}[mime]||"bin";return `${base}.${ext}`}
-
-function deleteDone(id){if(!confirm("Xóa mẫu DONE này?"))return;data.dones=data.dones.filter(x=>x.id!==id);saveDB();renderDones();updateStats()}
-function duplicateDone(id){const d=data.dones.find(x=>x.id===id);if(!d)return;data.dones.push({...d,id:crypto.randomUUID(),title:d.title+" Copy"});saveDB();renderDones();updateStats()}
-function renderDones(){const list=document.getElementById("doneList");if(!data.dones.length)return list.innerHTML='<div class="empty">Chưa có mẫu DONE.</div>';list.innerHTML=data.dones.map(d=>`<div class="card"><div class="cardHead"><div><b>${escapeHtml(d.title)}</b>${d.price?`<span class="badge" style="color:#4ade80">${formatMoney(d.price)}</span>`:""}<div class="muted">${escapeHtml(d.bot)}</div></div><div class="actions"><button class="small" onclick="editDone('${d.id}')">Nạp / Sửa</button><button class="small" onclick="duplicateDone('${d.id}')">Copy</button><button class="small danger" onclick="deleteDone('${d.id}')">Xóa</button></div></div><div class="muted" style="margin-top:8px">${escapeHtml(d.message||"")}</div></div>`).join("")}
-
-function updatePreview(){
-  const bot=document.getElementById("doneBot").value||"DONE BOT";
-  const orderCode=document.getElementById("doneOrderCode").value.trim();
-  const status=document.getElementById("doneStatus").value;
-  const price=document.getElementById("donePrice").value.trim();
-  const title=document.getElementById("doneTitle").value||"Đơn hàng đã hoàn tất";
-  const msg=document.getElementById("doneMessage").value||"Nội dung đơn hàng";
-  const color=document.getElementById("doneColor").value||"#8b5cf6";
-  const footer=document.getElementById("doneFooter").value||"DONE ORDER VIP";
-  const roblox=document.getElementById("doneRoblox").value.trim();
-  const ping=document.getElementById("donePing").value;
-  const pingId=document.getElementById("donePingId").value.trim();
-  const image=document.getElementById("doneImage").value.trim();
-  const order=selectedDoneOrderImageData;
-  const embed=selectedDoneEmbedImageData||image;
-  const pingText=(ping==="yes"&&pingId)?makeDiscordMention(pingId):"";
-
-  let headerPrev="";
-  if(orderCode) headerPrev+=`\`${orderCode}\` `;
-  if(pingText) headerPrev+=`${pingText} `;
-  if(roblox) headerPrev+=`🌸 \`${roblox}\` `;
-  if(status) headerPrev+=`⚙️ **${status}**`;
-
-  document.getElementById("donePreview").innerHTML=`
-    <div style="font-size:12px;color:#aaa;margin-bottom:8px">${escapeHtml(bot)}</div>${headerPrev?`<div style="margin-bottom:8px;font-size:13px">${headerPrev}</div>`:""}
-    <div class="discordPreview" style="border-left-color:${escapeHtml(color)}">
-      <div class="discordTitle">${escapeHtml(title)}</div>${price?`<div class="muted" style="margin-top:6px">💰 ${Number(price).toLocaleString("vi-VN")}đ</div>`:""}
-      <div style="margin-top:8px;white-space:pre-wrap">${escapeHtml(msg)}</div>${order?`<div class="muted" style="margin-top:10px">🖼️ Ảnh DONE</div><img src="${escapeAttribute(order)}" style="max-width:100%;max-height:220px;object-fit:contain;margin-top:6px;border-radius:10px">`:""}
-      ${embed?`<div class="muted" style="margin-top:10px">✨ Ảnh Embed</div><img src="${escapeAttribute(embed)}" style="max-width:100%;max-height:320px;object-fit:contain;margin-top:6px;border-radius:10px">`:""}
-      <div class="discordFooter">${escapeHtml(footer)}</div>
-    </div>`;
-}
-
-function loadNichoForm(){
-  const n=data.nicho||{};
-  document.getElementById("nichoTitle").value=n.title||"Nicho Bút";
-  document.getElementById("nichoMessage").value=n.message||"";
-  document.getElementById("nichoColor").value=n.color||"#d946ef";
-  document.getElementById("nichoBanner").value=n.banner||"";
-  document.getElementById("nichoWebhook").value=n.webhook||"";
-  document.getElementById("nichoBotName").value=n.botName||"Nicho Bút";
-  setNichoBannerStatus(n.bannerData?"Đã có banner lưu":"Chưa chọn ảnh");
-  updateNichoPreview();
-}
-function saveNichoSettings(){
-  data.nicho={
-    title:document.getElementById("nichoTitle").value.trim()||"Nicho Bút",
-    message:document.getElementById("nichoMessage").value,
-    color:document.getElementById("nichoColor").value||"#d946ef",
-    banner:document.getElementById("nichoBanner").value.trim(),
-    bannerData:selectedNichoBannerData||"",
-    botName:document.getElementById("nichoBotName").value.trim()||"Nicho Bút",
-    webhook:document.getElementById("nichoWebhook").value.trim()
-  };
-  saveDB();
-  toast("✅ Đã lưu cấu hình Nicho Bút");
-}
-function resetNichoForm(){
-  document.getElementById("nichoTitle").value="Nicho Bút";
-  document.getElementById("nichoMessage").value="";
-  document.getElementById("nichoColor").value="#d946ef";
-  document.getElementById("nichoBanner").value="";
-  document.getElementById("nichoWebhook").value="";
-  document.getElementById("nichoBotName").value="Nicho Bút";
-  selectedNichoBannerData="";
-  document.getElementById("nichoBannerFile").value="";
-  setNichoBannerStatus("Chưa chọn ảnh");
-  updateNichoPreview();
-}
-function setNichoBannerStatus(text){
-  const el=document.getElementById("nichoBannerStatus"); if(el)el.textContent=text;
-}
-function clearNichoBanner(){
-  selectedNichoBannerData="";
-  const f=document.getElementById("nichoBannerFile"); if(f)f.value="";
-  setNichoBannerStatus("Chưa chọn ảnh");
-  updateNichoPreview();
-}
-function pickNichoBanner(e){
-  const file=e.target.files&&e.target.files[0]; if(!file)return;
-  if(!file.type.startsWith("image/"))return toast("❌ Chỉ chọn file ảnh");
-  readImageFile(file).then(dataUrl=>{
-    selectedNichoBannerData=dataUrl;
-    setNichoBannerStatus("✅ "+file.name+" • sẵn sàng gửi");
-    updateNichoPreview();
-  }).catch(()=>toast("❌ Không đọc được ảnh"));
-}
-function discordMarkdownHtml(text){
-  return escapeHtml(text||"")
-    .replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
-    .replace(/`([^`]+)`/g,'<span style="background:rgba(0,0,0,.28);padding:2px 5px;border-radius:4px">$1</span>')
-    .replace(/\n/g,"<br>");
-}
-function updateNichoPreview(){
-  const title=document.getElementById("nichoTitle")?.value||"Nicho Bút";
-  const msg=document.getElementById("nichoMessage")?.value||"Nội dung / các dòng giá";
-  const color=document.getElementById("nichoColor")?.value||"#d946ef";
-  const bot=document.getElementById("nichoBotName")?.value||"Nicho Bút";
-  const banner=document.getElementById("nichoBanner")?.value.trim()||selectedNichoBannerData||"";
-  document.getElementById("nichoPreview").innerHTML=
-    `<div style="font-size:12px;color:#aaa;margin-bottom:8px">${escapeHtml(bot)}</div>
-     <div class="discordPreview" style="border-left-color:${escapeHtml(color)}">
-       <div class="discordTitle">${escapeHtml(title)}</div>
-       <div style="margin-top:10px;line-height:1.6">${discordMarkdownHtml(msg)}</div>
-       <div class="discordFooter">Nicho Bút • Discord</div>
-       ${banner?`<img src="${escapeAttribute(banner)}" style="display:block;max-width:100%;max-height:300px;object-fit:contain;margin-top:10px;border-radius:10px" onerror="this.style.display='none'">`:""}
-     </div>`;
-}
-async function sendNichoEmbed(){
-  const webhook=document.getElementById("nichoWebhook").value.trim();
-  const title=document.getElementById("nichoTitle").value.trim()||"Nicho Bút";
-  const message=document.getElementById("nichoMessage").value.trim();
-  const color=document.getElementById("nichoColor").value||"#d946ef";
-  const bot=document.getElementById("nichoBotName").value.trim()||"Nicho Bút";
-  const bannerUrl=document.getElementById("nichoBanner").value.trim();
-  const bannerData=selectedNichoBannerData||"";
-  if(!/^https:\/\/(?:discord(?:app)?\.com)\/api\/webhooks\//i.test(webhook))return toast("❌ Webhook Discord không hợp lệ");
-  if(!message)return toast("❌ Nhập nội dung / các dòng giá");
-  const embed={title,description:message,color:parseInt(color.replace("#",""),16)};
-  try{
-    let res;
-    if(bannerData){
-      const filename=dataUrlFilename(bannerData,"nicho-banner");
-      embed.image={url:`attachment://${filename}`};
-      const fd=new FormData();
-      const payloadJson={
-        username:bot,
-        embeds:[embed],
-        attachments:[{id:"0",filename:filename,description:"Nicho Bút Banner"}]
-      };
-      fd.append("payload_json",JSON.stringify(payloadJson));
-      fd.append("files[0]",dataUrlToBlob(bannerData),filename);
-      res=await fetch(webhook,{method:"POST",body:fd});
-    }else{
-      if(bannerUrl)embed.image={url:bannerUrl};
-      res=await fetch(webhook,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({username:bot,embeds:[embed]})
-      });
-    }
-    if(res.status===429)throw new Error("Discord đang Rate Limit (429)");
-    if(!res.ok)throw new Error("Discord HTTP "+res.status);
-    data.nicho={title,message,color,banner:bannerUrl,bannerData,botName:bot,webhook};
-    data.stats.sent++;
-    addHistory("NICHO BÚT","Đã gửi embed: "+title);
-    saveDB(); updateStats();
-    toast("✅ Đã gửi Nicho Bút lên Discord");
-  }catch(e){
-    data.stats.failed++;
-    addHistory("NICHO BÚT","Gửi thất bại: "+title+" • "+(e.message||"Lỗi"));
-    saveDB(); updateStats();
-    toast("❌ "+(e.message||"Gửi thất bại"));
-  }
-}
-
-function saveWebhook(){const url=document.getElementById("webhookUrl").value.trim();if(!/^https:\/\/(discord(?:app)?\.com)\/api\/webhooks\//i.test(url))return toast("Webhook Discord không hợp lệ");data.webhook=url;saveDB();toast("✅ Đã lưu Webhook")}
-async function testWebhook(){if(!data.webhook)return toast("Chưa có Webhook");try{const r=await fetch(data.webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:"✅ Webhook Test • DONE ORDER VIP"})});if(r.status===429)return toast("⚠️ Discord đang Rate Limit");if(!r.ok)return toast("❌ Webhook lỗi HTTP "+r.status);toast("✅ Webhook hoạt động")}catch{toast("❌ Không gửi được Webhook")}}
-
-async function sendMemberPing(url,id,msg=""){const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:`${makeDiscordMention(id)}${msg?" "+msg:""}`.trim(),allowed_mentions:{parse:["users"]}})});if(r.status===429)throw new Error("Discord Rate Limit 429");if(!r.ok)throw new Error(`Webhook lỗi HTTP ${r.status}`);return true}
-
-async function startPingTest(){
-  if(pingRunning)return toast("Đang chạy test");
-  if(!Array.isArray(data.apiBots)||!data.apiBots.some(b=>b.enabled!==false&&b.url))return toast("Chưa thêm API Bot riêng cho Ping Member");
-  const id=document.getElementById("testUserId").value.trim();
-  const msg=document.getElementById("testMessage").value.trim();
-  let count=Math.max(1,Math.min(50,Math.floor(Number(document.getElementById("testCount").value)||1)));
-  let delay=Math.max(500,Math.floor(Number(document.getElementById("testDelay").value)||1500));
-  if(!id)return toast("Vui lòng nhập Tên hoặc ID Discord");
-  pingRunning=true;pingStopRequested=false;
-  document.getElementById("testLog").innerHTML="";
-  document.getElementById("testProgress").style.width="0%";
-  let ok=0,fail=0;
-  for(let i=1;i<=count;i++){
-    if(pingStopRequested)break;
-    try{
-      const sent=await sendToApiBots(id,msg);
-      ok+=sent;data.stats.sent+=sent;
-      logTest(`✅ Lượt ${i}/${count}: đã gửi qua ${sent} API Bot Ping`);
-    }catch(e){
-      fail++;data.stats.failed++;
-      logTest(`❌ Lượt ${i}/${count}: ${e.message}`);
-      if(String(e.message).includes("429"))break;
-    }
-    document.getElementById("testProgress").style.width=(i/count*100)+"%";
-    saveDB();updateStats();
-    if(i<count&&!pingStopRequested)await sleep(delay);
-  }
-  pingRunning=false;
-  document.getElementById("testStatus").textContent=`Hoàn tất • Thành công: ${ok} • Thất bại: ${fail}`;
-  toast(`Test xong: ${ok} thành công / ${fail} lỗi`);
-}
-function stopPingTest(){if(!pingRunning)return toast("Không có test đang chạy");pingStopRequested=true;document.getElementById("testStatus").textContent="Đang dừng..."}
-function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
-function addHistory(type,message){data.history.unshift({time:new Date().toISOString(),type,message});data.history=data.history.slice(0,300);saveDB()}
-function renderHistory(){const list=document.getElementById("historyList");if(!data.history.length)return list.innerHTML='<div class="empty">Chưa có lịch sử.</div>';list.innerHTML=data.history.map(x=>`<div class="card"><b>${escapeHtml(x.type)}</b><div>${escapeHtml(x.message)}</div><div class="muted">${new Date(x.time).toLocaleString()}</div></div>`).join("")}
-function clearHistory(){data.history=[];saveDB();renderHistory();toast("Đã xóa lịch sử")}
-function renderApiBots(){const list=document.getElementById("apiBotList");if(!data.apiBots.length){list.innerHTML='<div class="empty">Chưa có API Bot.</div>';return}list.innerHTML=data.apiBots.map((b,i)=>`<div class="card"><div class="cardHead"><div><b>${escapeHtml(b.name||("Bot "+(i+1)))}</b><div class="muted mono">${escapeHtml(b.url)}</div></div><div class="actions"><label class="muted"><input type="checkbox" ${b.enabled!==false?"checked":""} onchange="toggleApiBot(${i},this.checked)"> Bật</label><button class="small danger" onclick="removeApiBot(${i})">Xóa</button></div></div></div>`).join("")}
-function addApiBot(){if(data.apiBots.length>=10)return toast("Tối đa 10 API Bot");const name=document.getElementById("apiBotName").value.trim()||("Bot "+(data.apiBots.length+1));const url=document.getElementById("apiBotUrl").value.trim();const key=document.getElementById("apiBotKey").value.trim();if(!/^https?:\/\//i.test(url))return toast("API URL không hợp lệ");data.apiBots.push({name,url,key,enabled:true});saveDB();renderApiBots();document.getElementById("apiBotName").value="";document.getElementById("apiBotUrl").value="";document.getElementById("apiBotKey").value="";toast("✅ Đã thêm API Bot")}
-function toggleApiBot(i,v){data.apiBots[i].enabled=v;saveDB()}
-function removeApiBot(i){data.apiBots.splice(i,1);saveDB();renderApiBots()}
-function clearApiBots(){if(!confirm("Xóa toàn bộ API Bot?"))return;data.apiBots=[];saveDB();renderApiBots()}
-async function sendToApiBots(id,msg){
-  const bots=data.apiBots.filter(b=>b.enabled!==false&&b.url);
-  if(!bots.length)throw new Error("Chưa có API Bot đang bật");
-  let ok=0;
-  const mention=makeDiscordMention(id);
-  for(const b of bots){
-    const headers={"Content-Type":"application/json"};
-    if(b.key)headers["Authorization"]="Bearer "+b.key;
-    const isDiscord=/^https:\/\/(?:discord(?:app)?\.com)\/api\/webhooks\//i.test(b.url);
-    const body=isDiscord
-      ? {content:`${mention}${msg?" "+msg:""}`.trim(),allowed_mentions:{parse:["users"]}}
-      : {userId:id,username:id,message:msg};
-    const r=await fetch(b.url,{method:"POST",headers,body:JSON.stringify(body)});
-    if(r.status===429)throw new Error(`${b.name}: Rate Limit 429`);
-    if(!r.ok)throw new Error(`${b.name}: HTTP ${r.status}`);
-    ok++;
-    await sleep(300);
-  }
-  return ok;
-}
-
-function pickThemeBgFile(e){
-  const file=e.target.files&&e.target.files[0];
-  if(!file)return;
-  if(!file.type.startsWith("image/"))return toast("❌ Chỉ chọn file ảnh hoặc GIF");
-  readImageFile(file).then(dataUrl=>{
-    selectedThemeBgData=dataUrl;
-    document.getElementById("themeBgStatus").textContent="✅ Đã chọn: "+file.name;
-    document.documentElement.style.setProperty("--bg-url",`url("${dataUrl}")`);
-  }).catch(()=>toast("❌ Không đọc được ảnh nền"));
-}
-function previewBgUrl(){
-  const url=document.getElementById("themeBgUrl").value.trim();
-  if(url){
-    document.documentElement.style.setProperty("--bg-url",`url("${url}")`);
-    document.getElementById("themeBgStatus").textContent="🔗 Đang dùng link ảnh URL";
-  }
-}
-function clearThemeBg(){
-  selectedThemeBgData="";
-  document.getElementById("themeBgUrl").value="";
-  const f=document.getElementById("themeBgFile");if(f)f.value="";
-  document.getElementById("themeBgStatus").textContent="Đang dùng hình nền mặc định";
-  document.documentElement.style.setProperty("--bg-url",`url("${DEFAULT_BG}")`);
-}
-function loadThemeForm(){
-  const t=data.theme;
-  document.getElementById("themeAccent").value=t.accent;
-  document.getElementById("themeAccent2").value=t.accent2;
-  document.getElementById("themeGlass").value=t.glass;
-  document.getElementById("themeDark").value=t.dark;
-  document.getElementById("themeRadius").value=t.radius;
-  document.getElementById("themeGlow").value=t.glow;
-  document.getElementById("themeRGB").value=t.rgb||"off";
-  document.getElementById("themeParticles").value=t.particles;
-  document.getElementById("themeBgUrl").value=t.bgUrl||"";
-  selectedThemeBgData=t.bgData||"";
-  document.getElementById("themeBgStatus").textContent=selectedThemeBgData?"✅ Đang dùng ảnh tải từ máy":(t.bgUrl?"🔗 Đang dùng link ảnh URL":"Đang dùng hình nền mặc định");
-}
-function saveTheme(){
-  data.theme={
-    accent:document.getElementById("themeAccent").value,
-    accent2:document.getElementById("themeAccent2").value,
-    glass:Number(document.getElementById("themeGlass").value),
-    dark:Number(document.getElementById("themeDark").value),
-    radius:Number(document.getElementById("themeRadius").value),
-    glow:Number(document.getElementById("themeGlow").value),
-    rgb:document.getElementById("themeRGB").value,
-    particles:document.getElementById("themeParticles").value,
-    bgUrl:document.getElementById("themeBgUrl").value.trim(),
-    bgData:selectedThemeBgData||""
-  };
-  saveDB();applyTheme();toast("🎨 Đã lưu Theme & Hình nền");
-}
-function resetTheme(){
-  data.theme={...DEFAULT_THEME};
-  selectedThemeBgData="";
-  saveDB();loadThemeForm();applyTheme();
-  toast("↩️ Đã khôi phục giao diện mặc định");
-}
-function applyTheme(){
-  const t=data.theme,r=document.documentElement;
-  r.style.setProperty("--accent",t.accent);
-  r.style.setProperty("--accent2",t.accent2);
-  r.style.setProperty("--glass",t.glass);
-  r.style.setProperty("--bg-dark",t.dark);
-  r.style.setProperty("--radius",t.radius+"px");
-  r.style.setProperty("--glow",t.glow+"px");
-  const bgSource=t.bgData||t.bgUrl||DEFAULT_BG;
-  r.style.setProperty("--bg-url",`url("${bgSource}")`);
-  document.body.classList.toggle("rgb",t.rgb==="on");
-  document.getElementById("particles").style.display=t.particles==="on"?"block":"none";
-  loadThemeForm();
-}
-function updateStats(){
-  const doneOrders=Number(data.stats.doneOrders)||0;
-  const revenue=Number(data.stats.revenue)||0;
-  document.getElementById("statDoneOrders").textContent=doneOrders;
-  document.getElementById("statRevenue").textContent=formatMoney(revenue);
-  document.getElementById("statCustomers").textContent=data.customers.length;
-  document.getElementById("statDone").textContent=data.dones.length;
-  document.getElementById("statSent").textContent=data.stats.sent;
-  document.getElementById("statFailed").textContent=data.stats.failed;
-  const dashOrders=document.getElementById("dashDoneOrders");
-  const dashRev=document.getElementById("dashRevenue");
-  if(dashOrders)dashOrders.textContent=doneOrders+" đơn";
-  if(dashRev)dashRev.textContent=formatMoney(revenue);
-}
-function downloadBlob(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)}
-function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function escapeAttribute(v){return escapeHtml(v)}
-["doneApiUrl","doneApiKey","doneBot","doneOrderCode","doneStatus","donePrice","doneRoblox","donePingId","donePing","doneTitle","doneMessage","doneColor","doneFooter","doneImage"].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener("input",updatePreview);el.addEventListener("change",updatePreview)}})
-["nichoTitle","nichoMessage","nichoColor","nichoBanner","nichoBotName"].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener("input",updateNichoPreview);el.addEventListener("change",updateNichoPreview)}})
-function createParticles(){const b=document.getElementById("particles");for(let i=0;i<45;i++){const p=document.createElement("div");p.className="particle";p.style.left=Math.random()*100+"%";p.style.animationDelay=(-Math.random()*8)+"s";p.style.animationDuration=(5+Math.random()*8)+"s";p.style.opacity=.25+Math.random()*.65;b.appendChild(p)}}
-createParticles();
-document.addEventListener("mousemove",e=>{const g=document.getElementById("cursorGlow");g.style.left=e.clientX+"px";g.style.top=e.clientY+"px"});
-document.addEventListener("click",e=>{const r=document.createElement("div");r.className="ripple";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),600)});
-applyTheme();renderCustomers();renderDones();renderCompletedOrders();renderHistory();renderApiBots();updateStats();updatePreview();loadNichoForm();showSection("dashboard");
-</script>
-</body>
-</html>
+  if(item)fields.push({name:"📦 Nội dung đơn",value:item,inline:true});
+  if(price)fields.push({name:"💰 Giá tiền",value:vnd(price),inline:true});
+  const embed={title,description:m,color:parseInt(col.replace("#",""),16),fields,footer:{text:"DONE ORDER VIP"}};
+  const payload={username:bot,content:(ping?tag(ping)+"\n":"")+m,allowed_mentions:{parse:["users","roles","everyone"]},embeds:[embed]};
+  
