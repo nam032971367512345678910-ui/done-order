@@ -24,8 +24,8 @@ body.rgb{animation:bgRGB 12s linear infinite}@keyframes bgRGB{0%{filter:hue-rota
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:16px 20px;margin-bottom:18px;flex-wrap:wrap}.logo{font-size:21px;font-weight:900;letter-spacing:.5px;text-shadow:0 0 16px var(--accent)}.userBox{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.badge{padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);font-size:12px}
 button,input,textarea,select{font:inherit}button{color:#fff;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);border-radius:13px;padding:10px 14px;cursor:pointer;transition:.18s}button:hover{transform:translateY(-2px) scale(1.015);box-shadow:0 0 18px rgba(139,92,246,.28)}button.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;font-weight:800}button.danger{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}button.small{padding:7px 10px;font-size:12px}
 input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:11px 12px;outline:none}input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 15px rgba(139,92,246,.16)}textarea{min-height:100px;resize:vertical}select option{background:#151522}
-.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(6,1fr);margin-bottom:18px}.stat{padding:17px;text-align:center}.stat b{display:block;font-size:24px;margin-top:5px;word-break:break-word}.stat span{color:#b9b9ca;font-size:12px}.stat.highlight b{color:#4ade80;text-shadow:0 0 12px rgba(74,222,128,.35)}.layout{grid-template-columns:320px 1fr;align-items:start}.side,.panel{padding:18px}.side{position:sticky;top:15px}.nav{display:grid;gap:8px}.nav button{text-align:left}.nav button.active{background:linear-gradient(135deg,rgba(139,92,246,.45),rgba(34,211,238,.22));border-color:rgba(255,255,255,.25)}
-.section{display:none}.section.active{display:block}.row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.field{margin-bottom:12px}.field label{display:block;font-size:12px;color:#bdbdcc;margin-bottom:6px}.actions{display:flex;gap:8px;flex-wrap:wrap}.card{padding:14px;border-radius:17px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);margin-top:10px}.cardHead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.muted{color:#aaaabd;font-size:12px}.mono{font-family:monospace}.empty{padding:30px;text-align:center;color:#aaa}.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;font-size:13px}th{color:#aaa}
+.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(6,1fr);margin-bottom:18px}.stat{padding:17px;text-align:center}.stat b{display:block;font-size:24px;margin-top:5px;word-break:break-word}.stat span{color:#b9b9ca;font-size:12px}.stat.highlight b{color:#4ade80;text-shadow:0 0 12px rgba(74,222,128,.35)}.layout{grid-template-columns:320px 1fr;align-items:start}.side,.panel{padding:18px}.side{position:sticky;top:15px}.nav{display:grid;gap:8px}.nav button{text-align:left;width:100%}.nav button.active{background:linear-gradient(135deg,rgba(139,92,246,.45),rgba(34,211,238,.22));border-color:rgba(255,255,255,.25)}
+.section{display:none}.section.active{display:block}.row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.field{margin-bottom:12px}.field label{display:block;font-size:12px;color:#bdbdcc;margin-bottom:6px}.actions{display:flex;gap:8px;flex-wrap:wrap}.card{padding:14px;border-radius:17px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);margin-top:10px}.cardHead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.muted{color:#aaaabd;font-size:12px}.mono{font-family:monospace}.empty{padding:30px;text-align:center;color:#aaa}
 .preview{border-radius:17px;border:1px solid rgba(255,255,255,.12);padding:16px;background:rgba(0,0,0,.25)}.discordPreview{border-left:4px solid var(--accent);background:#202225;padding:14px;border-radius:7px}.discordTitle{color:#fff;font-weight:800;font-size:17px}.discordFooter{margin-top:14px;font-size:11px;color:#aaa}
 .progress{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin:10px 0}.progressBar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.2s}.hidden{display:none!important}.log{max-height:280px;overflow:auto;background:rgba(0,0,0,.2);padding:10px;border-radius:13px;font-family:monospace;font-size:12px}.log div{padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 .toastBox{position:fixed;right:18px;bottom:18px;z-index:10000;display:grid;gap:8px}.toast{min-width:250px;max-width:350px;padding:12px 14px;border-radius:14px;background:rgba(15,15,25,.9);border:1px solid rgba(255,255,255,.15);box-shadow:0 0 25px rgba(0,0,0,.3);animation:toastIn .25s ease}@keyframes toastIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
@@ -58,15 +58,15 @@ input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1p
   <div class="grid layout">
     <aside class="glass side">
       <div class="nav">
-        <button data-section="dashboard" onclick="showSection('dashboard')">📊 Dashboard</button>
-        <button data-section="customers" onclick="showSection('customers')">👥 Customers</button>
-        <button data-section="done" onclick="showSection('done')">✅ DONE Manager</button>
-        <button data-section="nicho" onclick="showSection('nicho')">⭐ Nicho Bút</button>
-        <button data-section="webhook" onclick="showSection('webhook')">🔗 Webhook</button>
-        <button data-section="test" onclick="showSection('test')">🧪 Ping members</button>
-        <button data-section="history" onclick="showSection('history')">📜 History</button>
-        <button data-section="theme" onclick="showSection('theme')">🎨 Theme & Hình nền</button>
-        <button data-section="profile" onclick="showSection('profile')">👤 Profile</button>
+        <button type="button" data-section="dashboard" onclick="showSection('dashboard')">📊 Dashboard</button>
+        <button type="button" data-section="customers" onclick="showSection('customers')">👥 Customers</button>
+        <button type="button" data-section="done" onclick="showSection('done')">✅ DONE Manager</button>
+        <button type="button" data-section="nicho" onclick="showSection('nicho')">⭐ Nicho Bút</button>
+        <button type="button" data-section="webhook" onclick="showSection('webhook')">🔗 Webhook</button>
+        <button type="button" data-section="test" onclick="showSection('test')">🧪 Ping members</button>
+        <button type="button" data-section="history" onclick="showSection('history')">📜 History</button>
+        <button type="button" data-section="theme" onclick="showSection('theme')">🎨 Theme & Hình nền</button>
+        <button type="button" data-section="profile" onclick="showSection('profile')">👤 Profile</button>
       </div>
       <hr style="border-color:rgba(255,255,255,.08);margin:18px 0">
       <a href="https://discord.gg/QfSHWECJ2" target="_blank" style="display:block;text-decoration:none">
@@ -151,7 +151,7 @@ input,textarea,select{width:100%;color:#fff;background:rgba(0,0,0,.25);border:1p
             <div class="field"><label>Tên Discord (@username) hoặc ID để Ping</label><input id="donePingId" placeholder="nguyenvana hoặc @nguyenvana"></div>
             <div class="field"><label>Ping khách khi gửi</label><select id="donePing"><option value="no">Không</option><option value="yes">Có</option></select></div>
             <div class="field"><label>Tiêu đề</label><input id="doneTitle" placeholder="Đơn hàng đã hoàn tất"></div>
-            <div class="field"><label>Nội dung</label><textarea id="doneMessage" placeholder="Cảm ơn bạn đã mua hàng!"></textarea></div>
+            <div class="field"><label>Nội dung đơn hàng (Mô tả chi tiết)</label><textarea id="doneMessage" placeholder="Cảm ơn bạn đã mua hàng!"></textarea></div>
           </div>
           <div>
             <div class="field"><label>💰 Giá tiền (VNĐ)</label><input id="donePrice" type="number" min="0" step="1" inputmode="decimal" placeholder="100000"><div class="muted">Ví dụ: nhập 100000 → sẽ cộng 100.000đ vào doanh thu khi gửi</div></div>
@@ -276,7 +276,7 @@ Vui lòng gửi tài khoản mật khẩu và 4-5 mã dự phòng khi mua
 <div id="toastBox" class="toastBox"></div>
 
 <script>
-const DB_KEY="DONE_ORDER_VIP_DB_V7";
+const DB_KEY="DONE_ORDER_VIP_DB_V8";
 const DEFAULT_BG="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLhbYj_y2EFQBqG4TLja3fAO4j_zA4iqSBv-WaJgrXpWhmOKaqnQyKRic&s";
 const DEFAULT_THEME={accent:"#8b5cf6",accent2:"#22d3ee",glass:.12,dark:.45,radius:22,glow:22,rgb:"off",particles:"on",bgUrl:"",bgData:""};
 
@@ -306,6 +306,7 @@ function saveDB(){
 function workspace(){return data}
 function toast(message){const box=document.getElementById("toastBox"),el=document.createElement("div");el.className="toast";el.textContent=message;box.appendChild(el);setTimeout(()=>el.remove(),3500)}
 function logTest(message){const log=document.getElementById("testLog"),div=document.createElement("div");div.textContent="["+new Date().toLocaleTimeString()+"] "+message;log.appendChild(div);log.scrollTop=log.scrollHeight}
+
 function showSection(name){
   document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
   const s=document.getElementById("section-"+name);
@@ -321,7 +322,7 @@ function showSection(name){
 
 function makeDiscordMention(val){
   val=String(val||"").trim();
-  if(!val)throw new Error("Chưa nhập tên hoặc ID Discord.");
+  if(!val)return "";
   if(/^<@!?\d+>$/.test(val))return val;
   if(/^\d{17,20}$/.test(val))return `<@${val}>`;
   return val.startsWith("@")?val:`@${val}`;
@@ -444,7 +445,6 @@ async function sendCurrentDone(){
   const numericPrice=Math.max(0,Number(price)||0);
   const pingId=document.getElementById("donePingId").value.trim();
   const ping=document.getElementById("donePing").value;
-  if(ping==="yes" && !pingId)return toast("❌ Nhập Tên Discord hoặc ID để ping");
   const title=document.getElementById("doneTitle").value.trim()||"Đơn hàng đã hoàn tất";
   const message=document.getElementById("doneMessage").value.trim();
   const color=document.getElementById("doneColor").value||"#8b5cf6";
@@ -452,20 +452,19 @@ async function sendCurrentDone(){
   const imageUrl=document.getElementById("doneImage").value.trim();
   const orderImage=selectedDoneOrderImageData||"";
   const embedImage=selectedDoneEmbedImageData||"";
-  if(!message)return toast("❌ Nhập nội dung DONE trước");
+  if(!message)return toast("❌ Nhập nội dung đơn hàng trước");
 
-  const mention=(ping==="yes"&&pingId)?`${makeDiscordMention(pingId)}\n`:"";
+  const mention=(ping==="yes"&&pingId)?`${makeDiscordMention(pingId)} `:"";
   const orderName=orderImage?dataUrlFilename(orderImage,"done-order-image"):"";
   const embedName=embedImage?dataUrlFilename(embedImage,"done-embed-image"):"";
 
-  // Định dạng dòng hiển thị trạng thái đơn hàng giống ảnh mẫu của bạn
   let formattedHeader = "";
   if(orderCode) formattedHeader += `\`${orderCode}\` `;
-  if(pingId) formattedHeader += `${makeDiscordMention(pingId)} `;
+  if(pingId) formattedHeader += `${mention}`;
   if(roblox) formattedHeader += `🌸 \`${roblox}\` `;
   if(status) formattedHeader += `⚙️ **${status}**`;
 
-  const finalContent = (formattedHeader ? formattedHeader + "\n" : "") + (mention ? mention : "") + message;
+  const finalContent = (formattedHeader ? formattedHeader : "") + "\n" + message;
 
   const fields=[];
   if(price) fields.push({name:"💰 Giá tiền",value:numericPrice.toLocaleString("vi-VN")+"đ",inline:true});
@@ -489,7 +488,7 @@ async function sendCurrentDone(){
   const payload={
     username: bot,
     content: finalContent,
-    allowed_mentions:{parse:ping==="yes"?["users","roles","everyone"]:[]},
+    allowed_mentions:{parse:["users","roles","everyone"]},
     embeds
   };
 
@@ -542,7 +541,7 @@ function clearDoneForm(){
   ["doneOrderImageFile","doneEmbedImageFile"].forEach(id=>{const f=document.getElementById(id);if(f)f.value=""});
   document.getElementById("editingDoneId").value="";
   document.getElementById("doneColor").value="#8b5cf6";
-  document.getElementById("donePing").value="no";
+  document.getElementById("donePing").value="yes";
   document.getElementById("doneStatus").value="📦 CHỜ XỬ LÍ";
   selectedDoneOrderImageData="";selectedDoneEmbedImageData="";
   setDoneOrderImageStatus("Chưa chọn ảnh");setDoneEmbedImageStatus("Chưa chọn ảnh");
@@ -561,7 +560,7 @@ function editDone(id){
   document.getElementById("donePrice").value=d.price||"";
   document.getElementById("doneRoblox").value=d.roblox||"";
   document.getElementById("donePingId").value=d.pingId||"";
-  document.getElementById("donePing").value=d.ping||"no";
+  document.getElementById("donePing").value=d.ping||"yes";
   document.getElementById("doneTitle").value=d.title||"";
   document.getElementById("doneMessage").value=d.message||"";
   document.getElementById("doneColor").value=d.color||"#8b5cf6";
@@ -594,7 +593,7 @@ function updatePreview(){
   const status=document.getElementById("doneStatus").value;
   const price=document.getElementById("donePrice").value.trim();
   const title=document.getElementById("doneTitle").value||"Đơn hàng đã hoàn tất";
-  const msg=document.getElementById("doneMessage").value||"Nội dung DONE";
+  const msg=document.getElementById("doneMessage").value||"Nội dung đơn hàng";
   const color=document.getElementById("doneColor").value||"#8b5cf6";
   const footer=document.getElementById("doneFooter").value||"DONE ORDER VIP";
   const roblox=document.getElementById("doneRoblox").value.trim();
@@ -607,16 +606,14 @@ function updatePreview(){
 
   let headerPrev="";
   if(orderCode) headerPrev+=`\`${orderCode}\` `;
-  if(pingId) headerPrev+=`${pingText} `;
+  if(pingText) headerPrev+=`${pingText} `;
   if(roblox) headerPrev+=`🌸 \`${roblox}\` `;
   if(status) headerPrev+=`⚙️ **${status}**`;
 
   document.getElementById("donePreview").innerHTML=`
     <div style="font-size:12px;color:#aaa;margin-bottom:8px">${escapeHtml(bot)}</div>${headerPrev?`<div style="margin-bottom:8px;font-size:13px">${headerPrev}</div>`:""}
-    ${pingText&&!headerPrev?`<div style="margin-bottom:6px;color:#c9cdfb;background:rgba(88,101,242,.3);display:inline-block;padding:2px 6px;border-radius:4px">${escapeHtml(pingText)}</div>`:""}
     <div class="discordPreview" style="border-left-color:${escapeHtml(color)}">
-      <div class="discordTitle">${escapeHtml(title)}</div>${roblox&&!headerPrev?`<div class="muted" style="margin-top:6px">🎮 ${escapeHtml(roblox)}</div>`:""}
-      ${price?`<div class="muted" style="margin-top:6px">💰 ${Number(price).toLocaleString("vi-VN")}đ</div>`:""}
+      <div class="discordTitle">${escapeHtml(title)}</div>${price?`<div class="muted" style="margin-top:6px">💰 ${Number(price).toLocaleString("vi-VN")}đ</div>`:""}
       <div style="margin-top:8px;white-space:pre-wrap">${escapeHtml(msg)}</div>${order?`<div class="muted" style="margin-top:10px">🖼️ Ảnh DONE</div><img src="${escapeAttribute(order)}" style="max-width:100%;max-height:220px;object-fit:contain;margin-top:6px;border-radius:10px">`:""}
       ${embed?`<div class="muted" style="margin-top:10px">✨ Ảnh Embed</div><img src="${escapeAttribute(embed)}" style="max-width:100%;max-height:320px;object-fit:contain;margin-top:6px;border-radius:10px">`:""}
       <div class="discordFooter">${escapeHtml(footer)}</div>
